@@ -1,0 +1,130 @@
+{% load static %}
+<div class="d-lg-block sticky-sidebar">
+  <div>
+    <div class="custom-tabs">
+      <button class="custom-tab active">Gallery's</button>
+    </div>
+
+    <div class="custom-post Container_background p-3"
+      style="max-height: 600px; overflow-y: auto; -ms-overflow-style: none; scrollbar-width: none;">
+      {% if active_galleries %}
+      {% for gallery in active_galleries %}
+      <div class="items_background post-card mb-4 p-3 rounded-3 shadow-sm">
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <div class="d-flex align-items-center gap-2">
+            <a href="{% url 'journalist_profile' gallery.journalist.username %}">
+              <div class="profile-pic">
+              <img class="rounded-circle" width="40" height="40"
+                src="{% if gallery.journalist.profile_picture %}{{ gallery.journalist.profile_picture.url }}{% else %}{% static 'assets/dnn/img/user_random.jpg' %}{% endif %}"
+                >
+                </div>
+            </a>
+            <div>
+              <a href="{% url 'journalist_profile' gallery.journalist.username %}" class="text-decoration-none text-dark">
+                <strong>{{ gallery.journalist.first_name }} {{ gallery.journalist.last_name }}</strong>
+              </a><br>
+              <small class="text-muted">{{ gallery.updated_at|timesince }} · 🌐</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Image -->
+        <img src="{{ gallery.image.url }}"  class="post-image img-fluid rounded cursor-pointer" data-bs-toggle="modal"
+          data-bs-target="#galleryModal"
+          data-img="{{ gallery.image.url }}"
+          data-name="{{ gallery.journalist.first_name }} {{ gallery.journalist.last_name }}"
+          data-profile="{% if gallery.journalist.profile_picture %}{{ gallery.journalist.profile_picture.url }}{% else %}{% static 'assets/dnn/img/user_random.jpg' %}{% endif %}"
+          data-profile-link="{% url 'journalist_profile' gallery.journalist.username %}"
+          data-timeago="{{ gallery.updated_at|timesince }}">
+      </div>
+      {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="galleryModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content rounded-4">
+      <div class="modal-header border-0 p-3">
+        <div class="d-flex justify-content-between align-items-start w-100">
+          <div class="d-flex align-items-center gap-2">
+            <a href="#" id="modalProfileLink">
+              <img id="modalProfilePic" class="rounded-circle" width="40" height="40" />
+            </a>
+            <div>
+              <a href="#" id="modalProfileLinkName" class="text-decoration-none text-dark">
+                <strong id="modalJournalistName"></strong>
+              </a><br>
+              <small class="text-muted" id="modalTimeAgo">· 🌐</small>
+            </div>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+      </div>
+      <div class="modal-body text-center p-3">
+        <img id="modalImage" src="" class="img-fluid rounded" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .custom-post::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cursor-pointer {
+    cursor: pointer;
+  }
+
+  .post-card {
+    background: #fff;
+  }
+
+  .post-image {
+    margin-top: 10px;
+    max-height: 400px;
+    object-fit: cover;
+  }
+
+  .custom-tabs {
+    margin-bottom: 10px;
+  }
+
+  .custom-tab {
+    background: #f1f1f1;
+    border: none;
+    padding: 8px 16px;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  #modalImage {
+    object-fit: cover;
+    height: 560px;
+  }
+</style>
+
+<script>
+  const galleryModal = document.getElementById('galleryModal');
+  galleryModal.addEventListener('show.bs.modal', function (event) {
+    const image = event.relatedTarget;
+
+    const imgSrc = image.getAttribute('data-img');
+    const profileSrc = image.getAttribute('data-profile');
+    const name = image.getAttribute('data-name');
+    const profileLink = image.getAttribute('data-profile-link');
+    const timeAgo = image.getAttribute('data-timeago');
+
+    document.getElementById('modalImage').src = imgSrc;
+    document.getElementById('modalProfilePic').src = profileSrc;
+    document.getElementById('modalJournalistName').textContent = name;
+    document.getElementById('modalProfileLink').href = profileLink;
+    document.getElementById('modalProfileLinkName').href = profileLink;
+    document.getElementById('modalTimeAgo').textContent = timeAgo + ' · 🌐';
+  });
+</script>

@@ -1,0 +1,75 @@
+{% include "head.html" %}
+{% block body %}
+{% load static %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-2 p-0">
+            {% include "inn/Journalist_menu.html" %}
+        </div>
+        <div class="col-lg-10 p-0">
+            <h3 class="dash-title">Request to Enroll an Artist</h3>
+            <section class="content">
+                <div class="news-post bg-light">
+                    <form action="{% url 'add_artist' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="first_name" class="form-label">First Name *</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="last_name" class="form-label">Last Name *</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email *</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+<style>
+   
+    .dash-title {
+        color: #000;
+        padding: 15px 30px;
+        font-size: 18px;
+        font-weight: 500;
+        background: #f1f1f1;
+    }
+
+   .news-post {
+    border: 1px solid #ddd;
+    padding: 40px;
+    border-radius: 8px;
+    margin: 20px 50px 50px;
+}
+    @media (min-width: 280px) and (max-width: 667px) {
+        .dash-title {
+            text-align: center;
+        }
+
+        .news-post {
+          padding: 20px;
+         margin: 20px;
+           
+        }
+
+       
+    }
+
+    @media (min-width: 767px) and (max-width: 992px) {
+    .dash-title {
+        text-align: center;
+    }
+}
+
+
+</style>
+
+{% endblock %}

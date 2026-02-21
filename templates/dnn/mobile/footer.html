@@ -1,0 +1,141 @@
+
+{% load static %}
+<!-- Floating Vertical Social Media Links -->
+  <div class="floating-social-links-vertical">
+    {% if profile_setting.facbook %}
+    <a href="{{ profile_setting.facbook }}" target="_blank" class="social-icon facebook">
+      <i class="fab fa-facebook-f"></i>
+    </a>
+    {% endif %}
+
+    {% if profile_setting.twitter %}
+    <a href="{{ profile_setting.twitter }}" target="_blank" class="social-icon twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+    {% endif %}
+
+    {% if profile_setting.instagram %}
+    <a href="{{ profile_setting.instagram }}" target="_blank" class="social-icon instagram">
+      <i class="fab fa-instagram"></i>
+    </a>
+    {% endif %}
+
+    {% if profile_setting.linkedin %}
+    <a href="{{ profile_setting.linkedin }}" target="_blank" class="social-icon linkedin">
+      <i class="fab fa-linkedin-in"></i>
+    </a>
+    {% endif %}
+  </div>
+
+  <!-- Footer Nav -->
+  <div class="footer-nav-area" id="footerNav">
+    <div class="newsten-footer-nav h-100">
+      <ul class="h-100 d-flex align-items-center justify-content-between">
+        <li class="active">
+          <a href="/">
+            <i class="bi bi-house-door-fill"></i> <!-- Home Icon -->
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="bi bi-grid-fill"></i> <!-- Category Icon -->
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="bi bi-lightning-charge-fill"></i> <!-- Trending Icon -->
+          </a>
+        </li>
+        <li>
+          <!-- Notification icon -->
+          <a href="#" id="notificationIcon">
+            <i class="bi bi-bell-fill notification-icon"></i>
+          </a>
+          <!-- <a type="button" class="nav-icon" data-bs-toggle="modal" data-bs-target="#ModalSubscribe">
+            <i class="bi bi-bell-fill notification-icon"></i>
+          </a> -->
+          {% include 'subscribe_model.html' %}
+        </li>
+        <!-- <li>
+          <a href="#">
+            <i class="bi bi-file-earmark-text-fill"></i> 
+          </a>
+        </li> -->
+      </ul>
+
+    </div>
+  </div>
+  <!-- Modal -->
+  
+
+  
+  <script>
+    function showSubmenu(id) {
+      document.querySelectorAll('.submenu, .thirdmenu').forEach(menu => menu.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+    }
+
+    function hideSubmenu(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+    function closeMenu() {
+      document.getElementById('sideMenu').style.display = 'none';
+    }
+  </script>
+  <script>
+    function toggleMenu() {
+      document.getElementById('sideMenu').classList.add('active');
+    }
+    function closeMenu() {
+      document.getElementById('sideMenu').classList.remove('active');
+      hideSubmenu('submenu');
+      hideSubmenu('thirdmenu');
+    }
+    function showSubmenu(id) {
+      document.getElementById(id).classList.add('active');
+    }
+    function hideSubmenu(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+
+    // Get modal and elements
+    const modal = document.getElementById('subscribeModal');
+    const notificationIcon = document.getElementById('notificationIcon');
+    const closeModal = document.getElementById('closeModal');
+
+    // When the user clicks on the notification icon, open the modal
+    notificationIcon.onclick = function () {
+      modal.style.display = 'flex';
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    closeModal.onclick = function () {
+      modal.style.display = 'none';
+    }
+
+    // Close the modal if the user clicks outside the modal
+    window.onclick = function (event) {
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    }
+  </script>
+  <!-- All JavaScript Files-->
+  {% load static %}
+
+  <script src="{% static 'mobile/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'mobile/js/jquery.min.js' %}"></script>
+  <script src="{% static 'mobile/js/waypoints.min.js' %}"></script>
+  <script src="{% static 'mobile/js/jquery.easing.min.js' %}"></script>
+  <script src="{% static 'mobile/js/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'mobile/js/jquery.animatedheadline.min.js' %}"></script>
+  <script src="{% static 'mobile/js/jquery.counterup.min.js' %}"></script>
+  <script src="{% static 'mobile/js/wow.min.js' %}"></script>
+  <script src="{% static 'mobile/js/date-clock.js' %}"></script>
+  <script src="{% static 'mobile/js/dark-mode-switch.js' %}"></script>
+  <script src="{% static 'mobile/js/active.js' %}"></script>
+  <script src="{% static 'mobile/js/pwa.js' %}"></script>
+
+</body>
+
+</html>

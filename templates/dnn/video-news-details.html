@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% block body %}
+{% load static %}
+
+<div class="dxb-container ">
+    <div class="row">
+        <div class="col-lg-9 col-md-8 col-sm-12 scrollrs"><!-- collam-left !-->
+            <div class="position-relative mb-3">
+                <h1>{{Vnews.video_title}}</h1>
+                <img class="img-fluid w-100" src="../upload/{{Vnews.post_image}}" style="object-fit: cover;"
+                    alt="{{Blog.post_cat|lower}}">
+              
+                <div id="player"></div>
+
+                <div class="border-top-0 py-4">
+                    <p>
+                        {% if Vnews.author %}
+                        Post by : {{ Vnews.author.first_name|default:""|capfirst }} 
+                        {{ Vnews.author.last_name|default:""|capfirst }}
+                        {% elif Vnews.journalist %}
+                        Author :
+                        <a href="{% url 'journalist_profile' Vnews.journalist.username %}" style="color: #cf1e25 !important;">
+                            {{ Vnews.journalist.first_name|default:""|capfirst }} {{ Vnews.journalist.last_name|default:""|capfirst }}
+                        </a>
+                        {% else %}
+                        Post by : Admin
+                        {% endif %}
+                    </p>
+                    <div  class="my-1">
+                        <script async
+                            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
+                            crossorigin="anonymous"></script>
+                        <!-- News Page  Ads 2 HR -->
+                        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5922835412614482"
+                            data-ad-slot="7753527589" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                    </div>
+                    <p class="m-0">{{Vnews.video_des|safe}}</p>
+                    <div  class="my-1">
+                        <script async
+                            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
+                            crossorigin="anonymous"></script>
+                        <!-- News Page  Ads 2 HR -->
+                        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5922835412614482"
+                            data-ad-slot="7753527589" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <small><i class="fas fa-calendar-alt"></i> {{Vnews.video_date|date}}</small>
+                        <small class="ml-3"> <i class="fas fa-clock"></i> {{ Vnews.video_date|time }}</small>
+                        <small class="ml-3"><i
+                                class="far fa-eye mr-2"></i>{{Vnews.counter|add:Vnews.viewcounter}}</small>
+                    </div>
+                    {% for tag in Vnews.tags.all %}
+                        <a href="{{ tag.get_absolute_url }}" class="badge bg-secondary">#{{ tag.name }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="container-fluid ">
+                <div class="row align-items-center mb-3">
+                    <div class="col-lg-6">
+                        <div class="heading-text">Must Watch Videos</div>
+                    </div>
+                    <div class="col-lg-6 text-right">
+                        <a href="/all-video-news/all" class="btn btn-sm view-all ">VIEW ALL &gt;</a>
+                    </div>
+                    <div  class="mb-2">
+                        <script async
+                            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
+                            crossorigin="anonymous"></script>
+                        <ins class="adsbygoogle" style="display:block" data-ad-format="autorelaxed"
+                            data-ad-client="ca-pub-5922835412614482" data-ad-slot="5436461790"></ins>
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                    </div>
+                </div>
+                <div class="row border-b">
+                    {% for vidpost in vidart|slice:"2:8"%}
+                    <div class="col-lg-4 colo-md-4 colo-sm-12 mt-3">
+                        <a class="d-block mb-1 text-secondary font-weight-bold" href="/video/{{vidpost.slug}}">
+                            <div class="thumimg">
+                                <p class="playbut"><i class="fa fa-play-circle" aria-hidden="true"></i></p>
+                                <img src="https://img.youtube.com/vi/{{vidpost.video_url}}/mqdefault.jpg"
+                                    alt="Video Thumbnail" width="100%">
+                            </div>
+                            <h6 class="video-text-heading pt-3">{{vidpost.video_title}}
+                            </h6>
+                        </a>
+                        <div class="my-1" >
+                            <script async
+                                src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
+                                crossorigin="anonymous"></script>
+                            <!-- News Page SQ Sidebar -->
+                            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5922835412614482"
+                                data-ad-slot="2309629217" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                            <script>
+                                (adsbygoogle = window.adsbygoogle || []).push({});
+                            </script>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-sm-12 scrollrs"><!-- collam-right !-->
+            {% include "rightcollam.html" %}
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .video-frame {
+        width: 100%;
+        height: 430px;
+    }
+
+    @media (min-width:768px) and (max-width:1024px) {
+        .video-frame {
+            width: 100%;
+            height: 350px;
+        }
+    }
+
+    @media (min-width:280px) and (max-width:667px) {
+        .video-frame {
+            width: 100%;
+            height: 250px;
+        }
+    }
+</style>
+
+
+<script>
+  var tag = document.createElement('script');
+  tag.src = "https://www.youtube.com/iframe_api";
+  var firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+  var player;
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player('player', {
+      height: '680',
+      width: '100%',
+      videoId: '{{ Vnews.video_url }}',
+      playerVars: {
+        autoplay: 1,
+        mute: 1,
+        controls: 1,
+        playsinline: 1
+      }
+    });
+  }
+</script>
+{% endblock %}

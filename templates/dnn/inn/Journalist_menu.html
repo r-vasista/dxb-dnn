@@ -1,0 +1,220 @@
+{% load static %}
+
+<!-- Sidebar Toggle Button (Hamburger) -->
+<button class="sidebar-toggle-btn" onclick="toggleSidebar()">
+  <i class="fas fa-bars"></i>
+</button>
+
+<!-- Sidebar -->
+<div class="sidebar-container" id="sidebar">
+  <div class="profile-box">
+    <div class="profile-info text-center">
+      <img class="mx-2 rounded-circle profile-img"
+        style="object-fit: cover; border: 2px solid #FFCC00 !important;"
+        src="{% if journalist.profile_picture %}{{ journalist.profile_picture.url }}{% else %}{% static 'assets/dnn/img/user_random.jpg' %}{% endif %}"
+        alt="Journalist Profile">
+      <div class="profile-text text-capitalize">
+        <h5 class="name">{{ journalist.first_name }} {{ journalist.last_name }}</h5>
+        <h5 class="username"></h5>
+        <p><i class="fa fa-circle status"></i> {{ journalist.username }}</p>
+      </div>
+    </div>
+  </div>
+
+  {% if messages %}
+    {% for message in messages %}
+      <button class="btn btn-success successMessage" style="display: flex; align-items: center; justify-content: space-between;">
+        <p class="p-0 m-0" style="font-size: 10px;">{{ message }}</p>
+        <span onclick="this.parentElement.style.display='none'" style="margin-left:10px; cursor:pointer;">x</span>
+      </button>
+    {% endfor %}
+  {% endif %}
+
+  <nav class="sidebar-menu">
+    <a class="sidebar-link active" href="{% url 'dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+    <a class="sidebar-link" href="{% url 'profile' %}"><i class="fas fa-user-circle"></i> My Profile</a>
+    <a class="sidebar-link" href="{% url 'manage-post' %}"><i class="fas fa-tasks"></i> News Submission</a>
+    <a class="sidebar-link" href="{% url 'news-post' %}"><i class="bi bi-newspaper"></i> News Post</a>
+    <a class="sidebar-link" href="{% url 'manage-video-post' %}"><i class="fas fa-video"></i> Video Submission</a>
+    <a class="sidebar-link" href="{% url 'video-post' %}"><i class="fas fa-plus-square"></i> Video Post</a>
+    {% if journalist.registration_type != "journalist" %}
+      <a class="sidebar-link" href="{% url 'gallery_post' %}"><i class="fas fa-images"></i> My Gallery</a>
+    {% endif %}
+    {% if journalist.registration_type == "organisation" %}
+      <a class="sidebar-link" href="{% url 'add_artist' %}"><i class="fas fa-user-plus"></i> Enrollment Request</a>
+    {% endif %}
+    <a class="sidebar-link logout" href="{% url 'logout-user' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+  </nav>
+</div>
+
+<script>
+  function toggleSidebar() {
+    const sidebar = document.getElementById("sidebar");
+    sidebar.classList.toggle("open");
+  }
+
+  // Auto hide success message
+  setTimeout(function () {
+    let successButtons = document.querySelectorAll(".successMessage");
+    successButtons.forEach(function (btn) {
+      btn.style.display = "none";
+    });
+  }, 5000);
+</script>
+
+<!-- Font Awesome (make sure this is loaded in your base templates) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<style>
+  .sidebar-container {
+    background: rgb(241, 241, 241);
+    color: #000;
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 9999;
+    padding: 15px;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .profile-box {
+    border-bottom: 1px solid #302b2b;
+    padding: 15px 0;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .profile-img {
+    background: #eaeaea;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 100%;
+    width: 100px;
+    height: 100px;
+    margin-top: 10px;
+  }
+
+  .profile-text {
+    margin-top: 15px;
+    text-align: center;
+  }
+
+  .status {
+    color: #36b436 !important;
+    font-size: 14px;
+    text-decoration: none;
+  }
+
+  .sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    font-size: 14px;
+    text-decoration: none;
+    color: #000 !important;
+    border-radius: 6px;
+    transition: background 0.3s;
+  }
+
+  .sidebar-link i {
+    margin-right: 10px;
+    font-size: 14px;
+  }
+
+  .sidebar-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .logout {
+    color: #d61e25 !important;
+  }
+
+  .logout:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .sidebar-toggle-btn {
+   display: none;
+  }
+
+   /* Mobile view (phones) */
+@media (max-width: 768px) {
+  .sidebar-container {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .sidebar-container.open {
+    transform: translateX(0);
+  }
+
+  .sidebar-toggle-btn {
+    display: block;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background: #f1f1f1;
+    border: none;
+    padding: 6px 12px;
+    font-size: 16px;
+    border-radius: 5px;
+    z-index: 99999;
+  }
+}
+
+/* iPad Air & iPad Pro Portrait Mode */
+@media (max-width: 992px) and (min-width: 820px) {
+  .dash-box{
+    max-width: 100% !important;
+  }
+  .service-details img{
+    left: 44px !important;
+  }
+
+
+}
+@media (max-width: 1024px) and (min-width: 768px) {
+  .sidebar-container {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .sidebar-container.open {
+    transform: translateX(0);
+  }
+
+  .sidebar-toggle-btn {
+    display: block;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background: #f1f1f1;
+    border: none;
+    padding: 6px 12px;
+    font-size: 16px;
+    border-radius: 5px;
+    z-index: 99999;
+  }
+}
+@media (max-width: 1366px) and (min-width: 1024px) {
+  .sidebar-container {
+    transform: translateX(0);
+    max-width: 185px;
+    padding: 0px !important;
+  }
+
+ .sidebar-toggle-btn {
+   display: none;
+  }
+}
+</style>

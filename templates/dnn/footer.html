@@ -1,0 +1,280 @@
+{% load static %}
+
+
+
+<!-- Footer Section -->
+
+<footer class="footer" style="background-image: url('{{ profile_setting.footer_img.url }}')">
+
+    <div class="mx-2">
+
+        <div class="row">
+
+            <div class="col-lg-4 col-md-4 col-sm-6">
+
+                <h4 class="font-weight-bold">GET IN TOUCH</h4>
+
+                <div class="footer-logo my-4">
+
+                    <img style="width: 250px;" src="{{ profile_setting.logo_light.url }}" class="" alt="...">
+
+                </div>
+
+                <ul>
+
+                    <div class="my-4 d-flex align-items-center">
+
+                        <span class="mr-3"><i class="fas fa-map-marker-alt"></i></span>
+
+                        <span class="">
+
+                            {% if profile_setting.main_office_address %}
+
+                            <a href="https://www.google.com/maps/search/?api=1&query={{ profile_setting.main_office_address|urlencode }}"
+
+                                target="_blank">
+
+                                {{ profile_setting.main_office_address }}
+
+                            </a>
+
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <span class="mr-1"><i class="fas fa-phone-alt"></i></span>
+
+                        <a href="tel:{{ profile_setting.phone_number1 }}">{{ profile_setting.phone_number1 }}</a>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <span class="mr-1"><i class="fas fa-envelope"></i></span>
+
+                        <a href="mailto:{{ profile_setting.email }}" class="text-light">{{ profile_setting.email }}</a>
+
+                    </div>
+
+                </ul>
+
+            </div>
+
+            <div class="col-lg-5 col-md-5 col-sm-6">
+
+                <h4 class="font-weight-bold">ARTICLES</h4>
+
+                <ul class="mt-4 list-unstyled">
+
+                    {% for article in Articale|slice:":3" %}
+
+                    <div class="mt-3">
+
+                        <a class="text-body" href=""><strong><i class="fas fa-calendar-alt"></i>
+
+                                {{article.post_date|date}}</strong>
+
+                            <strong class="ml-3"> <i class="fas fa-clock"></i> {{ article.post_date|time }}</strong></a>
+
+                    </div>
+
+                    <a class="text-body" href="/{{article.slug}}">{{article.post_title|slice:":70"}}</a>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 p-2">
+
+                <h4 class="font-weight-bold">QUICK LINK</h4>
+
+                <ul class="mt-4 list-unstyled">
+
+                    <li><a href="/" class="text-body font-weight-medium p-2 ltnimg">Home</a></li>
+
+                    <li><a href="{% url 'contact-us' %}" class="text-body font-weight-medium p-2 ltnimg">Contact Us</a></li>
+
+                    {% for page in pages %}
+
+                    <li><a href="{% url 'cms' page.slug %}" class="text-body font-weight-medium p-2 ltnimg">{{ page.pagename }}</a></li>
+
+                    {% endfor %}
+
+                    <li><a href="{% url 'sitemap' %}" class="text-body font-weight-medium p-2 ltnimg">Sitemap</a></li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</footer>
+
+<div class="bottom-footer">
+
+    <div class="mx-5">
+
+        <div class=" row">
+
+            <div class="col-lg-8 col-md-6 col-sm-6">
+
+                <small class="text-white">&copy; <a class="text-white" href="https://www.{{ profile_setting.copyright }}">
+
+                    {{ profile_setting.copyright }}</a> All Rights Reserved.
+
+                </small>
+
+            </div>
+
+            <div class="col-lg-4 col-md-6 col-sm-6">
+
+                <ul class="list-unstyled d-flex m-0">
+
+                    <h6 class="mt-1 mr-3 text-white">Follow Us:</h6>
+
+                    {% if profile_setting.facbook %}
+
+                    <li class="mr-3">
+
+                        <a href="{{ profile_setting.facbook }}" target="_blank" class="text-light">
+
+                            <i class="fab fa-facebook"></i>
+
+                        </a>
+
+                    </li>
+
+                    {% endif %}
+
+                    {% if profile_setting.twitter %}
+
+                    <li class="mr-3">
+
+                        <a href="{{ profile_setting.twitter }}" target="_blank" class="text-light">
+
+                            <i class="fab fa-twitter"></i>
+
+                        </a>
+
+                    </li>
+
+                    {% endif %}
+
+                    {% if profile_setting.instagram %}
+
+                    <li class="mr-3">
+
+                        <a href="{{ profile_setting.instagram }}" target="_blank" class="text-light">
+
+                            <i class="fab fa-instagram"></i>
+
+                        </a>
+
+                    </li>
+
+                    {% endif %}
+
+                    {% if profile_setting.linkedin %}
+
+                    <li class="mr-3">
+
+                        <a href="{{ profile_setting.linkedin }}" target="_blank" class="text-light">
+
+                            <i class="fab fa-linkedin"></i>
+
+                        </a>
+
+                    </li>
+
+                    {% endif %}
+
+                    {% if profile_setting.youtube %}
+
+                    <li>
+
+                        <a href="{{ profile_setting.youtube }}" target="_blank" class="text-light">
+
+                            <i class="fab fa-youtube"></i>
+
+                        </a>
+
+                    </li>
+
+                    {% endif %}
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<a href="/" class="floating-home-btn" title="Go to Home">
+
+    <i class="fas fa-home"></i>
+
+</a>
+
+<button onclick="scrollToTop()" class="scroll-up-button" id="scrollTopBtn">
+
+    <i class="fas fa-arrow-up"></i>
+
+</button>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'assets/dnn/js/scripts.js'%}"></script>
+
+
+
+<script>
+
+    // Show Scroll Button When Scrolled
+
+    window.onscroll = function () {
+
+        var scrollBtn = document.getElementById("scrollTopBtn");
+
+        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+
+            scrollBtn.style.display = "block";
+
+        } else {
+
+            scrollBtn.style.display = "none";
+
+        }
+
+    };
+
+
+
+    // Scroll to Top Smoothly
+
+    function scrollToTop() {
+
+        window.scrollTo({
+
+            top: 0,
+
+            behavior: "smooth"
+
+        });
+
+    }
+
+</script>
+

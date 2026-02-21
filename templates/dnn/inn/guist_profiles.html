@@ -1,0 +1,35 @@
+<div class="row m-3">
+    <div class="heading-text">ArtDomain</div>
+    {% for profile in profiles %}
+        <div class="col-lg-2 col-md-6 col-sm-12">
+            <div class="article-card">
+                <div class="image-section">
+                    <a href="{% url 'journalist_profile' profile.username %}">
+                        <img style="height: 226px;" src="{{ profile.profile_picture.url }}" alt="{{ profile.username }}"
+                            title="{{ profile.username }}" loading="lazy" class="article-image" />
+                    </a>
+                    <div class="content-section items_background">
+                        {% if profile.registration_type == 'artist' %}
+                        <a href="{% url 'journalist_profile' profile.username %}" class="article-tag">
+                            {{ profile.first_name }} {{ profile.last_name }}
+                        </a>
+                        {% else %}
+                        <a href="{% url 'journalist_profile' profile.username %}" class="article-tag">
+                            {{ profile.organisation_name|truncatechars:30 }}
+                        </a>
+                        {% endif %}
+
+                        <a href="{% url 'journalist_profile' profile.username %}">
+                            <h2 style="font-size: 11px; font-weight: 700;">{{ profile.registration_type|capfirst }}</h2>
+                        </a>
+
+                        <a href="{% url 'journalist_profile' profile.username %}">
+                            <h2 style="font-size: 11px; font-weight: 700;">From : {{ profile.nationality }}</h2>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

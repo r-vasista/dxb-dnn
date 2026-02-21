@@ -1,0 +1,9 @@
+.env
+__pycache__/
+*.pyc
+db.sqlite3
+dnndb.sqlite3
+staticfiles/
+tmp/
+upload/
+static_collect/

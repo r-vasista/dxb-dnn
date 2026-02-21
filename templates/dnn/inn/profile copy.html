@@ -1,0 +1,246 @@
+{% extends 'base.html' %}
+{% block body %}
+{% load static %}
+
+<div class="container my-5">
+    <div class="bg-white">
+        <div class="art-banner"></div>
+        <div class="container d-flex">
+            <div class="art-profile-container">
+                <div class="art-logo">
+                    <a href="#">
+                        <img src="{{ journalist.profile_picture.url }}" alt="Art Logo">
+                    </a>
+                </div>
+                <div class="art-info">
+                    <h2>{{ journalist.first_name }} {{ journalist.last_name }}</h2>
+                    <h6>{{ journalist.registration_type }}</h6>
+                    <p>{{ journalist.biography|truncatechars:120 }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-9 col-md-8 col-sm-12">
+            <h5 class="fw-bold mb-3">Gallery</h5>
+            <div class="row">
+                {% for img in galleries %}
+                {% if img.image %}
+                <div class="col-md-3 mb-3">
+                    <a href="{{ img.image.url }}" target="_blank">
+                        <img src="{{ img.image.url }}" class="gallery-img img-fluid" alt="Gallery Image">
+                    </a>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-12">
+            <div>
+                <h5 class="fw-bold">Recommended Profile</h5>
+                {% for profiles in profile %}
+                <div class="d-flex align-items-center mb-3">
+                    <a href="{% url 'journalist_profile' profiles.id %}">
+                        <img src="{{ profiles.profile_picture.url }}" class="artist-img me-2">
+                    </a>
+                    <div>
+                        <a href="{% url 'journalist_profile' profiles.id %}">
+                            <div class="fw-semibold">{{ profiles.first_name }} {{ profiles.last_name }}</div>
+                        </a>
+                        <small class="text-muted">{{ profiles.registration_type }}</small>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-9 col-md-8 col-sm-12">
+            <div class="row">
+                <h5 class="fw-bold mb-3">News</h5>
+                {% for post in journalist_blogdata %}
+                <div class="news-item">
+                    <a href="/{{ post.slug }}">
+                        <img src="{{ post.post_image.url }}" class="news-img" alt="{{ post.post_title }}"
+                            title="{{ post.post_title }}" loading="lazy">
+                    </a>
+                    <div>
+                        <div class="news-title"><a href="/{{ post.slug }}">{{ post.post_title }}</a></div>
+                        <p>{{ post.post_short_des|truncatechars:120 }}</p>
+                        <div class="news-date">{{ post.schedule_date|date }} | {{ post.schedule_date|time }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-sm-12">
+            <div class="right-side-news">
+                <div class="right-side-news-title">Articales</div>
+                {% for post in journalist_articales %}
+                <div class="news-item-box">
+                    <a href="/{{ post.slug }}">
+                        <img src="{{ post.post_image.url }}" alt="Art News 1" class="news-thumb"
+                            alt="{{ post.post_title }}" title="{{ post.post_title }}" loading="lazy">
+                    </a>
+                    <div class="news-text ml-3">
+                        <a href="/{{ post.slug }}">
+                            <div class="news-text-title">{{ post.post_title|truncatechars:45 }}</div>
+                        </a>
+                        <div class="news-text-date">{{ post.schedule_date|date }} | {{ post.schedule_date|time }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<style>
+    .profile-img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    .gallery-img,
+    .news-img {
+        width: 100%;
+        height: 120px;
+        object-fit: contain;
+        border-radius: 8px;
+    }
+
+    .art-banner {
+        width: 100%;
+        height: 220px;
+        background-image: url('https://cdn.shortpixel.ai/spai2/w_1920+q_lossy+ret_img+to_webp/kleo.seventhqueen.com/wp-content/uploads/buddypress/members/1/cover-image/58a1cdb6dd967-bp-cover-image.jpg');
+        background-size: cover;
+        background-position: center;
+        position: relative;
+    }
+
+    .art-profile-container {
+        width: 100%;
+        max-width: 450px;
+        border-radius: 12px;
+        display: flex;
+        background: #f7f2f2;
+        position: relative;
+        bottom: 50px;
+    }
+
+    .art-logo img {
+        width: 130px;
+        height: 130px;
+        background-color: #fff;
+        border-radius: 50%;
+        border: 2px solid #ccc;
+        position: relative;
+        object-fit: cover;
+        bottom: 40px;
+        z-index: 99;
+        left: -4px;
+    }
+
+    .art-info {
+        align-items: center;
+        position: relative;
+        max-width: 430px;
+        padding: 20px;
+        bottom: 0px;
+    }
+
+    .art-info h2 {
+        margin: 0;
+        font-size: 1.5rem;
+    }
+
+    .art-info p {
+        margin: 5px 0 0;
+        font-size: 0.95rem;
+        color: #555;
+        max-width: 600px;
+        line-height: 1.4;
+    }
+
+    .artist-img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 50%;
+
+    }
+
+    .news-item {
+        display: flex;
+        align-items: start;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .news-img {
+        width: 100%;
+        height: 70px;
+        object-fit: contain;
+        border-radius: 8px;
+    }
+
+    .news-title {
+
+        font-size: 1rem;
+        margin-bottom: 5px;
+    }
+
+    .news-date {
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+
+    .right-side-news {
+        padding: 20px;
+        font-family: Arial, sans-serif;
+    }
+
+    .right-side-news-title {
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    .news-item-box {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 18px;
+    }
+
+    .news-thumb {
+
+        height: 50px;
+        object-fit: contain;
+        border-radius: 6px;
+        margin-right: 10px;
+        flex-shrink: 0;
+    }
+
+    .news-text {
+        max-width: 200px;
+    }
+
+    .news-text-title {
+        font-size: 0.95rem;
+
+        margin-bottom: 5px;
+        line-height: 1.2;
+    }
+
+    .news-text-date {
+        font-size: 0.85rem;
+        color: #777;
+    }
+</style>
+{% endblock %}

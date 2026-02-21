@@ -1,0 +1,150 @@
+{% load static %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
+<div class="m-3">
+  <div class="row mb-3">
+    <div class="col-lg-6 col-md-6">
+      <div class="heading-text">Articles</div>
+    </div>
+    <div class="col-lg-6 col-md-6 view-all">
+      <a href="/all-news/articles" class="btn btn-sm">VIEW ALL ></a>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-lg-2 col-md-4 col-sm-12 mb-4">
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
+        crossorigin="anonymous"></script>
+      <ins class="adsbygoogle" style="display:inline-block;width:206px;height:575px"
+        data-ad-client="ca-pub-5922835412614482" data-ad-slot="6367481659"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
+    <div class="col-lg-6 col-md-8 col-sm-12 mb-4">
+      <div class="article-slider-wrapper">
+        <div class="article-slider-main" id="articleSliderMain">
+          {% for article in Articale|slice:":4" %}
+          <div class="article-slide-item">
+            <img src="{{ article.post_image.url }}" alt="{{ article.post_title }}" title="{{ article.post_title }}"
+              loading="lazy">
+
+            <div class="article-content">
+              <a class="article-tag"
+                href="{% url 'catdetails' catlink=article.post_cat.sub_cat.cat_slug slug=article.post_cat.subcat_slug %}">
+                {{ article.post_cat }}
+              </a>
+              <a class="text-start" href="/{{ article.slug }}">
+                <h3>{{ article.post_title|truncatechars:80 }}</h3>
+              </a>
+              <a href="/{{ article.slug }}">
+                <p class="text-start">{{ article.post_short_des|truncatechars:150 }}</p>
+              </a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="article-slider-thumbs mt-3">
+          {% for article in Articale|slice:":4" %}
+          <div class="article-thumb-item" onclick="goToArticleSlide({{ forloop.counter0 }})">
+            <img src="{{ article.post_image.url }}" alt="{{ article.post_title }}" title="{{ article.post_title }}"
+              loading="lazy">
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-2 col-md-8 col-sm-12 mb-4">
+      {% for article in Articale|slice:"4:6" %}
+      <div class="article-card">
+        <div class="image-section">
+          <a href="/{{ article.slug }}">
+            <img src="{{ article.post_image.url }}" alt="{{ article.post_title }}" title="{{ article.post_title }}"
+              loading="lazy" class="article-image"/>
+          </a>
+          <div class="content-section items_background">
+            <a href="{% url 'catdetails' catlink=article.post_cat.sub_cat.cat_slug slug=article.post_cat.subcat_slug %}"
+              class="article-tag">
+              {{ article.post_cat|truncatechars:30 }}
+            </a>
+            <a href="/{{ article.slug }}">
+              <h2 class="article-heading">{{ article.post_title|truncatechars:50 }}</h2>
+            </a>
+            <div class="meta">
+              <span>{{ article.post_date }}</span>
+              <div class="share-icons-container" style="--custom-bottom: 0px; --custom-right: 0px;">
+                {% include 'share.html' with posts=article %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="col-lg-2 col-md-4 col-sm-12 mb-4">
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
+        crossorigin="anonymous"></script>
+      <ins class="adsbygoogle" style="display:inline-block;width:206px;height:575px"
+        data-ad-client="ca-pub-5922835412614482" data-ad-slot="6367481659"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </div>
+
+  <div class="row">
+    {% for article in Articale|slice:"6:12" %}
+    <div class="col-lg-2 col-md-6 col-sm-12">
+      <div class="article-card">
+        <div class="image-section">
+          <a href="/{{ article.slug }}">
+            <img src="{{ article.post_image.url }}" alt="{{ article.post_title }}" title="{{ article.post_title }}"
+              loading="lazy" class="article-image" />
+          </a>
+          <div class="content-section items_background">
+            <a href="{% url 'catdetails' catlink=article.post_cat.sub_cat.cat_slug slug=article.post_cat.subcat_slug %}"
+              class="article-tag">
+              {{ article.post_cat|truncatechars:30 }}
+            </a>
+            <a href="/{{ article.slug }}">
+              <h2 class="article-heading">{{ article.post_title|truncatechars:50 }}</h2>
+            </a>
+
+            <div class="meta">
+              <span>{{ article.post_date }}</span>
+              <div class="share-icons-container" style="--custom-bottom: 0px; --custom-right: 0px;">
+                {% include 'share.html' with posts=article %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+<div class="row my-2">
+  <div class="col-lg-6 col-md-12">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
+      crossorigin="anonymous"></script>
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5922835412614482" data-ad-slot="2979021120"
+      data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+
+  <div class="col-lg-6 col-md-12">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
+      crossorigin="anonymous"></script>
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5922835412614482" data-ad-slot="2979021120"
+      data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+</div>

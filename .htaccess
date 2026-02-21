@@ -1,0 +1,12 @@
+# ===============================
+# DJANGO LOCAL DEVELOPMENT
+# ===============================
+
+RewriteEngine Off
+
+# Disable Passenger locally
+PassengerEnabled off
+
+# No HTTPS redirect
+# No rewrite rules
+# No bot blocking

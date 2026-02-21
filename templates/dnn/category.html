@@ -1,0 +1,1003 @@
+{% extends 'base.html' %}
+{% block body %}
+{% load static %}
+<!-- <link rel="stylesheet" href="{% static 'assets/category/css/vendor/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'assets/category/css/vendor/font-awesome.css' %}">
+<link rel="stylesheet" href="{% static 'assets/category/css/vendor/icon-font.css' %}">
+<link rel="stylesheet" href="{% static 'assets/category/css/vendor/remixicon.css' %}"> -->
+<link rel="stylesheet" href="{% static 'assets/category/css/app.css' %}">
+<link rel="stylesheet" href="{% static 'assets/category/css/responsive.css' %}">
+
+<div id="main-wrapper" class="main-wrapper">
+    <div class=" col-lg-12 text-title text-center mt-3">
+        <h1>Top Stories and Breaking News in {{ BlogData.0.post_cat }}</h1>
+      </div>
+    {% if BlogData %}
+    <section class="blog-hero-area mb-3 mt-30">
+        <div class="container">
+            <div class="section-title sm-mt-24 p-0">
+                <p class="title-block h3">
+                    News
+                </p>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    {% for Blog in BlogData|slice:"2:6" %}
+                    <article class="post-block-style-wrapper post-block-template-one post-block-template-small">
+                        <div class="post-block-style-inner">
+                            <div class="post-block-media-wrap">
+                                <a href="/{{ Blog.slug }}">
+                                    <img src="{{ Blog.post_image.url }}" alt="{{ Blog.post_title }}" title="{{ Blog.post_title }}" loading="lazy">
+                                </a>
+                            </div>
+                            <div class="post-block-content-wrap">
+                                <div class="post-item-title">
+                                    <p class="post-title h3">
+                                        <a href="/{{ Blog.slug }}">{{ Blog.post_title|truncatechars:80 }}</a>
+                                    </p>
+                                </div>
+                                <div class="post-bottom-meta">
+                                    <div class="post-meta-author-box">
+                                        By <a style="color: #de1c24 !important;" href="javascript:void(0)">
+                                            {% if Blog.author %}
+                                                {{ Blog.author.first_name|capfirst }} {{ Blog.author.last_name|capfirst }}
+                                            {% elif Blog.journalist %}
+                                                {{ Blog.journalist.first_name|capfirst }} {{ Blog.journalist.last_name|capfirst }}
+                                            {% else %}
+                                                Admin
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                    <div class="post-meta-date-box">
+                                        {{ Blog.schedule_date|date }} | {{ Blog.schedule_date|time }}
+                                    </div>
+                                    <div style="--custom-bottom: 0px; --custom-right: 0px;">
+                                        {% include 'share.html' with posts=Blog %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+                <div class="col-lg-6">
+                    {% for Blog in BlogData|slice:":2" %}
+                    <article class="post-block-style-wrapper post-block-template-one sm-mt-24">
+                        <div class="post-block-style-inner">
+                            <div class="post-block-media-wrap">
+                                <a href="/{{ Blog.slug }}">
+                                    <img src="{{ Blog.post_image.url }}" alt="{{ Blog.post_title }}" title="{{ Blog.post_title }}" loading="lazy">
+                                </a>
+                            </div>
+                            <div class="post-block-content-wrap">
+                                <div class="post-item-title">
+                                    <p class="post-title h3">
+                                        <a href="/{{ Blog.slug }}">{{ Blog.post_title|truncatechars:90 }}</a>
+                                    </p>
+                                </div>
+                                <div class="post-excerpt-box">
+                                    <p>{{ Blog.post_short_des|truncatechars:150 }}</p>
+                                </div>
+                                <div class="post-bottom-meta">
+                                    <div class="post-meta-author-box">
+                                        By <a style="color: #de1c24 !important;" href="javascript:void(0)">
+                                            {% if Blog.author %}
+                                                {{ Blog.author.first_name|capfirst }} {{ Blog.author.last_name|capfirst }}
+                                            {% elif Blog.journalist %}
+                                                {{ Blog.journalist.first_name|capfirst }} {{ Blog.journalist.last_name|capfirst }}
+                                            {% else %}
+                                                Admin
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                    <div class="post-meta-date-box">
+                                        {{ Blog.schedule_date|date }} | {{ Blog.schedule_date|time }}
+                                    </div>
+                                    <div style="--custom-bottom: 0px; --custom-right: 0px;">
+                                        {% include 'share.html' with posts=Blog %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+                <div class="col-lg-3">
+                    {% for Blog in BlogData|slice:"6:12" %}
+                    <article class="post-block-style-wrapper post-block-template-two">
+                        <div class="post-block-style-inner post-block-list-style-inner">
+                            <div class="post-block-media-wrap">
+                                <a href="/{{ Blog.slug }}">
+                                    <img src="{{ Blog.post_image.url }}" alt="{{ Blog.post_title }}" title="{{ Blog.post_title }}" loading="lazy">
+                                </a>
+                            </div>
+                            <div class="post-block-content-wrap">
+                                <div class="post-item-title">
+                                    <p class="post-title h3">
+                                        <a href="/{{ Blog.slug }}">{{ Blog.post_title|truncatechars:50 }}</a>
+                                    </p>
+                                </div>
+                                <div class="post-bottom-meta">
+                                    <div class="post-meta-author-box">
+                                        <a style="color: #de1c24 !important;" href="javascript:void(0)">
+                                            {% if Blog.author %}
+                                                {{ Blog.author.first_name|capfirst }} {{ Blog.author.last_name|capfirst }}
+                                            {% elif Blog.journalist %}
+                                                {{ Blog.journalist.first_name|capfirst }} {{ Blog.journalist.last_name|capfirst }}
+                                            {% else %}
+                                                Admin
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                    <div class="post-meta-date-box">
+                                        {{ Blog.schedule_date|date }} | {{ Blog.schedule_date|time }}
+                                    </div>
+                                    <div style="--custom-bottom: 0px; --custom-right: 0px;">
+                                        {% include 'share.html' with posts=Blog %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    {% endfor %}
+                    <div class="ads-widget mt-40">
+                        <div style=" height: 487px;" class="col-lg-12">
+                            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
+                              crossorigin="anonymous"></script>
+                            <ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-layout-key="-6t+ed+2i-1n-4w"
+                              data-ad-client="ca-pub-5922835412614482" data-ad-slot="1982075160"></ins>
+                            <script>
+                              (adsbygoogle = window.adsbygoogle || []).push({});
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="blog-pagination-area mt-40">
+                        <ul class="page-numbers">
+            
+                            {% if BlogData.has_previous %}
+                                <li><a class="page-numbers" href="?page={{ BlogData.previous_page_number }}&headline_page={{ headline.number }}&articles_page={{ articales.number }}&trending_page={{ trending.number }}&breakingnews={{ brknews.number }}&videos_page={{ videos.number }}&reels_page={{ reels.number }}&podcast_page={{ podcast.number }}">
+                                    <i class="icofont-long-arrow-left"></i>
+                                </a></li>
+                            {% endif %}
+            
+                            {% for page_num in BlogData.paginator.page_range %}
+                                {% if page_num == 1 or page_num == BlogData.paginator.num_pages or page_num >= BlogData.number|add:"-1" and page_num <= BlogData.number|add:"1" %}
+                                    
+                                    {% if page_num == BlogData.number %}
+                                        <li><span aria-current="page" class="page-numbers current">{{ page_num }}</span></li>
+                                    {% else %}
+                                        <li><a class="page-numbers" href="?page={{ page_num }}&headline_page={{ headline.number }}&articles_page={{ articales.number }}&trending_page={{ trending.number }}&breakingnews={{ brknews.number }}&videos_page={{ videos.number }}&reels_page={{ reels.number }}&podcast_page={{ podcast.number }}">{{ page_num }}</a></li>
+                                    {% endif %}
+                                
+                                {% elif page_num == BlogData.number|add:"-2" or page_num == BlogData.number|add:"2" %}
+                                    <li><span class="page-numbers">...</span></li>
+                                {% endif %}
+                            {% endfor %}
+            
+                            {% if BlogData.has_next %}
+                                <li><a class="page-numbers" href="?page={{ BlogData.next_page_number }}&headline_page={{ headline.number }}&articles_page={{ articales.number }}&trending_page={{ trending.number }}&breakingnews={{ brknews.number }}&videos_page={{ videos.number }}&reels_page={{ reels.number }}&podcast_page={{ podcast.number }}">
+                                    <i class="icofont-long-arrow-right"></i>
+                                </a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>                 
+        </div>
+    </section>
+    {% endif %}
+
+    {% if latestnews %}
+    <section class="articles-grid-section mt-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <p class="title-block h3">
+                            Recent Post
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                {% for Blog in latestnews|slice:":3"%}
+                <div class="col-lg-3">
+                    <div class="post-block-style-wrapper post-block-template-one post-block-template-small">
+                        <div class="post-block-style-inner">
+                            <div class="post-block-media-wrap">
+                                <a href="/{{ Blog.slug }}">
+                                    <img src="{{ Blog.post_image.url }}" alt="{{ Blog.post_title }}" title="{{ Blog.post_title }}" loading="lazy">
+                                </a>
+                            </div>
+                            <div class="post-block-content-wrap">
+                                <div class="post-item-title">
+                                    <p class="post-title h3">
+                                        <a href="/{{ Blog.slug }}">{{ Blog.post_title|truncatechars:55 }}</a>
+                                    </p>
+                                </div>
+                                <div class="post-bottom-meta">
+                                    <div class="post-meta-author-box">
+                                        By <a style="color: #de1c24 !important;" href="javascript:void(0)">
+                                            {% if Blog.author %}
+                                                {{ Blog.author.first_name|capfirst }} {{ Blog.author.last_name|capfirst }}
+                                            {% elif Blog.journalist %}
+                                                {{ Blog.journalist.first_name|capfirst }} {{ Blog.journalist.last_name|capfirst }}
+                                            {% else %}
+                                                Admin
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                    <div class="post-meta-date-box">
+                                        {{ Blog.schedule_date|date }} | {{ Blog.schedule_date|time }}
+                                    </div>
+                                    <div style="--custom-bottom: 0px; --custom-right: 0px;">
+                                        {% include 'share.html' with posts=Blog %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="col-lg-3">
+                    <div class="newsletter-box-wrapper">
+                        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
+                            crossorigin="anonymous"></script>
+                        <ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-layout-key="-6t+ed+2i-1n-4w"
+                            data-ad-client="ca-pub-5922835412614482" data-ad-slot="1982075160"></ins>
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                    </div>
+                </div>
+            </div>      
+        </div>
+    </section>
+    {% endif %}
+
+    {% if headline %}
+    <div class="section-divider mt-60 mb-60"></div>
+
+    <section class="editor-choice-one-area">
+        <div class="container">
+            <div class="section-title">
+                <p class="title-block h3">
+                    Top Picks
+                </p>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="post-block-template-three-wrapper">
+                        {% for Blog in headline|slice:"2:5" %}
+                        <div class="post-block-style-wrapper post-block-template-three">
+                            <div class="post-block-style-inner post-block-list-style-inner-three">
+                                <div class="post-block-number-wrap">
+                                    <span class="post-number-counter">{{ forloop.counter }}</span>
+                                </div>
+                                <div class="post-block-content-wrap">
+                                    <div class="post-item-title">
+                                        <p class="post-title h3">
+                                            <a href="/{{ Blog.slug }}">{{ Blog.post_title|truncatechars:50 }}</a>
+                                        </p>
+                                    </div>
+                                    <div class="post-bottom-meta">
+                                        <div class="post-meta-author-box">
+                                            By <a style="color: #de1c24 !important;" href="javascript:void(0)">
+                                                {% if Blog.author %}
+                                                    {{ Blog.author.first_name|capfirst }} {{ Blog.author.last_name|capfirst }}
+                                                {% elif Blog.journalist %}
+                                                    {{ Blog.journalist.first_name|capfirst }} {{ Blog.journalist.last_name|capfirst }}
+                                                {% else %}
+                                                    Admin
+                                                {% endif %}
+                                            </a>
+                                        </div>
+                                        <div class="post-meta-date-box">
+                                            {{ Blog.schedule_date|date }} | {{ Blog.schedule_date|time }}
+                                        </div>
+                                        <div style="--custom-bottom: 0px; --custom-right: 0px;">
+                                            {% include 'share.html' with posts=Blog %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-lg-8 most-recent-col-custom">
+                    <div class="row">
+                        {% for Blog in headline|slice:":2" %}
+                        <div class="col-lg-6">
+                            <div
+                                class="post-block-style-wrapper post-block-template-one post-block-template-medium">
+                                <div class="post-block-style-inner">
+                                    <div class="post-block-media-wrap">
+                                        <a href="/{{ Blog.slug }}">
+                                            <img src="{{ Blog.post_image.url }}" alt="{{ Blog.post_title }}" title="{{ Blog.post_title }}" loading="lazy">
+                                        </a>
+                                    </div>
+                                    <div class="post-block-content-wrap">
+                                        <div class="post-item-title">
+                                            <p class="post-title h3">
+                                                <a href="/{{ Blog.slug }}">{{ Blog.post_title|truncatechars:60 }}</a>
+                                            </p>
+                                        </div>
+                                        <div class="post-excerpt-box">
+                                            <p>{{ Blog.post_short_des|truncatechars:90 }}</p>
+                                        </div>
+                                        <div class="post-bottom-meta">
+                                            <div class="post-meta-author-box">
+                                                By <a style="color: #de1c24 !important;" href="javascript:void(0)">
+                                                {% if Blog.author %}
+                                                    {{ Blog.author.first_name|capfirst }} {{ Blog.author.last_name|capfirst }}
+                                                {% elif Blog.journalist %}
+                                                    {{ Blog.journalist.first_name|capfirst }} {{ Blog.journalist.last_name|capfirst }}
+                                                {% else %}
+                                                    Admin
+                                                {% endif %}
+                                                </a>
+                                            </div>
+                                            <div class="post-meta-date-box">
+                                                {{ Blog.schedule_date|date }} | {{ Blog.schedule_date|time }}
+                                            </div>
+                                            <div style="--custom-bottom: 0px; --custom-right: 0px;">
+                                                {% include 'share.html' with posts=Blog %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="blog-pagination-area mt-40">
+                        <ul class="page-numbers">
+            
+                            {% if headline.has_previous %}
+                                <li><a class="page-numbers" href="?headline_page={{ headline.previous_page_number }}&page={{ BlogData.number }}&articles_page={{ articales.number }}&trending_page={{ trending.number }}&breakingnews={{ brknews.number }}&videos_page={{ videos.number }}&reels_page={{ reels.number }}&podcast_page={{ podcast.number }}">
+                                    <i class="icofont-long-arrow-left"></i>
+                                </a></li>
+                            {% endif %}
+            
+                            {% for page_num in headline.paginator.page_range %}
+                                {% if page_num == 1 or page_num == headline.paginator.num_pages or page_num >= headline.number|add:"-1" and page_num <= headline.number|add:"1" %}
+                                    
+                                    {% if page_num == headline.number %}
+                                        <li><span aria-current="page" class="page-numbers current">{{ page_num }}</span></li>
+                                    {% else %}
+                                        <li><a class="page-numbers" href="?headline_page={{ page_num }}&page={{ BlogData.number }}&articles_page={{ articales.number }}&trending_page={{ trending.number }}&breakingnews={{ brknews.number }}&videos_page={{ videos.number }}&reels_page={{ reels.number }}&podcast_page={{ podcast.number }}">{{ page_num }}</a></li>
+                                    {% endif %}
+                                
+                                {% elif page_num == headline.number|add:"-2" or page_num == headline.number|add:"2" %}
+                                    <li><span class="page-numbers">...</span></li>
+                                {% endif %}
+                            {% endfor %}
+            
+                            {% if headline.has_next %}
+                                <li><a class="page-numbers" href="?headline_page={{ headline.next_page_number }}&page={{ BlogData.number }}&articles_page={{ articales.number }}&trending_page={{ trending.number }}&breakingnews={{ brknews.number }}&videos_page={{ videos.number }}&reels_page={{ reels.number }}&podcast_page={{ podcast.number }}">
+                                    <i class="icofont-long-arrow-right"></i>
+                                </a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </section>
+    {% endif %}
+
+    <section class="ads-area mt-70 mb-60">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3 class="ads-caption d-none">Advertisement</h3>
+                    <div class="ads-image">
+                        <div class="col-lg-12 col-md-12">
+                            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
+                              crossorigin="anonymous"></script>
+                            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5922835412614482" data-ad-slot="2979021120"
+                              data-ad-format="auto" data-full-width-responsive="true"></ins>
+                            <script>
+                              (adsbygoogle = window.adsbygoogle || []).push({});
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% if trendpost %}
+    <section class="editor-choice-two-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <p class="title-block h3">
+                            Popular News
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8">
+                    {% for Blog in trendpost|slice:":3" %}
+                    <div class="post-block-style-wrapper post-block-template-four my-3">
+                        <div class="post-block-style-inner post-block-list-style-inner">
+                            <div class="post-block-content-wrap">
+                                <div class="post-item-title">
+                                    <p class="post-title h3">
+                                        <a href="/{{ Blog.slug }}">{{ Blog.post_title|truncatechars:80 }}</a>
+                                    </p>
+                                </div>
+                                <div class="post-excerpt-box">
+                                    <p>{{ Blog.post_short_des|truncatechars:150 }}</p>
+                                </div>
+                                <div class="post-bottom-meta">
+                                    <div class="post-meta-author-box">
+                                        By <a style="color: #de1c24 !important;" href="javascript:void(0)">
+                                            {% if Blog.author %}
+                                                {{ Blog.author.first_name|capfirst }} {{ Blog.author.last_name|capfirst }}
+                                            {% elif Blog.journalist %}
+                                                {{ Blog.journalist.first_name|capfirst }} {{ Blog.journalist.last_name|capfirst }}
+                                            {% else %}
+                                                Admin
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                    <div class="post-meta-date-box">
+                                        {{ Blog.schedule_date|date }} | {{ Blog.schedule_date|time }}
+                                    </div>
+                                    <div style="--custom-bottom: 0px; --custom-right: 0px;">
+                                        {% include 'share.html' with posts=Blog %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="post-block-media-wrap">
+                                <a href="/{{ Blog.slug }}">
+                                    <img src="{{ Blog.post_image.url }}" alt="{{ Blog.post_title }}" title="{{ Blog.post_title }}" loading="lazy">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="col-lg-4">
+                    {% for Blog in trendpost|slice:"3:7"%}
+                    <div class="post-block-style-wrapper post-block-template-two most-read-block-list my-3">
+                        <div class="post-block-style-inner post-block-list-style-inner">
+                            <div class="post-block-media-wrap">
+                                <a href="/{{ Blog.slug }}">
+                                    <img src="{{ Blog.post_image.url }}" alt="{{ Blog.post_title }}" title="{{ Blog.post_title }}" loading="lazy">
+                                </a>
+                            </div>
+                            <div class="post-block-content-wrap">
+                                <div class="post-item-title">
+                                    <p class="post-title h3">
+                                        <a href="/{{ Blog.slug }}">{{ Blog.post_title|truncatechars:60 }}</a>
+                                    </p>
+                                </div>
+                                <div class="post-bottom-meta">
+                                    <div class="post-meta-author-box">
+                                        <a style="color: #de1c24 !important;" href="javascript:void(0)">
+                                            {% if Blog.author %}
+                                                {{ Blog.author.first_name|capfirst }} {{ Blog.author.last_name|capfirst }}
+                                            {% elif Blog.journalist %}
+                                                {{ Blog.journalist.first_name|capfirst }} {{ Blog.journalist.last_name|capfirst }}
+                                            {% else %}
+                                                Admin
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                    <div class="post-meta-date-box">
+                                        {{ Blog.schedule_date|date }} | {{ Blog.schedule_date|time }}
+                                    </div>
+                                    <div style="--custom-bottom: 0px; --custom-right: 0px;">
+                                        {% include 'share.html' with posts=Blog %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="col-lg-12 col-md-12">
+                        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
+                            crossorigin="anonymous"></script>
+                        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5922835412614482" data-ad-slot="2979021120"
+                            data-ad-format="auto" data-full-width-responsive="true"></ins>
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="blog-pagination-area mt-40">
+                        <ul class="page-numbers">
+                            {% if BlogData.has_previous %}
+                                <li><a class="page-numbers" href="?page={{ BlogData.previous_page_number }}&headline_page={{ headline.number }}&articles_page={{ articales.number }}&trending_page={{ trending.number }}&breakingnews={{ brknews.number }}&videos_page={{ videos.number }}&reels_page={{ reels.number }}&podcast_page={{ podcast.number }}">
+                                    <i class="icofont-long-arrow-left"></i>
+                                </a></li>
+                            {% endif %}
+            
+                            {% for page_num in BlogData.paginator.page_range %}
+                                {% if page_num == 1 or page_num == BlogData.paginator.num_pages or page_num >= BlogData.number|add:"-1" and page_num <= BlogData.number|add:"1" %}
+                                    {% if page_num == BlogData.number %}
+                                        <li><span aria-current="page" class="page-numbers current">{{ page_num }}</span></li>
+                                    {% else %}
+                                        <li><a class="page-numbers" href="?page={{ page_num }}&headline_page={{ headline.number }}&articles_page={{ articales.number }}&trending_page={{ trending.number }}&breakingnews={{ brknews.number }}&videos_page={{ videos.number }}&reels_page={{ reels.number }}&podcast_page={{ podcast.number }}">{{ page_num }}</a></li>
+                                    {% endif %}
+                                {% elif page_num == BlogData.number|add:"-2" or page_num == BlogData.number|add:"2" %}
+                                    <li><span class="page-numbers">...</span></li>
+                                {% endif %}
+                            {% endfor %}
+            
+                            {% if BlogData.has_next %}
+                                <li><a class="page-numbers" href="?page={{ BlogData.next_page_number }}&headline_page={{ headline.number }}&articles_page={{ articales.number }}&trending_page={{ trending.number }}&breakingnews={{ brknews.number }}&videos_page={{ videos.number }}&reels_page={{ reels.number }}&podcast_page={{ podcast.number }}">
+                                    <i class="icofont-long-arrow-right"></i>
+                                </a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </section>
+    {% endif %}
+
+    {% if breakingnews %}
+    <div class="section-divider mt-60 mb-60"></div>
+
+    <section class="most-popular-area me mt-40">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <p class="title-block h3">
+                            Breaking News
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-50">
+                {% for Blog in breakingnews|slice:":1"%}
+                <div class="col-lg-5">
+                    <div class="post-block-style-wrapper post-block-template-one custom-spacing">
+                        <div class="post-block-style-inner">
+                            <div class="post-block-media-wrap">
+                                <a href="/{{ Blog.slug }}">
+                                    <img src="{{ Blog.post_image.url }}" alt="{{ Blog.post_title }}" title="{{ Blog.post_title }}" loading="lazy">
+                                </a>
+                            </div>
+                            <div class="post-block-content-wrap">
+                                <div class="post-item-title">
+                                    <p class="post-title h3">
+                                        <a href="/{{ Blog.slug }}">{{ Blog.post_title|truncatechars:80 }}</a>
+                                    </p>
+                                </div>
+                                <div class="post-excerpt-box">
+                                    <p>{{ Blog.post_short_des|truncatechars:120 }}</p>
+                                </div>
+                                <div class="post-bottom-meta">
+                                    <div class="post-meta-author-box">
+                                        By <a style="color: #de1c24 !important;" href="javascript:void(0)">
+                                            {% if Blog.author %}
+                                                {{ Blog.author.first_name|capfirst }} {{ Blog.author.last_name|capfirst }}
+                                            {% elif Blog.journalist %}
+                                                {{ Blog.journalist.first_name|capfirst }} {{ Blog.journalist.last_name|capfirst }}
+                                            {% else %}
+                                                Admin
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                    <div class="post-meta-date-box">
+                                        {{ Blog.schedule_date|date }} | {{ Blog.schedule_date|time }}
+                                    </div>
+                                    <div style="--custom-bottom: 0px; --custom-right: 0px;">
+                                        {% include 'share.html' with posts=Blog %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="col-lg-7">
+                    {% for Blog in breakingnews|slice:"1:3"%}
+                    <div class="post-block-style-wrapper post-block-template-four my-3">
+                        <div class="post-block-style-inner post-block-list-style-inner">
+                            <div class="post-block-content-wrap">
+                                <div class="post-item-title">
+                                    <p class="post-title h3">
+                                        <a href="/{{ Blog.slug }}">{{ Blog.post_title|truncatechars:90 }}</a>
+                                    </p>
+                                </div>
+                                <div class="post-excerpt-box">
+                                    <p>{{ Blog.post_short_des|truncatechars:150 }}</p>
+                                </div>
+                                <div class="post-bottom-meta">
+                                    <div class="post-meta-author-box">
+                                        By <a style="color: #de1c24 !important;" href="javascript:void(0)">
+                                            {% if Blog.author %}
+                                                {{ Blog.author.first_name|capfirst }} {{ Blog.author.last_name|capfirst }}
+                                            {% elif Blog.journalist %}
+                                                {{ Blog.journalist.first_name|capfirst }} {{ Blog.journalist.last_name|capfirst }}
+                                            {% else %}
+                                                Admin
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                    <div class="post-meta-date-box">
+                                        {{ Blog.schedule_date|date }} | {{ Blog.schedule_date|time }}
+                                    </div>
+                                    <div style="--custom-bottom: 0px; --custom-right: 0px;">
+                                        {% include 'share.html' with posts=Blog %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="post-block-media-wrap">
+                                <a href="/{{ Blog.slug }}">
+                                    <img src="{{ Blog.post_image.url }}" alt="{{ Blog.post_title }}" title="{{ Blog.post_title }}" loading="lazy">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="row divider-border">
+                <div style=" height: 165px;" class="col-lg-4">
+                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
+                        crossorigin="anonymous"></script>
+                    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5922835412614482" data-ad-slot="2979021120"
+                        data-ad-format="auto" data-full-width-responsive="true"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+                {% for Blog in breakingnews|slice:"3:5"%}
+                <div class="col-lg-4">
+                    <div class="post-block-template-three-wrapper popular-post-block-bottom-wrapper">
+                        <div class="post-block-style-wrapper post-block-template-three">
+                            <div class="post-block-style-inner post-block-list-style-inner-three">
+                                <div class="post-block-number-wrap">
+                                    <span class="post-number-counter">{{ forloop.counter|add:"3" }}</span>
+                                </div>
+                                <div class="post-block-content-wrap">
+                                    <div class="post-item-title">
+                                        <p class="post-title h3">
+                                            <a href="/{{ Blog.slug }}">{{ Blog.post_title|truncatechars:60 }}</a>
+                                        </p>
+                                    </div>
+                                    <div class="post-bottom-meta">
+                                        <div class="post-meta-author-box">
+                                            By <a style="color: #de1c24 !important;" href="javascript:void(0)">
+                                                {% if Blog.author %}
+                                                    {{ Blog.author.first_name|capfirst }} {{ Blog.author.last_name|capfirst }}
+                                                {% elif Blog.journalist %}
+                                                    {{ Blog.journalist.first_name|capfirst }} {{ Blog.journalist.last_name|capfirst }}
+                                                {% else %}
+                                                    Admin
+                                                {% endif %}
+                                            </a>
+                                        </div>
+                                        <div class="post-meta-date-box">
+                                            {{ Blog.schedule_date|date }} | {{ Blog.schedule_date|time }}
+                                        </div>
+                                        <div style="--custom-bottom: 0px; --custom-right: 0px;">
+                                            {% include 'share.html' with posts=Blog %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="blog-pagination-area mt-40">
+                        <ul class="page-numbers">
+                            {% if breakingnews.has_previous %}
+                                <li><a class="page-numbers" href="?breakingnews={{ breakingnews.previous_page_number }}&page={{ BlogData.number }}&headline_page={{ headline.number }}&articles_page={{ Articale.number }}&trending_page={{ trending.number }}&videos_page={{ videos.number }}&reels_page={{ reels.number }}&podcast_page={{ podcast.number }}">
+                                    <i class="icofont-long-arrow-left"></i>
+                                </a></li>
+                            {% endif %}
+            
+                            {% for page_num in breakingnews.paginator.page_range %}
+                                {% if page_num == 1 or page_num == breakingnews.paginator.num_pages or page_num >= breakingnews.number|add:"-1" and page_num <= breakingnews.number|add:"1" %}
+                                    {% if page_num == breakingnews.number %}
+                                        <li><span aria-current="page" class="page-numbers current">{{ page_num }}</span></li>
+                                    {% else %}
+                                        <li><a class="page-numbers" href="?breakingnews={{ page_num }}&page={{ BlogData.number }}&headline_page={{ headline.number }}&articles_page={{ Articale.number }}&trending_page={{ trending.number }}&videos_page={{ videos.number }}&reels_page={{ reels.number }}&podcast_page={{ podcast.number }}">{{ page_num }}</a></li>
+                                    {% endif %}
+                                {% elif page_num == breakingnews.number|add:"-2" or page_num == breakingnews.number|add:"2" %}
+                                    <li><span class="page-numbers">...</span></li>
+                                {% endif %}
+                            {% endfor %}
+            
+                            {% if breakingnews.has_next %}
+                                <li><a class="page-numbers" href="?breakingnews={{ breakingnews.next_page_number }}&page={{ BlogData.number }}&headline_page={{ headline.number }}&articles_page={{ Articale.number }}&trending_page={{ trending.number }}&videos_page={{ videos.number }}&reels_page={{ reels.number }}&podcast_page={{ podcast.number }}">
+                                    <i class="icofont-long-arrow-right"></i>
+                                </a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </section>
+    {% endif %}
+    <div class=" col-lg-12 text-title text-center mt-3">
+        <h2>Breaking News, Trends & Updates in {{ BlogData.0.post_cat }}</h2>
+      </div>
+    {% if vidnews %}
+    <section class="video-posts-area pt-80 pb-80 mt-40">
+        <div class="container">
+            <div class="section-title">
+                <p style="color: white !important;" class="title-block h3">
+                    Videos News
+                </p>
+            </div>
+            <div class="row">
+                <div class="col-lg-7">
+                    {% for Blog in vidnews|slice:":2" %}
+                    <div class="post-block-style-wrapper post-block-template-one post-block-video mb-3">
+                        <div class="post-block-style-inner">
+                            <div class="post-block-video-thumb">
+                                <div class="post-block-media-wrap">
+                                    <a href="/video/{{Blog.slug}}">
+                                        <img style="object-fit: unset;" src="https://img.youtube.com/vi/{{Blog.video_url}}/hqdefault.jpg" alt="{{ Blog.video_title }}" title="{{ Blog.video_title }}" loading="lazy">
+                                    </a>
+                                </div>
+                                <div class="video-play-icon-wrap">
+                                    <a style="display: flex; align-items: center; justify-content: center;"  href="/video/{{Blog.slug}}" class="theme-play-btn video-play-btn"><i style="font-size: 30px; color: black;" class="fa fa-play"></i></a>
+                                </div>
+                            </div>
+                            <div class="post-block-content-wrap">
+                                <div class="post-item-title">
+                                    <p class="post-title h3">
+                                        <a style="color: white !important;" href="/video/{{Blog.slug}}">{{ Blog.video_title|truncatechars:100 }}</a>
+                                    </p>
+                                </div>
+                                <div class="post-excerpt-box">
+                                    <p>{{ Blog.video_short_des|truncatechars:120 }}</p>
+                                </div>
+                                <div class="post-bottom-meta">
+                                    <div class="post-meta-author-box">
+                                        <a style="color: #de1c24 !important;" href="javascript:void(0)">
+                                            {% if Blog.author %}
+                                            {{ Blog.author.first_name|capfirst }} {{ Blog.author.last_name|capfirst }}
+                                        {% elif Blog.journalist %}
+                                            {{ Blog.journalist.first_name|capfirst }} {{ Blog.journalist.last_name|capfirst }}
+                                        {% else %}
+                                            Admin
+                                        {% endif %}
+                                        </a>
+                                    </div>
+                                    <div class="post-meta-date-box">
+                                        {{ Blog.schedule_date|date }} | {{ Blog.schedule_date|time }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="col-lg-5">
+                    {% for Blog in vidnews|slice:"2:7" %}
+                    <div class="post-block-style-wrapper post-block-template-two post-video-list">
+                        <div class="post-block-style-inner post-block-list-style-inner">
+                            <div class="post-block-media-wrap">
+                                <a href="/video/{{Blog.slug}}">
+                                    <img src="https://img.youtube.com/vi/{{Blog.video_url}}/hqdefault.jpg" alt="{{ Blog.video_title }}" title="{{ Blog.video_title }}" loading="lazy">
+                                </a>
+                                <div style="top: 40%; left: 40%;" class="video-play-icon-wrap">
+                                    <a style="display: flex; align-items: center; justify-content: center; width: 40px !important; height: 40px !important;"  href="/video/{{Blog.slug}}" class="theme-play-btn video-play-btn"><i style="font-size: 18px; color: black;" class="fa fa-play"></i></a>
+                                </div>
+                            </div>
+                            <div class="post-block-content-wrap">
+                                <div class="post-item-title">
+                                    <p class="post-title h3">
+                                        <a style="color: white !important;" href="/video/{{Blog.slug}}">{{ Blog.video_title|truncatechars:60 }}</a>
+                                    </p>
+                                </div>
+                                <div class="post-bottom-meta">
+                                    <div class="post-meta-author-box">
+                                        <a style="color: #de1c24 !important;" href="javascript:void(0)">
+                                        {% if Blog.author %}
+                                            {{ Blog.author.first_name|capfirst }} {{ Blog.author.last_name|capfirst }}
+                                        {% elif Blog.journalist %}
+                                            {{ Blog.journalist.first_name|capfirst }} {{ Blog.journalist.last_name|capfirst }}
+                                        {% else %}
+                                            Admin
+                                        {% endif %}
+                                        </a>
+                                    </div>
+                                    <div class="post-meta-date-box">
+                                        {{ Blog.schedule_date|date }} | {{ Blog.schedule_date|time }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="col-lg-12 col-md-12">
+                        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
+                            crossorigin="anonymous"></script>
+                        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5922835412614482" data-ad-slot="2979021120"
+                            data-ad-format="auto" data-full-width-responsive="true"></ins>
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="blog-pagination-area mt-40">
+                        <ul class="page-numbers">
+                            {% if vidnews.has_previous %}
+                                <li><a class="page-numbers" href="?podcast_page={{ vidnews.previous_page_number }}&page={{ BlogData.number }}&headline_page={{ headline.number }}&articles_page={{ Articale.number }}&brknews_page={{ bnews.number }}&trending_page={{ trendpost.number }}&videos_page={{ videos.number }}&reels_page={{ reels.number }}">
+                                    <i class="icofont-long-arrow-left"></i>
+                                </a></li>
+                            {% endif %}
+            
+                            {% for page_num in vidnews.paginator.page_range %}
+                                {% if page_num == 1 or page_num == vidnews.paginator.num_pages or page_num >= vidnews.number|add:"-1" and page_num <= vidnews.number|add:"1" %}
+                                    {% if page_num == vidnews.number %}
+                                        <li><span aria-current="page" class="page-numbers current">{{ page_num }}</span></li>
+                                    {% else %}
+                                        <li><a class="page-numbers" href="?podcast_page={{ page_num }}&page={{ BlogData.number }}&headline_page={{ headline.number }}&articles_page={{ Articale.number }}&brknews_page={{ bnews.number }}&trending_page={{ trendpost.number }}&videos_page={{ videos.number }}&reels_page={{ reels.number }}">{{ page_num }}</a></li>
+                                    {% endif %}
+                                {% elif page_num == vidnews.number|add:"-2" or page_num == vidnews.number|add:"2" %}
+                                    <li><span class="page-numbers">...</span></li>
+                                {% endif %}
+                            {% endfor %}
+            
+                            {% if vidnews.has_next %}
+                                <li><a class="page-numbers" href="?podcast_page={{ vidnews.next_page_number }}&page={{ BlogData.number }}&headline_page={{ headline.number }}&articles_page={{ Articale.number }}&brknews_page={{ bnews.number }}&trending_page={{ trendpost.number }}&videos_page={{ videos.number }}&reels_page={{ reels.number }}">
+                                    <i class="icofont-long-arrow-right"></i>
+                                </a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </section>
+    {% endif %}
+    
+    {% if Articale %}
+    <section class="popular-posts-column-area mt-40 mb-35">
+        <div class="container">
+            <div class="row">
+                <div class="section-title">
+                    <p class="title-block h3">
+                        Articles
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                {% for Blog in Articale|slice:":5"%}
+                <div class="col-lg-4">
+                    <article class="post-block-style-wrapper post-block-template-one post-block-template-medium mb-40">
+                        <div class="post-block-style-inner">
+                            <div class="post-block-media-wrap">
+                                <a href="/{{ Blog.slug }}">
+                                    <img src="{{ Blog.post_image.url }}" alt="{{ Blog.post_title }}" title="{{ Blog.post_title }}" loading="lazy">
+                                </a>
+                            </div>
+                            <div class="post-block-content-wrap">
+                                <div class="post-item-title">
+                                    <p class="post-title h3">
+                                        <a href="/{{ Blog.slug }}">{{ Blog.post_title|truncatechars:60 }}</a>
+                                    </p>
+                                </div>
+                                <div class="post-excerpt-box">
+                                    <p>{{ Blog.post_short_des|truncatechars:150 }}</p>
+                                </div>
+                                <div class="post-bottom-meta">
+                                    <div class="post-meta-author-box">
+                                        By <a style="color: #de1c24 !important;" href="javascript:void(0)">
+                                        {% if Blog.author %}
+                                            {{ Blog.author.first_name|capfirst }} {{ Blog.author.last_name|capfirst }}
+                                        {% elif Blog.journalist %}
+                                            {{ Blog.journalist.first_name|capfirst }} {{ Blog.journalist.last_name|capfirst }}
+                                        {% else %}
+                                            Admin
+                                        {% endif %}
+                                        </a>
+                                    </div>
+                                    <div class="post-meta-date-box">
+                                        {{ Blog.schedule_date|date }} | {{ Blog.schedule_date|time }}
+                                    </div>
+                                    <div style="--custom-bottom: 0px; --custom-right: 0px;">
+                                        {% include 'share.html' with posts=Blog %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                {% endfor %}
+                <div class="col-lg-4">
+                    <div class="col-lg-12 col-md-12">
+                        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
+                            crossorigin="anonymous"></script>
+                        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5922835412614482" data-ad-slot="2979021120"
+                            data-ad-format="auto" data-full-width-responsive="true"></ins>
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="blog-pagination-area">
+                        <ul class="page-numbers">
+                            {% if Articale.has_previous %}
+                                <li><a class="page-numbers" href="?articles_page={{ Articale.previous_page_number }}&page={{ BlogData.number }}&headline_page={{ headline.number }}&brknews_page={{ bnews.number }}&trending_page={{ trendpost.number }}&videos_page={{ videos.number }}&reels_page={{ reels.number }}&podcast_page={{ vidnews.number }}">
+                                    <i class="icofont-long-arrow-left"></i>
+                                </a></li>
+                            {% endif %}
+            
+                            {% for page_num in Articale.paginator.page_range %}
+                                {% if page_num == 1 or page_num == Articale.paginator.num_pages or page_num >= Articale.number|add:"-1" and page_num <= Articale.number|add:"1" %}
+                                    {% if page_num == Articale.number %}
+                                        <li><span aria-current="page" class="page-numbers current">{{ page_num }}</span></li>
+                                    {% else %}
+                                        <li><a class="page-numbers" href="?articles_page={{ page_num }}&page={{ BlogData.number }}&headline_page={{ headline.number }}&brknews_page={{ bnews.number }}&trending_page={{ trendpost.number }}&videos_page={{ videos.number }}&reels_page={{ reels.number }}&podcast_page={{ vidnews.number }}">{{ page_num }}</a></li>
+                                    {% endif %}
+                                {% elif page_num == Articale.number|add:"-2" or page_num == Articale.number|add:"2" %}
+                                    <li><span class="page-numbers">...</span></li>
+                                {% endif %}
+                            {% endfor %}
+            
+                            {% if Articale.has_next %}
+                                <li><a class="page-numbers" href="?articles_page={{ Articale.next_page_number }}&page={{ BlogData.number }}&headline_page={{ headline.number }}&brknews_page={{ bnews.number }}&trending_page={{ trendpost.number }}&videos_page={{ videos.number }}&reels_page={{ reels.number }}&podcast_page={{ vidnews.number }}">
+                                    <i class="icofont-long-arrow-right"></i>
+                                </a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>           
+        </div>
+    </section>
+
+    <div class="section-divider mt-60 mb-60"></div>
+    {% endif %}
+    
+    
+</div>
+
+<script src="{% static 'assets/category/js/vendor/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'assets/category/js/vendor/imagesloaded.pkgd.min.js' %}"></script>
+<script src="{% static 'assets/category/js/vendor/odometer.min.js' %}"></script>
+<script src="{% static 'assets/category/js/vendor/jquery-appear.js' %}"></script>
+<script src="{% static 'assets/category/js/app.js' %}"></script>
+
+<style>
+    .post-block-style-wrapper .post-block-media-wrap a img {
+        transition: .35s ease-in;
+        display: block;
+        overflow: hidden;
+        width: 100%;
+        object-fit: contain;
+    }
+</style>
+
+{% endblock %}

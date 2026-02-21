@@ -1,0 +1,71 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+
+<div class="m-auto">
+    <!-- top ads (3 ads) start -->
+    {% include 'top_ads.html' %}
+    <!-- top ads end -->
+
+    <!-- top news (BREAKING NEWS, TRENDING NEWS & Events ) start -->
+    {% include 'topnews.html' %}
+    <!-- top news end -->
+    
+     <!--profiles start art domain -->
+    {% include 'guist_profiles.html' %}
+    <!--profiles end -->
+<div class=" col-lg-12 text-title text-center">
+  <h1>Discover What’s Trending in UAE – Only on DXB News Network</h1>
+</div>
+    <!-- news1 (first and second category) start -->
+    {% include 'news1.html' %}
+    <!-- news1 end -->
+    
+    
+    <!-- reels news start -->
+    {% include 'reels-news.html' %}
+    <!-- reels news end -->
+
+
+    <!-- articls section start -->
+    {% include 'articale.html' %}
+    <!-- articls section end -->
+
+    <!-- news2 (from third category) start -->
+    {% include 'news2.html' %}
+    <!-- news2 end -->
+
+
+    <!--BRAND PARTNERS Start -->
+    {% include 'bp-logo.html' %}
+    <!--BRAND PARTNERS End -->
+
+    <div class="row my-2">
+        <div class="col-lg-6 col-md-12">
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
+            crossorigin="anonymous"></script>
+          <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5922835412614482" data-ad-slot="2979021120"
+            data-ad-format="auto" data-full-width-responsive="true"></ins>
+          <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+        <div class="col-lg-6 col-md-12">
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
+            crossorigin="anonymous"></script>
+          <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5922835412614482" data-ad-slot="2979021120"
+            data-ad-format="auto" data-full-width-responsive="true"></ins>
+          <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+        
+    </div>
+
+
+    <!--LATESH INSTAGRAM POSTS End -->
+    {% include 'instapost.html' %}
+    <!--LATEST INSTAGRAM POSTS End -->
+</div>
+{% endblock %}

@@ -1,0 +1,217 @@
+{% load static %}
+<div class="container  m-0 p-0 " style="max-width: 100%;">
+   <label class="theme-toggle-switch">
+    <input type="checkbox" id="theme-toggle" />
+    <span class="slider"></span>
+    </label>
+    <!-- top nav end -->
+    <div class="row header my-2" style="margin-right: 0px; margin-left: 0px;">
+        <div class="col-lg-4 col-md-4 col-sm-12 row-content">
+            <div class="calender d-flex align-items-center">
+                <ul class="dxb-top-nav d-flex gap-3 align-items-center list-unstyled mb-0 mr-3">
+                    <li><a href="{% url 'contact-us' %}" class="nav-icon"><i class="bi bi-person-fill"></i></a></li>
+                    <li>
+                        <a type="button" class="nav-icon" data-bs-toggle="modal" data-bs-target="#ModalSubscribe">
+                            <i class="bi bi-bell-fill"></i>
+                        </a>
+                    </li>
+                    {% include 'subscribe_model.html' %}
+                </ul>
+                <a href="#" class="d-flex align-items-center text-decoration-none">
+                    <i class="bi bi-calendar-date-fill mr-2"></i>
+                    <span class="calender-text" id="currentDate"></span>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 row-content d-flex align-items-center justify-content-center">
+            <div class="text-center mt-2" style="width: 400px;">
+                <a href="/" class="text-center">
+                    <img src="{{ profile_setting.logo_dark.url }}" alt="Dark Logo"
+                        class="logo logo-light logo img-fluid w-100">
+                    <img src="{{ profile_setting.logo_light.url }}" alt="Light Logo"
+                        class="logo logo-dark logo img-fluid w-100">
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-12 col-sm-12 row-content">
+            <ul class="top_search_section list-unstyled d-flex align-items-center mb-0">
+                <li class="mr-3">
+                    <a type="button" class="p-2 d-flex align-items-center" data-bs-toggle="modal"
+                        data-bs-target="#ModalSearch">
+                        <i class="bi bi-search" aria-hidden="true" style="font-size: 16px; margin-right: 5px;"></i>
+                        <p class="mb-0">Search</p>
+                    </a>
+                </li>
+                {% if request.session.journalist_id %}
+                <li class="mr-3">
+                    <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+                </li>
+                <li class="mr-3">
+                    <a style="color: #d91c1c !important;" class="nav-link text-body"
+                        href="{% url 'logout-user' %}">Logout</a>
+                </li>
+                {% else %}
+                <li class="mr-3">
+                    <a class="nav-link" href="{% url 'sign-in' %}">
+                        <img style="height:28px;" src="{% static 'assets/dnn/img/dxb_login_signup.png' %}" alt="">
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+            <div class="modal fade" id="ModalSearch" tabindex="-1" aria-labelledby="ModalSearchLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="ModalSearchLabel">Search</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                style="color: #d91c1c; font-weight: bold; background-color: transparent; border: none; width: 40px; height: 40px; padding: 0px;">
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{% url 'search' %}" method="get">
+                                <input type="text" name="title" class="form-control" placeholder="Search for posts..."
+                                    required>
+                                <button type="submit" class="btn btn-primary mt-3 w-100"
+                                    style="background-color: #4891cd;">Search</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="nav-border">
+        <nav class="navbar navbar-expand-lg navbar-dark py-2 py-lg-0">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between px-0 px-lg-3" id="navbarCollapse">
+                <div class="navbar-nav mr-auto py-0">
+                    {% for link in Blogcat %}
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">{{ link.cat_name }}</a>
+                        <div class="dropdown-menu rounded-0 m-0">
+                            {% for sublink in link.sub_category_set.all|dictsort:"subcat_status" %}
+                            {% if sublink.subcat_status == 'active' %}
+                            <a href="/{{ link.cat_slug }}/{{ sublink.subcat_slug }}" class="dropdown-item">
+                                {{ sublink.subcat_name }}
+                            </a>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+<div class="nav-border sticky-nav" id="stickyNav">
+    <nav class="navbar navbar-expand-lg navbar-dark py-2 py-lg-0">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between px-0 px-lg-3" id="navbarCollapse">
+            <div class="navbar-nav mr-auto py-0">
+                {% for link in Blogcat %}
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">{{ link.cat_name }}</a>
+                    <div class="dropdown-menu rounded-0 m-0">
+                        {% for sublink in link.sub_category_set.all %}
+                        <a href="/{{ link.cat_slug }}/{{ sublink.subcat_slug }}" class="dropdown-item">
+                            {{ sublink.subcat_name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </nav>
+</div>
+</div>
+
+<script>
+    window.addEventListener("scroll", function () {
+        var stickyNav = document.getElementById("stickyNav");
+        if (window.pageYOffset > 100) {
+            stickyNav.style.display = "block";
+        } else {
+            stickyNav.style.display = "none";
+        }
+    });
+
+    const getFormattedDate = () => {
+        const options = { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' };
+        const today = new Date();
+        return today.toLocaleDateString('en-US', options);
+    };
+    document.getElementById('currentDate').innerText = getFormattedDate();
+</script>
+
+<style>
+    .theme-toggle-switch {
+    position: absolute;
+    display: inline-block;
+    width: 55px;
+    height: 28px;
+    right: 0;
+    z-index: 999;
+    top: 4px;
+}
+
+.theme-toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  background-color: #1461bc;
+  border-radius: 34px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: 0.4s;
+}
+
+.slider:before {
+  content: "";
+  position: absolute;
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #ff322c ;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #fff;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+.login-btn {
+  padding: 6px 30px;
+  background: #ff322c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 0 0 transparent;
+}
+
+.login-btn:hover {
+  background: #e1221c;
+}
+
+</style>

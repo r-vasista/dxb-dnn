@@ -1,0 +1,81 @@
+<div class="share-icons-container" style="--bottom: var(--custom-bottom, 115px); --right: var(--custom-right, 0px);">
+    <div class="d-flex align-items-center">
+        <span role="button" data-bs-toggle="modal" data-bs-target="#shareModal-{{ posts.id }}">
+            <i class="bi bi-share-fill"></i>
+        </span>
+
+        <div class="modal fade" id="shareModal-{{ posts.id }}" tabindex="-1"
+            aria-labelledby="shareModalLabel-{{ posts.id }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-dark" id="shareModalLabel-{{ posts.id }}">Share this post</h5>
+                        <button type="button" class="btn-close float-right" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body position-relative">
+                        <div class="slider-container" id="shareSlider-{{ posts.id }}">
+                            <div class="slider-item">
+                                <a href="https://api.whatsapp.com/send?text=Check%20this%20out!%20https://www.dxbnewsnetwork.com/{{ posts.slug }}"
+                                    target="_blank" class="text-success">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                            </div>
+
+                            <div class="slider-item">
+                                <button class="btn" onclick="copyLink('{{ posts.slug }}')" title="Copy Link">
+                                    <i class="fas fa-link"></i>
+                                </button>
+                            </div>
+
+                            <div class="slider-item">
+                                <a href="mailto:?subject=Check%20this%20out&body=Read%20here:%20https://www.dxbnewsnetwork.com/{{ posts.slug }}"
+                                    class="text-danger">
+                                    <i class="fas fa-envelope"></i>
+                                </a>
+                            </div>
+
+                            <div class="slider-item">
+                                <a href="https://t.me/share/url?url=https://www.dxbnewsnetwork.com/{{ posts.slug }}&text=Check%20this%20out!"
+                                    class="text-primary" target="_blank">
+                                    <i class="fab fa-telegram"></i>
+                                </a>
+                            </div>
+
+                            <div class="slider-item">
+                                <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.dxbnewsnetwork.com/{{ posts.slug }}"
+                                    class="text-primary" target="_blank">
+                                    <i class="fab fa-facebook"></i>
+                                </a>
+                            </div>
+
+                            <div class="slider-item">
+                                <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://www.dxbnewsnetwork.com/{{ posts.slug }}"
+                                    class="text-primary" target="_blank">
+                                    <i class="fab fa-linkedin"></i>
+                                </a>
+                            </div>
+
+                            <div class="slider-item">
+                                <a href="https://twitter.com/intent/tweet?text=Check%20this%20out!%20https://www.dxbnewsnetwork.com/{{ posts.slug }}"
+                                    class="text-info" target="_blank">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.modal-backdrop {
+    display: none !important;
+}
+.modal {
+    z-index: 1050 !important;
+    position: fixed;
+}
+</style>
