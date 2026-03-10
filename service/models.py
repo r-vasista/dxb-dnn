@@ -87,7 +87,7 @@ class BrandPartner(models.Model):
 class RegForm(models.Model):
         person_name= models.CharField(max_length=255, null=True,verbose_name="Person Name")
         company_name= models.CharField(max_length=255, null=True,verbose_name="Company Name")
-        company_address= models.CharField(max_length=255, null=True,verbose_name="Company Address")
+        company_address= models.TextField(null=True,verbose_name="Company Address")
         phone= models.CharField(max_length=255, null=True,verbose_name="phone")
         email= models.CharField(max_length=255, null=True,verbose_name="email")
         city = models.CharField(max_length=255, null=True,verbose_name="city")

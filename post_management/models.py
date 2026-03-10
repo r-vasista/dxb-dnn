@@ -43,7 +43,7 @@ class sub_category(models.Model):
 
 
 class Tag(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=500, unique=True)
     slug = AutoSlugField(populate_from='name', unique=True)
     create_date=models.DateTimeField(default=timezone.now)
     is_active=models.BooleanField(verbose_name="Status", null=True, default=True)

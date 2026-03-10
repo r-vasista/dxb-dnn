@@ -8,16 +8,16 @@ class Migration(migrations.Migration):
     dependencies = [
         ('journalist', '0004_alter_journalist_biography'),
     ]
-
-    operations = [
-        migrations.AddField(
-            model_name='journalist',
-            name='organisation_name',
-            field=models.CharField(blank=True, max_length=255, null=True),
-        ),
-        migrations.AddField(
-            model_name='journalist',
-            name='registration_type',
-            field=models.CharField(blank=True, choices=[('artist', 'Artist'), ('journalist', 'Journalist'), ('organisation', 'Organisation')], max_length=50, null=True),
-        ),
-    ]
+    operations = []
+    # operations = [
+    #     migrations.AddField(
+    #         model_name='journalist',
+    #         name='organisation_name',
+    #         field=models.CharField(blank=True, max_length=255, null=True),
+    #     ),
+    #     migrations.AddField(
+    #         model_name='journalist',
+    #         name='registration_type',
+    #         field=models.CharField(blank=True, choices=[('artist', 'Artist'), ('journalist', 'Journalist'), ('organisation', 'Organisation')], max_length=50, null=True),
+    #     ),
+    # ]
