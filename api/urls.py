@@ -1,8 +1,8 @@
 from django.urls import path
 from .views import (
     HeadlineNewsAPIView, TrendingNewsAPIView, BreakingNewsAPIView, UserNewsAPIView, EventsAPIView,
-    LatestNewsAPIView, ProfilesAPIView, ReelsAPIView, CategoryListAPIView, CategoryNewsAPIView
-    
+    LatestNewsAPIView, ProfilesAPIView, ReelsAPIView, CategoryListAPIView, CategoryNewsAPIView,
+    ArticlesAPIView
 )
 
 urlpatterns = [
@@ -12,6 +12,7 @@ urlpatterns = [
     path('news/user/', UserNewsAPIView.as_view()),
     path('news/latest/', LatestNewsAPIView.as_view()),
     path('news/category/', CategoryNewsAPIView.as_view()), 
+    path('news/articles/', ArticlesAPIView.as_view()), 
 
     path('events/', EventsAPIView.as_view()),
     path('profiles/', ProfilesAPIView.as_view()),

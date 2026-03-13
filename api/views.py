@@ -517,3 +517,53 @@ class CategoryNewsAPIView(PaginationMixin, APIView):
                 error_response("Failed to fetch category news"),
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+
+class ArticlesAPIView(PaginationMixin, APIView):
+    """
+    Get Articles
+
+    GET /api/news/articles/
+
+    Returns:
+        - status = active
+        - schedule_date < now
+        - articles = 1
+    """
+
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        try:
+            current_datetime = timezone.now()
+
+            queryset = NewsPost.objects.select_related(
+                "journalist",
+                "post_cat",
+                "post_cat__sub_cat"
+            ).prefetch_related(
+                "tags"
+            ).filter(
+                status="active",
+                schedule_date__lt=current_datetime,
+                articles=True
+            ).order_by("-id")
+
+            paginated_queryset = self.paginate_queryset(queryset, request)
+
+            serializer = NewsPostSerializer(
+                paginated_queryset,
+                many=True,
+                context={"request": request}
+            )
+
+            return self.get_paginated_response(
+                serializer.data,
+                message="Articles retrieved successfully"
+            )
+
+        except Exception as e:
+            return Response(
+                error_response(str(e)),
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
