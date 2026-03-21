@@ -27,7 +27,7 @@
     <div class=" mb-3">
         {% for trendingpost in trendpost %}
         <div class="news-card mb-3">
-            <img class="img-fluid tranimg news-image" src="../upload/{{trendingpost.post_image}}" alt="">
+            <img class="img-fluid tranimg news-image" src="{{trendingpost.thumbnail_url}}" alt="">
             <a class="news-title" href="/{{trendingpost.slug}}">
                 <p>{{trendingpost.post_title}}</p>
             </a>

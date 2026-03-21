@@ -71,25 +71,47 @@ class NewsPost(models.Model):
     post_image = ImageCropField(upload_to='newsimage/%Y/%m/%d', max_length=255,null=True,default=None, verbose_name="News Image (1280X720px)")
     #image_crop = ImageRatioField('post_image', '430x360')
     
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
-        if self.post_image:
-            try:
-                img = Image.open(self.post_image.path)
-                original_format = img.format  # e.g. 'JPEG', 'PNG', 'WEBP'
+        if not self.post_image:
+            return
 
-                # Convert as needed
-                if img.mode in ("RGBA", "P") and original_format == "JPEG":
+        try:
+            original_path = self.post_image.path
+            base, ext = os.path.splitext(original_path)
+
+            # Skip if already WEBP
+            if ext.lower() == ".webp":
+                return
+
+            # Convert to WEBP in memory
+            with Image.open(original_path) as img:
+                if img.mode in ("RGBA", "P"):
                     img = img.convert("RGB")
 
-                desired_size = (1280, 720)
-                img.thumbnail(desired_size)
+                img.thumbnail((1280, 720))
 
-                # Overwrite in same format
-                img.save(self.post_image.path, format=original_format, quality=90)
-            except Exception as e:
-                print("Image processing error:", e)
+                buffer = BytesIO()
+                img.save(buffer, format="WEBP", quality=85)
+                buffer.seek(0)
+
+            # New file name
+            webp_filename = os.path.basename(base) + ".webp"
+
+            # Delete old file BEFORE saving new
+            if os.path.exists(original_path):
+                os.remove(original_path)
+
+            # Save new WEBP file
+            self.post_image.save(webp_filename, ContentFile(buffer.read()), save=False)
+
+            # Update DB without recursion
+            super().save(update_fields=["post_image"])
+
+        except Exception as e:
+            print("Image conversion error:", e)
     
     post_tag=models.TextField(null=True,default="#trending #latest", verbose_name="News tag")
     tags = models.ManyToManyField(Tag, blank=True, verbose_name="Tags")
