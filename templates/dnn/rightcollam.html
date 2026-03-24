@@ -1,8 +1,10 @@
 {% load static %}
-<div class="mb-3 news-card">
-    <div class="position-relative">
-        <h6 class="news-header">Sponsored</h6>
+<div class="mb-3">
+     <div class="text-center ">
+          <div class="fs-5">Sponsored</div>
+          <!-- <div class="double-underline"></div> -->
     </div>
+    
     <div class="mb-3">
         {% for adrcol in adright %}
         <a href="{{adrcol.ad_url}}" target="_blank"><img class="img-fluid w-100 news-image"
@@ -21,42 +23,47 @@
     </script>
 </div>
 
-
 <div class="mb-3 ">
-    <h6 class="news-header">Trending News</h6>
-    <div class=" mb-3">
+     <div class="mb-3">
+          <div class="section-title">Trending News</div>
+          <div class="double-underline"></div>
+        </div>
+    
+        <div class="">
         {% for trendingpost in trendpost %}
-        <div class="news-card mb-3">
-            <img class="img-fluid tranimg news-image" src="{{trendingpost.thumbnail_url}}" alt="">
+        <div class="card-bg-dark mb-3 p-2" style=" border-radius: 8px;">
+
             <a class="news-title" href="/{{trendingpost.slug}}">
-                <p>{{trendingpost.post_title}}</p>
-            </a>
-            <a href="/{{trendingpost.slug}}" class="news-description">
-                <p>{{trendingpost.post_short_des|slice:":100"|safe}}</p>
+                
+                <img src="{{trendingpost.post_image.url}}" alt="{{trendingpost.post_title}}" class="img-fluid">
+
+                <p class="my-2 fw-bold">
+                    {{ trendingpost.post_title|slice:":60"|safe }}...
+                </p>
+
+                <p class="news-description">
+                    {{ trendingpost.post_short_des|slice:":100"|safe }}
+                </p>
+
             </a>
 
-            <div class="d-flex align-items-center px-2 my-1 mb-1 news-meta">
-                <small><i class="fas fa-calendar-alt"></i> {{trendingpost.schedule_date|date}}</small>
-                <small class="ml-3"><i class="fas fa-clock"></i> {{ trendingpost.schedule_date|time }}</small>
-                <small class="ml-3"><i class="far fa-eye mr-2"></i>{{trendingpost.post_status|add:trendingpost.viewcounter}}</small>
-                <div style="--custom-bottom: 0px; --custom-right: 0px;">
-                        {% include 'share.html' with posts=trendingpost %}
+            <div class="d-flex align-items-center px-2 my-1 news-meta">
+                <small>{{ trendingpost.schedule_date|date }}</small>
+                <small class="ms-2">{{ trendingpost.schedule_date|time }}</small>
+                <small class="ms-2">
+                    <i class="far fa-eye"></i>
+                    {{ trendingpost.post_status|add:trendingpost.viewcounter }}
+                </small>
+
+                <div class="ms-auto">
+                    {% include 'share.html' with posts=trendingpost %}
                 </div>
             </div>
-        </div>
-        <div class="my-1" >
-            <script async
-                src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
-                crossorigin="anonymous"></script>
-            <!-- News Page SQ Sidebar -->
-            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5922835412614482"
-                data-ad-slot="2309629217" data-ad-format="auto" data-full-width-responsive="true"></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
+
         </div>
         {% endfor %}
     </div>
+
 </div>
 <style>
     .news-card {
@@ -90,22 +97,18 @@
         margin-bottom: 8px;
         line-height: 1.5;
         font-weight: 600;
-        font-family: 'EB Garamond', serif;
+        
 
     }
 
     .news-description {
-        font-size: 20px;
-        color: #666 !important;
         line-height: 1.4;
-        font-family: 'EB Garamond', serif;
+        
     }
 
     .news-meta {
         display: flex;
         justify-content: space-between;
-        font-size: 1rem;
-        color: #666;
         padding: 10px 15px;
         border-top: 1px solid #eee;
     }

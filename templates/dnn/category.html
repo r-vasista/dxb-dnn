@@ -7,19 +7,18 @@
 <link rel="stylesheet" href="{% static 'assets/category/css/vendor/remixicon.css' %}"> -->
 <link rel="stylesheet" href="{% static 'assets/category/css/app.css' %}">
 <link rel="stylesheet" href="{% static 'assets/category/css/responsive.css' %}">
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Swiper + Tailwind CDN -->
+<link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="{% static 'mobile/js/jquery.min.js' %}"></script>
+<script src="{% static 'mobile/js/owl.carousel.min.js' %}"></script>
 
-<div id="main-wrapper" class="main-wrapper">
-    <div class=" col-lg-12 text-title text-center mt-3">
-        <h1>Top Stories and Breaking News in {{ BlogData.0.post_cat }}</h1>
-      </div>
+<div id="main-wrapper" class="container mt-5">
+     <h1 class="text-center fw-bold pt-2">Top Stories and Breaking News in {{ BlogData.0.post_cat }}</h1>
     {% if BlogData %}
-    <section class="blog-hero-area mb-3 mt-30">
-        <div class="container">
-            <div class="section-title sm-mt-24 p-0">
-                <p class="title-block h3">
-                    News
-                </p>
-            </div>
+    <section class="blog-hero-area my-3">
+        <div class="">
             <div class="row">
                 <div class="col-lg-3">
                     {% for Blog in BlogData|slice:"2:6" %}
@@ -991,12 +990,15 @@
 <script src="{% static 'assets/category/js/app.js' %}"></script>
 
 <style>
+    h1, h2, h3, h4, h5, h6 {
+        font-size: 28px !important;
+    }
     .post-block-style-wrapper .post-block-media-wrap a img {
         transition: .35s ease-in;
         display: block;
         overflow: hidden;
         width: 100%;
-        object-fit: contain;
+        object-fit: cover;
     }
 </style>
 

@@ -2,22 +2,144 @@
 {% load static %}
 {% block body %}
 
-<div class="dxb-container">
+<style>
+  a {
+  text-decoration: none !important;
+}
+
+li {
+  list-style: none !important;
+}
+
+/* Apply to your existing slider-item class */
+.slider-item1 a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;          
+  height: 40px;        
+  border-radius: 50%;   
+  background-color: #3d3c38;
+  color: white !important;        
+  text-decoration: none;
+  font-size: 18px;
+  transition: transform 0.2s;
+}
+
+.slider-item1 a:hover {
+  transform: scale(1.1); /* Slight zoom on hover */
+}
+.slider-item1 button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;          
+  height: 40px;        
+  border-radius: 50%;   
+  background-color: #3d3c38;
+  color: white !important;        
+  text-decoration: none;
+  font-size: 18px;
+  transition: transform 0.2s;
+}
+
+.slider-item1 button:hover {
+  transform: scale(1.1); /* Slight zoom on hover */
+}
+.social-share-vertical {
+  position: fixed;
+  top: 28%;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  z-index: 999;
+}
+
+/* Share Button */
+.share-toggle {
+  width: 42px;
+  height: 42px;
+  border-radius: 25%;
+  background: #f7f7f7;
+  color: #000;
+  border: none;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.share-toggle:hover {
+  background: #0056b3;
+  color: #fff;
+}
+
+/* Hidden Icons */
+.social-icons {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+  animation: fadeInUp 0.3s ease;
+}
+
+.social-icons.show {
+  display: flex;
+}
+
+.social-icons a {
+  width: 42px;
+  height: 42px;
+  background: #fff;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.social-icons a:hover {
+  background: #007bff;
+}
+
+.social-icons i {
+  font-size: 18px;
+  color: #000;
+}
+
+.social-icons a:hover i {
+  color: #fff;
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+</style>
+<div class="container mt-4">
   <div class="row">
     <div class="col-lg-9 col-md-7 col-sm-12">
       <div class="position-relative my-1">
-        <h1 class="title">{{ Blogdetails.post_title }}</h1>
-        {% if Blogdetails.post_image == '' %}
-        <img class="img-fluid w-100" src="{% static 'upload/blog/null.jpg' %}" style="object-fit: cover"
-          alt="{{ Blogdetails.post_title|default:'No Image' }}" title="{{ Blogdetails.post_title }}" loading="lazy">
-        {% else %}
-        <img class="img-fluid w-100" src="{{ Blogdetails.post_image.url }}" style="object-fit: cover"
-          alt="{{ Blogdetails.post_title }}" title="{{ Blogdetails.post_title }}" loading="lazy">
-        {% endif %}
-        <div class="border-top-0 mt-1 artical-box">
-          <div class="row">
-            <div class="col-lg-6">
-              <p class="m-0">
+       
+        <div class="card-bg-dark mt-5"style="border-radius: 8px; background: #fff;
+    padding: 5px 10px;">
+          <div class="section-title">{{ Blogdetails.post_title }}</div>
+          <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center mt-3 small">
+
+            <!-- Author -->
+            <p class="m-0">
                 {% if Blogdetails.author %}
                 Post by : {{ Blogdetails.author.first_name|default:""|capfirst }}
                 {{ Blogdetails.author.last_name|default:""|capfirst }}
@@ -32,59 +154,63 @@
                 Post by : Admin
                 {% endif %}
               </p>
-              <div class="d-flex align-items-center">
-                <small><i class="fas fa-calendar-alt"></i> {{ Blogdetails.schedule_date|date }}</small>
-                <small class="ml-3"><i class="fas fa-clock"></i> {{ Blogdetails.schedule_date|time }}</small>
-                <small class="ml-3"><i class="far fa-eye mr-2"></i>{{ Blogdetails.post_status|add:Blogdetails.viewcounter }}</small>
-              </div>
+
+            <!-- Date + Time + Views -->
+            <div class="d-flex flex-wrap gap-2 mt-1 mt-md-0">
+              <small>{{ Blogdetails.schedule_date|date }}</small>
+              <small>{{ Blogdetails.schedule_date|time }}</small>
+              <small>
+                <i class="far fa-eye me-1"></i>{{ Blogdetails.viewcounter }}
+              </small>
             </div>
-            <div class="col-lg-6">
-              <div style="display: flex; float: right;">
-                <div class="slider-item">
-                  <a href="https://api.whatsapp.com/send?text=Check%20this%20out!%20{{ request.build_absolute_uri }}"
-                    target="_blank" class="text-success"> <i class="fab fa-whatsapp"></i>
-                  </a>
-                </div>
-                <div class="slider-item">
-                  <button class="btn" onclick="copyLink('{{ Blogdetails.slug }}')" title="Copy Link">
-                    <i class="fas fa-link"></i>
+
+          </div>
+
+          <!-- <div class="double-underline"></div> -->
+          
+        </div>
+        {% if Blogdetails.post_image == '' %}
+        <img class="img-fluid w-100" src="{% static 'upload/blog/null.jpg' %}" style="object-fit: cover"
+          alt="{{ Blogdetails.post_title|default:'No Image' }}" title="{{ Blogdetails.post_title }}" loading="lazy">
+        {% else %}
+        <img class="img-fluid w-100" src="{{ Blogdetails.post_image.url }}" style="object-fit: cover"
+          alt="{{ Blogdetails.post_title }}" title="{{ Blogdetails.post_title }}" loading="lazy">
+        {% endif %}
+        <div class="py-3 card-bg-dark" style=" border-radius: 8px; background: #fff;
+    padding: 5px 10px;">
+              <!-- 🌐 SOCIAL SHARE VERTICAL -->
+              <!-- 🌟 HTML -->
+                <div class="social-share-vertical mb-2">
+                  <!-- Share Toggle Button -->
+                  <button class="share-toggle" id="shareToggle" title="Share">
+                    <i class="fa-solid fa-share-from-square"></i>
                   </button>
+
+                  <!-- Hidden Social Icons -->
+                  <div class="social-icons" id="socialIcons">
+                    <a href="https://api.whatsapp.com/send?text=Check%20this%20out!%20{{ request.build_absolute_uri }}" target="_blank">
+                      <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a onclick="copyLink('{{ Blogdetails.slug }}')" title="Copy Link">
+                      <i class="fas fa-link"></i>
+                    </a>
+                    <a href="mailto:?subject=Check%20this%20out&body=Read%20here:%20{{ request.build_absolute_uri }}">
+                      <i class="fas fa-envelope"></i>
+                    </a>
+                    <a href="https://t.me/share/url?url={{ request.build_absolute_uri }}&text=Check%20this%20out!" target="_blank">
+                      <i class="fab fa-telegram"></i>
+                    </a>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank">
+                      <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri }}" target="_blank">
+                      <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://twitter.com/intent/tweet?text=Check%20this%20out!%20{{ request.build_absolute_uri }}" target="_blank">
+                      <i class="fab fa-twitter"></i>
+                    </a>
+                  </div>
                 </div>
-
-
-                <div class="slider-item">
-                  <a href="https://t.me/share/url?url={{ request.build_absolute_uri }}&text=Check%20this%20out!"
-                    class="text-primary" target="_blank">
-                    <i class="fab fa-telegram"></i>
-                  </a>
-                </div>
-
-                <div class="slider-item">
-                  <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
-                    class="text-primary" target="_blank">
-                    <i class="fab fa-facebook"></i>
-                  </a>
-                </div>
-
-            
-
-                <div class="slider-item">
-                  <a href="https://www.linkedin.com/shareposts?mini=true&url={{ request.build_absolute_uri }}"
-                    class="text-primary" target="_blank">
-                    <i class="fab fa-linkedin"></i>
-                  </a>
-                </div>
-
-                <div class="slider-item">
-                  <a href="https://twitter.com/intent/tweet?text=Check%20this%20out!%20{{ request.build_absolute_uri }}"
-                    class="text-info" target="_blank">
-                    <i class="fab fa-twitter"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-
-          </div>
           <div class="my-1">
             <script async
               src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
@@ -96,21 +222,12 @@
               (adsbygoogle = window.adsbygoogle || []).push({});
             </script>
           </div>
+          <div class="">
           {{ Blogdetails.post_des|safe }}
-          <div class="my-1">
-            <script async
-              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
-              crossorigin="anonymous"></script>
-            <!-- News Page  Ads 2 HR -->
-            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5922835412614482"
-              data-ad-slot="7753527589" data-ad-format="auto" data-full-width-responsive="true"></ins>
-            <script>
-              (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
           </div>
-
+           
           {% for tag in Blogdetails.tags.all %}
-          <a href="/topic/{{ tag.slug }}" class="badge bg-secondary">#{{ tag.name }}</a>
+          <a href="/topic/{{ tag.slug }}" class="badge rounded-pill bg-primary-subtle me-2 mb-2">#{{ tag.name }}</a>
           {% endfor %}
         </div>
       </div>
@@ -126,9 +243,9 @@
 
           <div class="border-top-0 mt-1">
             <div class="d-flex align-items-center my-3">
-              <small><i class="fas fa-calendar-alt"></i> {{ mnews.schedule_date|date }}</small>
-              <small class="ml-3"><i class="fas fa-clock"></i> {{ mnews.schedule_date|time }}</small>
-              <small class="ml-3"><i class="far fa-eye mr-2"></i>{{ mnews.post_status|add:mnews.viewcounter }}</small>
+              <small> {{ mnews.schedule_date|date }}</small>
+              <small > {{ mnews.schedule_date|time }}</small>
+              <small ><i class="far fa-eye mr-2"></i>{{ mnews.post_status|add:mnews.viewcounter }}</small>
             </div>
 
             <p class="m-0">
@@ -139,8 +256,7 @@
         </div>
       {% endfor %} -->
       {# -----------main-news--------- #}
-
-      <!-- Featured News Slider Start -->
+         <!-- Featured News Slider Start -->
       <div class="mb-2">
         <script async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
@@ -151,39 +267,27 @@
           (adsbygoogle = window.adsbygoogle || []).push({});
         </script>
       </div>
-      <div class="row">
-        {% for Blog in BlogData %}
-        <div class="col-lg-4">
-          <div class="news-card mb-3">
-            <img class="img-fluid tranimg news-image" src="../upload/{{Blog.post_image}}" alt="">
-            <a class="news-title" href="/{{Blog.slug}}">
-              <p>{{Blog.post_title}}</p>
-            </a>
-            <a href="/{{Blog.slug}}" class="news-description">
-              <p>{{Blog.post_short_des|slice:":100"|safe}}</p>
-            </a>
-
-            <div class="d-flex align-items-center px-2 my-1 mb-1 news-meta">
-              <small><i class="fas fa-calendar-alt"></i> {{Blog.schedule_date|date}}</small>
-              <small class="ml-3"><i class="fas fa-clock"></i> {{ Blog.schedule_date|time }}</small>
-              <small class="ml-3"><i class="far fa-eye mr-2"></i>{{Blog.post_status|add:Blog.viewcounter}}</small>
-              <div style="--custom-bottom: 0px; --custom-right: 0px;">
-                {% include 'share.html' with posts=Blog %}
+      
+      <div class="row mt-4">
+         <div class="mb-1">
+          <div class="section-title mt-2">Articles</div>
+          <div class="double-underline"></div>
+        </div>
+        {% for article in Articale %}
+        <div class="col-lg-3 col-md-12  col-sm-12 mb-3">
+          <a href="/{{ article.slug }}" class="text-decoration-none ">
+            <div class="article-card shadow-sm rounded overflow-hidden ">
+              <div class="article-image">
+                <img src="{{ article.post_image.url }}" class="img-fluid w-100" alt="{{ article.post_title }}" style="height: 160px; object-fit: cover;">
+              </div>
+              <div class="p-2 card-bg-dark">
+                <div class="fw-semibold mb-1" style="font-size: 13px; line-height: 1.4;">
+                  {{ article.post_title|truncatechars:58 }}
+                </div>
+                <small class="">{{ article.post_date|date:"M d, Y" }}</small>
               </div>
             </div>
-          </div>
-
-          <div class="my-1">
-            <script async
-              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
-              crossorigin="anonymous"></script>
-            <!-- News Page SQ Sidebar -->
-            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5922835412614482"
-              data-ad-slot="2309629217" data-ad-format="auto" data-full-width-responsive="true"></ins>
-            <script>
-              (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
+          </a>
         </div>
         {% endfor %}
       </div>
@@ -196,15 +300,19 @@
 
   </div>
 </div>
+<script>
+function copyLink(slug) {
+  const link = window.location.origin + '/' + slug;
+  navigator.clipboard.writeText(link);
+  alert('🔗 Link copied!');
+}
+</script>
 
+<script>
+document.getElementById("shareToggle").addEventListener("click", function () {
+  const icons = document.getElementById("socialIcons");
+  icons.classList.toggle("show");
+});
+</script>
 {% endblock %}
 
-<style>
-  a {
-    text-decoration: none !important;
-  }
-
-  li {
-    list-style: none !important;
-  }
-</style>

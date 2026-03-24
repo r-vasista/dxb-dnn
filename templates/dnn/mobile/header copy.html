@@ -1,0 +1,118 @@
+{% load static %}
+<!-- Preloader-->
+<!-- <div class="preloader" id="preloader">
+    <div class="spinner-grow text-secondary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div> -->
+
+<!-- Header Area-->
+<div class="header-area" id="headerArea">
+  <div class="container h-100 d-flex align-items-center justify-content-between">
+    <!-- Navbar Toggler-->
+
+    <div class="icon" onclick="toggleMenu()">
+      <i class="fas fa-bars"></i>
+    </div>
+
+    <!-- Logo-->
+    <div class="logo-wrapper">
+      <a href="/" class="text-center">
+        <img src="{{ profile_setting.logo_dark.url }}" alt="Dark Logo" class="logo logo-light logo img-fluid w-100">
+        <img src="{{ profile_setting.logo_light.url }}" alt="Light Logo" class="logo logo-dark logo img-fluid w-100">
+      </a>
+    </div>
+
+    <!-- Search Form-->
+    <div class="search-form">
+      <a href="#">
+        <i class="ti ti-search"></i>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="mt-5"></div>
+
+
+<!-- Sidenav Black Overlay-->
+<div class="sidenav-black-overlay"></div>
+
+<!-- Side Nav Wrapper-->
+
+<!-- Sidenav Nav-->
+<div class="side-menu" id="sideMenu">
+  <div class="" id="sidenavWrapper">
+    <!-- Time - Weather-->
+    <div class="time-date-weather-wrapper text-center py-3"
+      style="background-image: url('./img/bg-img/profile_451.jpg')">
+      <!-- <div class="weather-update mb-4">
+          <l class="icon ti ti-temperature-sun"></l>
+          <h4 class="mb-1">92°F</h4>
+          <h6 class="mb-0 text-white">UAE</h6>
+          <p class="mb-0">Mostly sunny</p>
+        </div> -->
+      <div class="time-date">
+        <div id="dashboardDate"></div>
+        <div class="running-time d-flex justify-content-center">
+          <div id="hours"></div><span>:</span>
+          <div id="min"></div><span>:</span>
+          <div id="sec"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="menu-back" onclick="closeMenu()">&larr; Back</div>
+
+  <!-- Main Menu -->
+  <div class="menu-item" onclick="showSubmenu('submenu')">
+    <i class="fas fa-file"></i> All-Categories <i class="fas fa-chevron-right"></i>
+  </div>
+  <!-- <div class="menu-item"> <a href="live.html"><i class="fas fa-play"></i> Live <span
+          class="red-circle ms-2 flashing-effect"></a></span></div> -->
+  <div class="menu-item"><a style="color: white !important;" href="/"><i class="fas fa-home"></i> Home</a></div>
+  <div class="menu-item"><a style="color: white !important;" href="{% url 'contact-us' %}"><i class="fas fa-phone"></i> Contact Us</a></div>
+  <div class="menu-item"><a style="color: white !important;" href="{% url 'sitemap' %}"><i class="fas fa-lock"></i> Sitemap</a></div>
+  {% for page in pages %}
+  <div class="menu-item"><a style="color: white !important;" href="{% url 'cms' page.slug %}"></i>{{ page.pagename }}</a></div>
+  {% endfor %}
+  <!-- <div class="menu-item"><a href="{% url 'setting' %}"><i class="fas fa-cog"></i> Settings</a></div> -->
+
+
+  <!-- Main Submenu -->
+  <div id="submenu" class="submenu active">
+    <div class="menu-back" onclick="closeMenu()">
+      &larr; BACK TO MAIN MENU
+    </div>
+
+    {% for link in Blogcat %}
+    <div class="menu-item" onclick="showSubmenu('submenu-{{ link.id }}')">
+      {{ link.cat_name }}
+      <i class="fas fa-chevron-right float-end"></i>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Submenus for Each Category -->
+  {% for link in Blogcat %}
+  <div id="submenu-{{ link.id }}" class="thirdmenu">
+    <div class="menu-back" onclick="hideSubmenu('submenu-{{ link.id }}')">
+      &larr; BACK TO SUBMENU
+    </div>
+
+    {% for sublink in link.sub_category_set.all %}
+    {% if sublink.subcat_status == 'active' %}
+    <div class="menu-item">
+      <a style="color: white !important;" href="/{{ link.cat_slug }}/{{ sublink.subcat_slug }}"  style="text-decoration: none; color: inherit;">
+        {{ sublink.subcat_name }}
+      </a>
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+  {% endfor %}
+
+
+</div>
+
+<div class="page-content-wrapper mt-0">
