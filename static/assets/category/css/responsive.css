@@ -913,6 +913,7 @@
     .post-block-number-wrap {
         font-size: 48px;
         min-width: 40px;
+        padding: 0 10px;
     }
 
     .author-bio-wrap {
