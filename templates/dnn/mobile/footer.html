@@ -24,124 +24,73 @@
 </div> -->
 
 <!-- 🔥 Bottom Footer Nav -->
-<div class="fixed bottom-0 left-0 w-full bg-white border-t z-50">
+<div class="position-fixed bottom-0 start-0 w-100 bg-white border-top" style="z-index:9999;">
 
-  <div class="flex justify-around items-center py-2 text-[11px] text-gray-500">
+  <div class="d-flex justify-content-around align-items-center py-2 text-muted">
 
-    <!-- Home (Active) -->
-    <a href="/" class="flex flex-col items-center {% if request.path == '/' %}text-blue-600{% endif %}">
-      <i class="bi bi-house text-xl"></i>
-      <span>Home</span>
+    <!-- Home -->
+    <a href="/" class="d-flex flex-column align-items-center {% if request.path == '/' %}text-primary{% endif %}">
+      <i class="bi bi-house fs-5"></i>
+      <span class="fs-12">Home</span>
     </a>
 
     <!-- Videos -->
-    <a href="all-video-news/all" class="flex flex-col items-center">
-      <i class="bi bi-play-circle text-xl"></i>
-      <span>Videos</span>
+    <a href="/all-video-news/all" class="d-flex flex-column align-items-center {% if 'all-video-news' in request.path %}text-primary{% endif %}">
+      <i class="bi bi-play-circle fs-5"></i>
+      <span class="fs-12">Videos</span>
     </a>
 
-   <!-- Reels Button -->
-  <a data-bs-toggle="modal" data-bs-target="#reelsModal"
-      class="flex flex-col items-center cursor-pointer hover:text-blue-600">
-
-    <i class="bi bi-lightning text-xl"></i>
-    <span>Reels</span>
-
-  </a>
-
+    <!-- Reels -->
+    <a href="/" 
+      class="d-flex flex-column align-items-center">
+      <i class="bi bi-lightning fs-5"></i>
+      <span class="fs-12">Reels</span>
+    </a>
+     
     <!-- Notifications -->
-   <a data-bs-toggle="modal" data-bs-target="#ModalSubscribe"
-     class="flex flex-col items-center cursor-pointer text-gray-500 hover:text-blue-600">
-
-  <i class="bi bi-bell text-xl"></i>
-  <span>Notifications</span>
-
-</a>
+    <a data-bs-toggle="modal" data-bs-target="#ModalSubscribe"
+       class="d-flex flex-column align-items-center">
+      <i class="bi bi-bell fs-5"></i>
+      <span class="fs-12">Notifications</span>
+    </a>
 
     <!-- Profile -->
-    <a href="#" class="flex flex-col items-center">
-      <i class="bi bi-person text-xl"></i>
-      <span>Profile</span>
+    <a href="{% url 'sign-in' %}" class="d-flex flex-column align-items-center">
+      <i class="bi bi-person fs-5"></i>
+      <span class="fs-12">Profile</span>
     </a>
 
   </div>
 </div>
 
-<div class="modal fade" id="reelsModal" tabindex="-1">
-  <div class="modal-dialog modal-fullscreen m-0">
-    <div class="modal-content bg-black p-0">
-
-      <!-- Close -->
-      <button type="button"
-              class="btn-close btn-close-white position-absolute top-0 end-0 m-3 z-50"
-              data-bs-dismiss="modal"></button>
-
-      <!-- Swiper -->
-      <div class="swiper reelsSwiper">
-
-        <div class="swiper-wrapper">
-
-          {% for reels in Reels %}
-          <div class="swiper-slide">
-
-            <div class="reel-item">
-
-              <!-- 🔥 YouTube (no controls for smooth swipe) -->
-            
-              <iframe
-                src="https://www.youtube.com/embed/LpSqbX7i-hQ?playsinline=1&rel=0"
-                frameborder="0"
-                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen>
-              </iframe>
-             
-
-              <!-- Title -->
-              <div class="reel-title">
-                {{ reels.video_title }}
-              </div>
-
-            </div>
-
-          </div>
-          {% endfor %}
-
-        </div>
-
-      </div>
-
-    </div>
-  </div>
-</div>
 <!-- 🔥 Subscribe Modal -->
 {% include 'subscribe_model.html' %}
 
 <style>
+.fs-10 { font-size: 10px; }
+.fs-11 { font-size: 11px; }
+.fs-12 { font-size: 12px; }
+.fs-14 { font-size: 14px; }
+.fs-16 { font-size: 16px; }
   /* Swiper Fullscreen */
-.reelsSwiper {
-  height: 100vh;
-}
-
+.reelsSwiper,
+.swiper-wrapper,
 .swiper-slide {
-  height: 100vh;
+  height: 100vh !important;
 }
 
-/* Reel item */
 .reel-item {
   position: relative;
   width: 100%;
   height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background: black;
 }
 
 /* Video */
 .reel-item iframe {
   width: 100%;
-  height: 80vh;
-  pointer-events: none; /* 🔥 वापस enable */
+  height: 100vh;
+  pointer-events: none; /* 🔥 swipe ke liye */
 }
 
 /* Title */
@@ -152,37 +101,10 @@
   right: 10px;
   color: #fff;
   font-size: 14px;
-  text-align: center;
 }
 </style>
 <!-- 🔥 JS (Cleaned + Optimized) -->
 
-<script>
-let reelsSwiper;
-
-const reelsModal = document.getElementById('reelsModal');
-
-if (reelsModal) {
-  reelsModal.addEventListener('shown.bs.modal', function () {
-
-    if (reelsSwiper) {
-      reelsSwiper.destroy(true, true);
-    }
-
-    reelsSwiper = new Swiper(".reelsSwiper", {
-    direction: "vertical",
-    slidesPerView: 1,
-    spaceBetween: 0,
-    mousewheel: true,
-
-    // 🔥 ये critical हैं
-    touchStartPreventDefault: false,
-    nested: true,
-  });
-
-  });
-}
-</script>
 
 <script>
 const subscribeModal = document.getElementById('subscribeModal');

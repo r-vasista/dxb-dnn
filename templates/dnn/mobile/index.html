@@ -9,122 +9,7 @@
 <script src="{% static 'mobile/js/owl.carousel.min.js' %}"></script>
 <!-- 🔥 Custom CSS -->
 <style>
-/* Category scroll */
-.cat-scroll {
-  display: flex;
-  overflow-x: auto;
-  background: #005dba;
-  padding: 8px;
-  gap: 6px;
-}
 
-.cat-btn {
-  white-space: nowrap;
-  padding: 8px 14px;
-  background: transparent;
-  color: #fff;
-  border-radius: 20px;
-  font-size: 11px;
-  text-transform: uppercase;
-}
-
-.cat-btn.active {
-  background: rgba(255,255,255,0.2);
-}
-
-/* Subcategory */
-.subcat-scroll {
-  display: flex;
-  overflow-x: auto;
-  background: #e8f5fe;
-  padding: 8px;
-}
-
-/* Hide all */
-.subcat-group {
-  display: none;
-  gap: 10px;
-}
-.subcat-group a{
-  color: #013f7c !important;
-}
-/* Show active */
-.subcat-group.active {
-  display: flex;
-}
-
-.subcat-btn {
-  white-space: nowrap;
-  padding: 6px 12px;
-  background: transparent;
-  font-size: 12px;
-  border-bottom: 2px solid transparent;
-}
-
-.subcat-btn:hover {
-  border-bottom: 2px solid #000;
-}
-.top-margin{
-  margin: 70px 0 0 0;
-}
-/* Wrapper */
-.breaking-wrapper {
-  display: flex;
-  align-items: center;
-  background: #eaf3fb;
-  overflow: hidden;
-}
-
-/* Label */
-.breaking-label {
-  background: #e60023;
-  color: #fff;
-  font-weight: bold;
-  padding: 8px 14px;
-  font-size: 13px;
-}
-
-/* Ticker */
-.breaking-ticker {
-  flex: 1;
-  overflow: hidden;
-  position: relative;
-}
-
-/* Track */
-.ticker-track {
-  display: flex;
-  width: max-content;
-  gap: 10px;
-  animation: scrollTicker 25s linear infinite;
-}
-
-/* Item */
-.ticker-item {
-  white-space: nowrap;
-  color: #0b5ed7;
-  font-size: 14px;
-  text-decoration: none;
-}
-
-.ticker-item:hover {
-  text-decoration: underline;
-}
-
-/* Smooth infinite loop */
-@keyframes scrollTicker {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-/* Pause on hover */
-.breaking-ticker:hover .ticker-track {
-  animation-play-state: paused;
-}
 .swiper-button-next,
 .swiper-button-prev {
   color: #fff;
@@ -201,6 +86,7 @@
 .custom-article-wrapper {
   background: #f5f5f5;
   padding: 10px;
+  
 }
 
 /* Header */
@@ -210,13 +96,18 @@
   align-items: center;
   margin-bottom: 12px;
 }
+.custom-article-header a {
+    text-decoration: none;
+    color: #005cb9 !important;
+    font-size: 12px;
+    font-weight: 500;
+}
 
 .custom-article-title {
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
   border-left: 4px solid #2563eb;
   padding-left: 8px;
-  text-transform: uppercase;
 }
 
 /* Arrow */
@@ -278,7 +169,70 @@
   flex-direction: column;
   gap: 12px;
 }
+.custom-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  margin: 8px;
+}
 
+/* Image */
+.card-img {
+  position: relative;
+  height: 180px;
+  background: #ddd;
+}
+
+.card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Badge */
+.card-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #0680a7;
+  color: #fff;
+  font-size: 10px !important;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+/* Share button */
+.card-share {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0,0,0,0.5);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+/* Content */
+.card-content {
+  padding: 12px;
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: #777;
+}
 /* Card */
 .custom-popular-card {
   background: #fff;
@@ -360,140 +314,101 @@
 </style>
 
 
-<div class="my-5">
-  
-  <div class="">
-    <!-- Category Scroll -->
-      <div class="cat-scroll">
-
-        {% for link in Blogcat %}
-        <button class="cat-btn {% if forloop.first %}active{% endif %}" 
-                onclick="showSubCat('{{ link.id }}')">
-          {{ link.cat_name }}
-        </button>
-        {% endfor %}
-
-      </div>
-
-      <!-- SubCategory Scroll -->
-      <div class="subcat-scroll">
-
-        {% for link in Blogcat %}
-        <div id="subcat-{{ link.id }}" 
-            class="subcat-group {% if forloop.first %}active{% endif %}">
-
-          {% for sublink in link.sub_category_set.all %}
-          {% if sublink.subcat_status == 'active' %}
-
-          <a href="/{{ link.cat_slug }}/{{ sublink.subcat_slug }}" 
-            class="subcat-btn">
-            {{ sublink.subcat_name }}
-          </a>
-
-          {% endif %}
-          {% endfor %}
-
-        </div>
-        {% endfor %}
-
-      </div>
-
-      <div class="breaking-wrapper">
-        <div class="breaking-label">
-          BREAKING
-        </div>
-
-        <div class="breaking-ticker">
-          <div class="ticker-track">
-           {% for Blog in bnews %}
-            <a href="/{{ Blog.slug }}" class="ticker-item">
-              {{ Blog.post_title }}
-            </a>
-            {% endfor %}
-
-           {% for Blog in bnews %}
-            <a href="/{{ Blog.slug }}" class="ticker-item">
-              {{ Blog.post_title }}
-            </a>
-            {% endfor %}
-
-          </div>
-        </div>
-
-      </div>
-
-     
-  </div>
-
+<div class="mtopspace mb-5">
+ 
     <div class="custom-article-wrapper">
-      <div class="">
+      <div class="custom-article-header">
+        <h6 class="custom-article-title">Head Lines</h6>
+        <a href="/all-news/head-lines" class="text-xs">View All</a>
+      </div>
 
-        <!-- Heading -->
-        <div class="custom-article-header">
-          <h6 class="custom-article-title">Latest News</h6>
+      <div class="custom-article-slider owl-carousel">
 
-          <a href="/all-news/articles" 
-            class="custom-arrow flex items-center justify-center hover:text-red-500 transition">
-            <i class="bi bi-arrow-right"></i>
+        {% for news in headline|slice:":5" %}
+        <div class="custom-card">
+          <a href="{{ news.slug }}">
+
+            <!-- Image -->
+            <div class="card-img">
+              <img src="{{ news.post_image.url }}" alt="{{ news.post_title }}">
+
+              <!-- Badge -->
+              <span class="card-badge">
+                {{ news.post_cat }}
+              </span>
+
+              <!-- Share Icon -->
+              <!-- <div class="card-share">
+                <i class="bi bi-share-fill"></i>
+              </div> -->
+            </div>
+
+            <!-- Content -->
+            <div class="card-content">
+              <h6 class="card-title">
+                {{ news.post_title }}
+              </h6>
+
+              <div class="card-meta">
+                DXB News • {{ news.schedule_date|date:"M d, Y" }}
+              </div>
+            </div>
+
           </a>
         </div>
-
-        <!-- Slider -->
-        <div class="custom-article-slider owl-carousel">
-
-          {% for news in LatestNews|slice:":5" %}
-          <div class="custom-article-card">
-            <a href="{{ news.slug }}">
-
-              <!-- Image -->
-              <div class="custom-article-img">
-                <img src="{{ news.post_image.url }}" 
-                    alt="{{ news.post_title }}" 
-                    title="{{ news.post_title }}"
-                    loading="lazy">
-              </div>
-
-              <!-- Content -->
-              <div class="custom-article-content">
-
-                <!-- Category -->
-                <span class="custom-badge">
-                  {{ news.post_cat }}
-                </span>
-
-                <!-- Title -->
-                <h6 class="custom-title">
-                  {{ news.post_title }}
-                </h6>
-
-                <!-- Time -->
-                <div class="custom-meta">
-                  {{ news.schedule_date|timesince }} ago
-                </div>
-
-              </div>
-
-            </a>
-          </div>
-          {% endfor %}
-
-        </div>
+        {% endfor %}
 
       </div>
     </div>
-    
 
+
+      <div class="custom-article-wrapper">
+      <div class="custom-article-header">
+        <h6 class="custom-article-title">Trending Post</h6>
+        <a href="/all-news/trending" class="text-xs">View All</a>
+      </div>
+
+        {% for trendingpost in trendpost %}
+        <div class="custom-card mb-3">
+          <a href="/{{trendingpost.slug}}">
+
+            <!-- Image -->
+            <div class="card-img">
+              <img src="{{trendingpost.post_image.url}}" alt="{{trendingpost.post_title}}">
+
+              <!-- Category Badge -->
+              <span class="card-badge">
+                {{ trendingpost.post_cat }}
+              </span>
+
+             
+            </div>
+
+            <!-- Content -->
+            <div class="card-content">
+              <h6 class="card-title">
+                {{ trendingpost.post_title }}
+              </h6>
+
+              <div class="card-meta">
+                DXB News • {{ trendingpost.schedule_date|date:"M d, Y" }}
+              </div>
+            </div>
+
+          </a>
+        </div>
+        {% endfor %}
+
+    </div>
+
+    {% include 'mobile/reels.html' %}
   <!-- Articale -->
   <div class="custom-article-wrapper">
     <div class="">
       <!-- Heading -->
       <div class="custom-article-header">
         <h6 class="custom-article-title">Top Articles</h6>
-        <div class="custom-arrow">
-          <a href="/all-news/articles">
-            <i class="bi bi-arrow-right"></i>
-          </a>
-        </div>
+        <a href="/all-news/articles" class="text-xs">View All</a>
       </div>
 
       <!-- Slider -->
@@ -542,10 +457,7 @@
       <!-- Heading -->
       <div class="custom-article-header">
         <h6 class="custom-article-title">Voices Of UAE</h6>
-        <a href="/spotlite/voices-of-uae" 
-          class="custom-arrow flex items-center justify-center hover:text-red-500 transition">
-          <i class="bi bi-arrow-right"></i>
-        </a>
+          <a href="/spotlite/voices-of-uae" class="text-xs">View All</a>         
       </div>
 
       <!-- Slider -->
@@ -596,10 +508,10 @@
 
       <!-- Header -->
       <div class="custom-article-header">
-        <h6 class="custom-article-title">Popular News</h6>
+        <h6 class="custom-article-title">Latest News</h6>
 
         <a href="/all-news/trending" 
-          class="text-xs bg-red-600 text-white px-3 py-1 rounded-md">
+          class="text-xs ">
           View All
         </a>
       </div>
@@ -607,7 +519,7 @@
       <!-- List -->
       <div class="custom-popular-list">
 
-        {% for news in trendpost %}
+        {% for news in LatestNews %}
         <div class="custom-popular-card">
           <a href="/{{ news.slug }}" class="flex gap-3">
 
@@ -716,7 +628,7 @@
         <h6 class="custom-article-title">Video News</h6>
 
         <a href="/all-video-news/all" 
-          class="text-xs bg-red-600 text-white px-3 py-1 rounded-md">
+          class="text-xs ">
           View All
         </a>
       </div>
@@ -767,7 +679,7 @@
         <h6 class="custom-article-title">Past Event</h6>
 
         <!-- <a href="/all-events/past" 
-          class="text-xs bg-red-600 text-white px-3 py-1 rounded-md">
+          class="text-xs ">
           View All
         </a> -->
       </div>
@@ -815,21 +727,63 @@
     </div>
   </div>
   <!-- Past Event end -->
+
+  <div class="custom-article-wrapper">
+
+  {% for category, subcategories_data in grouped_postsdata2.items %}
+
+  <!-- Section Header -->
+  <div class="custom-article-header">
+    <h6 class="custom-article-title">
+      {{ category.cat_name }}
+    </h6>
+    <a href="/{{ category.cat_slug }}/{{ subcategories_data.subcategories.0.subcat_slug }}" class="text-xs">
+      View All
+    </a>
+  </div>
+
+  <!-- Posts Loop -->
+  {% for post in subcategories_data.posts|slice:":4" %}
+  <div class="custom-card mb-3">
+    <a href="/{{ post.slug }}">
+
+      <!-- Image -->
+      <div class="card-img">
+        <img src="{{ post.post_image.url }}" alt="{{ post.post_title }}">
+
+        <!-- Category Badge -->
+        <span class="card-badge">
+          {{ category.cat_name }}
+        </span>
+      </div>
+
+      <!-- Content -->
+      <div class="card-content">
+        <h6 class="card-title">
+          {{ post.post_title|truncatechars:60 }}
+        </h6>
+
+        <div class="card-meta">
+          DXB News • {{ post.schedule_date|date:"M d, Y" }}
+        </div>
+      </div>
+
+    </a>
+  </div>
+  {% endfor %}
+
+  {% endfor %}
+
+  </div>
+
+  
 </div>
+
+
 
 <!-- 🔥 JS -->
 
-<script>
-function showSubCat(id) {
-  // remove active from all
-  document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-  document.querySelectorAll('.subcat-group').forEach(div => div.classList.remove('active'));
 
-  // activate selected
-  event.target.classList.add('active');
-  document.getElementById('subcat-' + id).classList.add('active');
-}
-</script>
 
 <script>
 const swiper = new Swiper(".mySwiper", {

@@ -69,7 +69,7 @@ Created: April 5, 2020
 body,
 html {
   font-family: "DM Sans", sans-serif;
-  color: #797494;
+  color: #000000;
   overflow-x: hidden;
   scrollbar-width: thin;
   font-weight: 400;
@@ -91,8 +91,9 @@ h6 {
 }
 
 p {
-  color: #797494;
-  font-size: 1rem;
+ color: #000000;
+  font-size: 0.825rem;
+  font-weight: 500;
 }
 
 a,
@@ -456,7 +457,7 @@ textarea:invalid {
 }
 .section-heading h6 {
   margin-bottom: 0;
-  color: #797494;
+  color: #000000;
 }
 .section-heading p {
   margin-bottom: 0;
@@ -674,7 +675,7 @@ textarea:invalid {
   position: relative;
   z-index: 1;
   margin-top: 1rem;
-  color: #797494;
+  color: #000000;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -729,7 +730,7 @@ textarea:invalid {
 .preview-footer-area .footer-nav li a {
   margin-left: 1rem;
   font-size: 14px;
-  color: #797494;
+  color: #000000;
 }
 .preview-footer-area .footer-nav li a:hover,
 .preview-footer-area .footer-nav li a:focus {
@@ -1893,7 +1894,7 @@ textarea:invalid {
   font-size: 12px;
   text-transform: capitalize;
   margin-right: 1.5rem;
-  color: #797494;
+  color: #000000;
   font-weight: 500;
   position: relative;
   z-index: 1;
@@ -1979,7 +1980,7 @@ textarea:invalid {
   -ms-flex-positive: 1;
   flex-grow: 1;
   text-align: center;
-  color: #797494;
+  color: #000000;
 }
 .tabs-news-wrapper .nav-tabs button.nav-link {
   border: 0;
@@ -2042,7 +2043,7 @@ textarea:invalid {
 .single-news-post .post-content .post-meta a {
   font-size: 7px;
   margin-right: 1.5rem;
-  color: #797494;
+  color: #000000;
   font-weight: 500;
   position: relative;
   z-index: 1;
@@ -2119,7 +2120,7 @@ textarea:invalid {
   .dropdown-menu
   .dropdown-item {
   padding: 0.25rem 0.75rem;
-  color: #797494;
+  color: #000000;
   font-size: 12px;
 }
 .single-recommended-post
@@ -2310,7 +2311,7 @@ textarea:invalid {
   font-size: 12px;
   text-transform: capitalize;
   margin-right: 1.5rem;
-  color: #797494;
+  color: #000000;
   font-weight: 500;
   position: relative;
   z-index: 1;
@@ -2328,7 +2329,7 @@ textarea:invalid {
   top: 7px;
   right: -14px;
   z-index: 1;
-  background-color: #797494;
+  background-color: #000000;
 }
 .single-editorial-slide .post-content .post-meta a:last-child {
   margin-right: 0;
@@ -2650,7 +2651,7 @@ textarea:invalid {
 .single-blog-info .post-like-wrap span {
   font-size: 12px;
   text-transform: uppercase;
-  color: #797494;
+  color: #000000;
   margin-top: 0.5rem;
 }
 .single-blog-info .post-like-wrap .line {
@@ -2686,7 +2687,7 @@ textarea:invalid {
   background-color: #dc2626;
 }
 .single-blog-info .post-meta a {
-  color: #797494;
+  color: #000000;
   font-size: 13px;
   text-transform: capitalize;
   font-weight: 500;
@@ -2882,7 +2883,7 @@ textarea:invalid {
   display: block;
   font-size: 10px;
   font-weight: 400;
-  color: #797494;
+  color: #000000;
 }
 .user-meta-data .user-content .user-meta-data p span.counter {
   font-size: 18px;
@@ -2997,12 +2998,12 @@ textarea:invalid {
 .single-comment-wrap .comment-meta .post-date {
   display: block;
   font-size: 12px;
-  color: #797494;
+  color: #000000;
   font-weight: 400;
 }
 .single-comment-wrap .comment-meta .comment-text {
   font-size: 14px;
-  color: #797494;
+  color: #000000;
   margin-bottom: 0.5rem;
 }
 .single-comment-wrap .comment-meta .like-count span {
@@ -3011,7 +3012,7 @@ textarea:invalid {
 .single-comment-wrap .comment-meta .like-count a {
   font-size: 14px;
   display: inline-block;
-  color: #797494;
+  color: #000000;
   border: 1px solid #e6e6e6;
   width: 30px;
   height: 30px;
@@ -3030,7 +3031,7 @@ textarea:invalid {
 }
 .single-comment-wrap .comment-meta .reply {
   font-size: 12px;
-  color: #797494;
+  color: #000000;
   font-weight: 700;
 }
 .single-comment-wrap .comment-meta .reply:hover {

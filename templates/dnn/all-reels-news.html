@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+
+<!-- Swiper CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+
+<div class="swiper reelsSwiper">
+  <div class="swiper-wrapper">
+
+    {% for reels in Reels %}
+    <div class="swiper-slide">
+      <div class="reel-item">
+
+        <!-- ✅ VIDEO FIX -->
+        <iframe
+          src="https://www.youtube.com/embed/{{ reels.video_url|cut:'https://www.youtube.com/watch?v=' }}?autoplay=1&mute=1&playsinline=1"
+          frameborder="0"
+          allow="autoplay; encrypted-media"
+          allowfullscreen>
+        </iframe>
+
+        <div class="reel-title">
+          {{ reels.video_title }}
+        </div>
+
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+</div>
+
+<!-- CSS -->
+<style>
+.reelsSwiper,
+.swiper-wrapper,
+.swiper-slide {
+  height: 100vh !important;
+}
+
+.reel-item {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: black;
+}
+
+.reel-item iframe {
+  width: 100%;
+  height: 100vh;
+  pointer-events: none; /* swipe ke liye */
+}
+
+.reel-title {
+  position: absolute;
+  bottom: 20px;
+  left: 10px;
+  color: #fff;
+  font-size: 14px;
+}
+</style>
+
+<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script>
+new Swiper(".reelsSwiper", {
+  direction: "vertical",
+  slidesPerView: 1,
+  spaceBetween: 0,
+  mousewheel: true,
+});
+</script>
+
+{% endblock %}
