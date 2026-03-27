@@ -1,0 +1,749 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Swiper + Tailwind CDN -->
+<link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="{% static 'mobile/js/jquery.min.js' %}"></script>
+<script src="{% static 'mobile/js/owl.carousel.min.js' %}"></script>
+<!-- 🔥 Custom CSS -->
+<style>
+
+.top-margin{
+  margin: 70px 0 0 0;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #fff;
+  background: rgba(0,0,0,0.5);
+  padding: 25px;
+  border-radius: 50%;
+}
+
+.swiper-pagination-bullet {
+  background: #fff;
+  opacity: 0.6;
+}
+.swiper-pagination-bullet-active {
+  background: red;
+  opacity: 1;
+}
+
+.news-card img {
+  transition: transform 0.4s ease;
+}
+.news-card:hover img {
+  transform: scale(1.05);
+}
+
+.news-card a{
+  line-height: 23px;
+  color: white !important;
+  padding-bottom: 20px;
+}
+.trending-strip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-bottom: 1px solid #eee;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.trending-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.trending-label {
+  color: #ff0003;
+  font-size: 12px;
+  font-weight: 700;
+  margin-right: 4px;
+}
+
+.trend-pill {
+  font-size: 12px;
+  padding: 5px 10px;
+  color: #000 !important;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 500;
+  background: #eee;
+}
+
+.trend-pill:hover {
+  background: linear-gradient(to right, #485563 0%, #29323c  51%, #485563  100%);
+   text-decoration: none;
+   color: #fff !important;
+}
+
+.trend-pill.active {
+  background: linear-gradient(to right, #485563 0%, #29323c  51%, #485563  100%);
+  color: #fff !important;
+  text-decoration: none;
+}
+
+/* Wrapper */
+.custom-article-wrapper {
+  background: #f5f5f5;
+  padding: 20px 10px;
+}
+
+/* Header */
+.custom-article-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.custom-article-title {
+  font-size: 16px;
+  font-weight: 700;
+  border-left: 4px solid red;
+  padding-left: 8px;
+  text-transform: uppercase;
+}
+
+/* Arrow */
+.custom-arrow {
+  width: 32px;
+  height: 32px;
+  background: #eee;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Card */
+.custom-article-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+}
+
+.custom-article-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Image */
+.custom-article-img img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+/* Content */
+.custom-article-content {
+  padding: 10px;
+}
+
+/* Badge */
+.custom-badge {
+  display: inline-block;
+  background: #eee;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
+
+/* Title */
+.custom-title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* List wrapper */
+.custom-popular-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Card */
+.custom-popular-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  transition: 0.3s;
+}
+
+.custom-popular-card:hover {
+  transform: translateY(-3px);
+}
+
+/* Image */
+.custom-popular-img img {
+  width: 90px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* Content */
+.custom-popular-content {
+  flex: 1;
+}
+
+/* Meta */
+.custom-meta {
+  font-size: 11px;
+  color: #888;
+  margin-top: 4px;
+}
+
+/* Grid */
+.custom-video-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+  .custom-video-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Image wrapper */
+.custom-video-img {
+  position: relative;
+}
+
+.custom-video-img img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 12px 12px 0 0;
+}
+
+/* Play button */
+.custom-play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0,0,0,0.6);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.custom-play-btn i {
+  font-size: 18px;
+}
+</style>
+
+
+<div class="my-5">
+  <div class="trending-strip mb-2">
+      <span class="trending-label">TOP LEAD STORY</span>
+
+      {% for Blog in trendpost|slice:"0:9" %}
+        <a href="/{{ Blog.newsfrom.slug }}/{{ Blog.post_cat.sub_cat.cat_slug }}/{{ Blog.slug }}"
+          class="trend-pill {% if forloop.first %}active{% endif %}">
+          {{ Blog.post_title|truncatechars:22 }}
+        </a>
+      {% endfor %}
+  </div>
+  <!-- 🔥 Top Ads -->
+  <!-- {% for ads in headtopad %}
+  <div class="container">
+    <div class="my-4 rounded-xl overflow-hidden shadow">
+      <a href="{{ads.ad_url}}" target="_blank">
+        {% if ads.ad_type == 'stil' %}
+        <img class="w-full max-h-[300px] object-cover" src="../upload/{{ads.ad_image}}">
+        {% else %}
+        <video class="w-full max-h-[300px]" autoplay loop muted>
+          <source src="../upload/{{ads.ad_image}}">
+        </video>
+        {% endif %}
+      </a>
+    </div>
+  </div>
+  {% endfor %} -->
+
+  <!-- 🔥 TOP NEWS SLIDER -->
+  <div class="bg-gray-100 py-6">
+    <div class="">
+
+      <!-- Header -->
+      <div class="container mx-auto px-3 flex justify-between items-center mb-4">
+        <h4 class=" md:text-2xl font-bold border-l-4 border-red-600 pl-2 text-uppercase">
+          DXB Top News
+        </h4>
+        <span id="dashboardDate2" class="text-sm text-gray-500"></span>
+      </div>
+
+      <!-- Slider -->
+      <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+
+          {% for news in LatestNews|slice:":5" %}
+          <div class="swiper-slide">
+            <div class="news-card relative rounded-xl overflow-hidden shadow-lg">
+
+              <img src="{{ news.post_image.url }}"
+                  class="w-full h-[250px] md:h-[350px] object-cover">
+
+              <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+
+              <div class="absolute bottom-0 p-4 text-white">
+                <div class="text-xs mb-1 opacity-80">
+                  {{ news.schedule_date|timesince }}
+                </div>
+
+                <span class="bg-red-600 px-2 py-1 text-xs rounded">
+                  {{ news.post_cat }}
+                </span>
+
+                <a href="{{ news.slug }}" class="block mt-2 font-semibold text-lg hover:text-red-400">
+                  {{ news.post_title }}
+                </a>
+              </div>
+
+            </div>
+          </div>
+          {% endfor %}
+
+        </div>
+
+        <!-- Controls -->
+        
+        <div class="swiper-pagination"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 🔥 Buttons -->
+  <!-- <div class="container mx-auto px-3 py-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+
+      <a href="{% url 'sign-up' %}"
+        class="bg-blue-600 hover:bg-blue-800 text-white text-center py-3 rounded-xl shadow transition">
+        PR Agencies
+      </a>
+
+      <a href="{% url 'voices-of-uae' %}"
+        class="bg-green-600 hover:bg-green-800 text-white text-center py-3 rounded-xl shadow transition">
+        Voices Of UAE
+      </a>
+
+      <a href="{% url 'sign-in' %}"
+        class="bg-purple-600 hover:bg-purple-800 text-white text-center py-3 rounded-xl shadow transition">
+        ArtDomain
+      </a>
+
+    </div>
+  </div> -->
+  <!-- Articale -->
+  <div class="custom-article-wrapper">
+    <div class="container">
+
+      <!-- Heading -->
+      <div class="custom-article-header">
+        <h6 class="custom-article-title">Top Articles</h6>
+        <div class="custom-arrow">
+          <a href="/all-news/articles">
+            <i class="bi bi-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Slider -->
+      <div class="custom-article-slider owl-carousel">
+
+        {% for article in Articale %}
+        <div class="custom-article-card">
+          <a href="/{{ article.slug }}">
+
+            <!-- Image -->
+            <div class="custom-article-img">
+              <img src="{{ article.post_image.url }}" 
+                  alt="{{ article.post_title }}" 
+                  title="{{ article.post_title }}"
+                  loading="lazy">
+            </div>
+
+            <!-- Content -->
+            <div class="custom-article-content">
+
+              <!-- Category -->
+              <span class="custom-badge">
+                {{ article.post_cat }}
+              </span>
+
+              <!-- Title -->
+              <h6 class="custom-title">
+                {{ article.post_title }}
+              </h6>
+
+            </div>
+
+          </a>
+        </div>
+        {% endfor %}
+
+      </div>
+    </div>
+  </div>
+  <!-- Articale end-->
+
+  <!-- voices of uae end -->
+  <div class="custom-article-wrapper">
+    <div class="container">
+
+      <!-- Heading -->
+      <div class="custom-article-header">
+        <h6 class="custom-article-title">Voices Of UAE</h6>
+        <a href="/spotlite/voices-of-uae" 
+          class="custom-arrow flex items-center justify-center hover:text-red-500 transition">
+          <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- Slider -->
+      <div class="custom-article-slider owl-carousel">
+
+        {% for post in uae_voice %}
+        <div class="custom-article-card">
+          <a href="/{{ post.slug }}">
+
+            <!-- Image -->
+            <div class="custom-article-img">
+              <img src="{{ post.post_image.url }}" 
+                  alt="{{ post.post_title }}" 
+                  title="{{ post.post_title }}"
+                  loading="lazy">
+            </div>
+
+            <!-- Content -->
+            <div class="custom-article-content">
+
+              <!-- Category -->
+              {% if post.post_cat %}
+              <span class="custom-badge">
+                {{ post.post_cat }}
+              </span>
+              {% endif %}
+
+              <!-- Title -->
+              <h6 class="custom-title">
+                {{ post.post_title }}
+              </h6>
+
+            </div>
+
+          </a>
+        </div>
+        {% endfor %}
+
+      </div>
+
+    </div>
+  </div>
+  <!-- voices of uae end -->
+
+  <!-- popular or tranding news -->
+  <div class="custom-article-wrapper">
+    <div class="container">
+
+      <!-- Header -->
+      <div class="custom-article-header">
+        <h6 class="custom-article-title">Popular News</h6>
+
+        <a href="/all-news/trending" 
+          class="text-xs bg-red-600 text-white px-3 py-1 rounded-md">
+          View All
+        </a>
+      </div>
+
+      <!-- List -->
+      <div class="custom-popular-list">
+
+        {% for news in trendpost %}
+        <div class="custom-popular-card">
+          <a href="/{{ news.slug }}" class="flex gap-3">
+
+            <!-- Image -->
+            <div class="custom-popular-img">
+              <img src="{{ news.post_image.url }}" alt="{{ news.post_title }}">
+            </div>
+
+            <!-- Content -->
+            <div class="custom-popular-content">
+
+              <!-- Category -->
+              <span class="custom-badge">
+                {{ news.post_cat }}
+              </span>
+
+              <!-- Title -->
+              <h6 class="custom-title">
+                {{ news.post_title|truncatechars:60 }}
+              </h6>
+
+              <!-- Date -->
+              <div class="custom-meta">
+                {{ news.schedule_date|date:"d M Y" }}
+              </div>
+
+            </div>
+
+          </a>
+        </div>
+        {% endfor %}
+
+      </div>
+
+    </div>
+  </div>
+  <!-- popular or tranding news end -->
+
+  <!-- ArdDomain -->
+  <div class="custom-article-wrapper">
+  <div class="container">
+
+    <!-- Header -->
+    <div class="custom-article-header">
+      <h6 class="custom-article-title">ArtDomain</h6>
+      <!-- <div class="custom-arrow">
+        <i class="bi bi-arrow-right"></i>
+      </div> -->
+    </div>
+
+    <!-- Slider -->
+    <div class="custom-article-slider owl-carousel">
+
+      {% for profile in profiles %}
+      <div class="custom-article-card">
+        <a href="{% url 'journalist_profile' profile.username %}">
+
+          <!-- Image -->
+          <div class="custom-article-img">
+            <img src="{{ profile.profile_picture.url }}" 
+                 alt="{{ profile.username }}" 
+                 title="{{ profile.username }}"
+                 loading="lazy">
+          </div>
+
+          <!-- Content -->
+          <div class="custom-article-content">
+
+            <!-- Name -->
+            <h6 class="custom-title">
+              {% if profile.registration_type == 'artist' %}
+                {{ profile.first_name }} {{ profile.last_name }}
+              {% else %}
+                {{ profile.organisation_name|truncatechars:30 }}
+              {% endif %}
+            </h6>
+
+            <!-- Type -->
+            <span class="custom-badge">
+              {{ profile.registration_type|capfirst }}
+            </span>
+
+            <!-- Extra -->
+            <div class="custom-meta">
+              {{ profile.nationality }}
+            </div>
+
+          </div>
+
+        </a>
+      </div>
+      {% endfor %}
+
+    </div>
+
+  </div>
+  </div>
+  <!-- ArdDomain end-->
+
+  <!-- Videos News-->
+  <div class="custom-article-wrapper">
+    <div class="container">
+
+      <!-- Header -->
+      <div class="custom-article-header">
+        <h6 class="custom-article-title">Video News</h6>
+
+        <a href="/all-video-news/all" 
+          class="text-xs bg-red-600 text-white px-3 py-1 rounded-md">
+          View All
+        </a>
+      </div>
+
+      <!-- Grid -->
+      <div class="custom-video-grid">
+
+        {% for video in videos|slice:":6" %}
+        <div class="custom-article-card">
+          <a href="/video/{{video.slug}}">
+
+            <!-- Image + Play Icon -->
+            <div class="custom-video-img">
+              <img src="https://img.youtube.com/vi/{{video.video_url}}/hqdefault.jpg"
+                  alt="{{video.video_title}}"
+                  title="{{video.video_title}}"
+                  loading="lazy">
+
+              <!-- Play Icon -->
+              <div class="custom-play-btn">
+                <i class="bi bi-play-fill"></i>
+              </div>
+            </div>
+
+            <!-- Content -->
+            <div class="custom-article-content">
+              <h6 class="custom-title">
+                {{ video.video_title|truncatechars:50 }}
+              </h6>
+            </div>
+
+          </a>
+        </div>
+        {% endfor %}
+
+      </div>
+
+    </div>
+  </div>
+  <!-- Video News end -->
+
+  <!-- Past Event -->
+  <div class="custom-article-wrapper">
+    <div class="container">
+
+      <!-- Header -->
+      <div class="custom-article-header">
+        <h6 class="custom-article-title">Past Event</h6>
+
+        <!-- <a href="/all-events/past" 
+          class="text-xs bg-red-600 text-white px-3 py-1 rounded-md">
+          View All
+        </a> -->
+      </div>
+
+      <!-- List -->
+      <div class="custom-popular-list">
+
+        {% for event in past_events|slice:":6" %}
+        <div class="custom-popular-card">
+          <a href="/{{ event.slug }}" class="flex gap-3">
+
+            <!-- Image -->
+            <div class="custom-popular-img">
+              <img src="{{ event.post_image.url }}" alt="{{ event.post_title }}">
+            </div>
+
+            <!-- Content -->
+            <div class="custom-popular-content">
+
+              <!-- Category -->
+              <span class="custom-badge">
+                {{ event.post_cat }}
+              </span>
+
+              <!-- Title -->
+              <h6 class="custom-title">
+                {{ event.post_title }}
+              </h6>
+
+              <!-- Meta -->
+              <div class="custom-meta">
+                End At: {{ event.Eventend_date|date:"d M Y" }}
+              </div>
+
+            </div>
+
+          </a>
+        </div>
+        {% empty %}
+        <p class="text-sm text-gray-500 px-2">No past events found.</p>
+        {% endfor %}
+
+      </div>
+
+    </div>
+  </div>
+  <!-- Past Event end -->
+</div>
+
+<!-- 🔥 JS -->
+<script>
+const swiper = new Swiper(".mySwiper", {
+  loop: true,
+  spaceBetween: 15,
+
+  autoplay: {
+    delay: 3000,
+    disableOnInteraction: false,
+  },
+
+  pagination: {
+    el: ".swiper-pagination",
+    clickable: true,
+  },
+
+  navigation: {
+    nextEl: ".swiper-button-next",
+    prevEl: ".swiper-button-prev",
+  },
+
+  breakpoints: {
+    0: { slidesPerView: 1 },
+    768: { slidesPerView: 2 },
+    1024: { slidesPerView: 3 }
+  }
+});
+
+// Date
+const dateElement = document.getElementById("dashboardDate2");
+const today = new Date();
+dateElement.innerHTML = today.toLocaleDateString('en-IN', {
+  weekday: 'long',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+</script>
+
+<script>
+$('.custom-article-slider').owlCarousel({
+  loop: true,
+  margin: 12,
+  nav: false,
+  dots: true,
+
+  responsive: {
+    0: {
+      items: 1.2
+    },
+    600: {
+      items: 2
+    },
+    1000: {
+      items: 3
+    }
+  }
+});
+</script>
+
+{% endblock %}

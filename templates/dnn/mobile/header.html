@@ -1,118 +1,643 @@
 {% load static %}
-<!-- Preloader-->
-<!-- <div class="preloader" id="preloader">
-    <div class="spinner-grow text-secondary" role="status">
-      <span class="visually-hidden">Loading...</span>
-    </div>
-  </div> -->
 
-<!-- Header Area-->
-<div class="header-area" id="headerArea">
-  <div class="container h-100 d-flex align-items-center justify-content-between">
-    <!-- Navbar Toggler-->
+<!-- ✅ Fixed Transparent Header -->
+<header class="top-overlay-header position-fixed w-100 border-bottom" style="top:0; left:0; z-index:100;">
+  <div class="container-fluid d-flex align-items-center justify-content-between py-2 px-3">
 
-    <div class="icon" onclick="toggleMenu()">
+    <!-- ☰ Left: Menu Icon -->
+    <div class="fs-4" onclick="toggleMenu()">
       <i class="fas fa-bars"></i>
     </div>
+    <!-- <div class="d-flex align-items-center gap-2 fs-12 fw-semibold">
+      <i class="bi bi-sun text-warning"></i> DXB 32°C
+    </div> -->
+    
 
-    <!-- Logo-->
-    <div class="logo-wrapper">
-      <a href="/" class="text-center">
-        <img src="{{ profile_setting.logo_dark.url }}" alt="Dark Logo" class="logo logo-light logo img-fluid w-100">
-        <img src="{{ profile_setting.logo_light.url }}" alt="Light Logo" class="logo logo-dark logo img-fluid w-100">
+    <!-- 🏠 Center: Logo -->
+    <div class="position-absolute translate-middle text-center" style="left:33%; top:18%;">
+      <a href="/" class="d-inline-block">
+        <img src="{{ profile_setting.logo_dark.url }}" alt="Logo" class="img-fluid" >
       </a>
     </div>
 
-    <!-- Search Form-->
-    <div class="search-form">
-      <a href="#">
-        <i class="ti ti-search"></i>
+    <!-- 🔍 Right: Icons -->
+    <div class="d-flex align-items-center gap-3 ms-auto fs-5">
+      <a href="#" class="download-app-btn" id="openAppBtn">
+        ⬇ App
       </a>
-    </div>
-  </div>
-</div>
-
-<div class="mt-5"></div>
-
-
-<!-- Sidenav Black Overlay-->
-<div class="sidenav-black-overlay"></div>
-
-<!-- Side Nav Wrapper-->
-
-<!-- Sidenav Nav-->
-<div class="side-menu" id="sideMenu">
-  <div class="" id="sidenavWrapper">
-    <!-- Time - Weather-->
-    <div class="time-date-weather-wrapper text-center py-3"
-      style="background-image: url('./img/bg-img/profile_451.jpg')">
-      <!-- <div class="weather-update mb-4">
-          <l class="icon ti ti-temperature-sun"></l>
-          <h4 class="mb-1">92°F</h4>
-          <h6 class="mb-0 text-white">UAE</h6>
-          <p class="mb-0">Mostly sunny</p>
-        </div> -->
-      <div class="time-date">
-        <div id="dashboardDate"></div>
-        <div class="running-time d-flex justify-content-center">
-          <div id="hours"></div><span>:</span>
-          <div id="min"></div><span>:</span>
-          <div id="sec"></div>
-        </div>
+      <div id="mobile-search-icon" role="button">
+        <i class="bi bi-search"></i>
       </div>
+      
     </div>
   </div>
+
+   <div class="">
+    <!-- Category Scroll -->
+      <div class="cat-scroll">
+
+        {% for link in Blogcat %}
+        <button class="cat-btn {% if forloop.first %}active{% endif %}" 
+                onclick="showSubCat('{{ link.id }}')">
+          {{ link.cat_name }}
+        </button>
+        {% endfor %}
+
+      </div>
+
+      <!-- SubCategory Scroll -->
+      <div class="subcat-scroll">
+
+        {% for link in Blogcat %}
+        <div id="subcat-{{ link.id }}" 
+            class="subcat-group {% if forloop.first %}active{% endif %}">
+
+          {% for sublink in link.sub_category_set.all %}
+          {% if sublink.subcat_status == 'active' %}
+
+          <a href="/{{ link.cat_slug }}/{{ sublink.subcat_slug }}" 
+            class="subcat-btn">
+            {{ sublink.subcat_name }}
+          </a>
+
+          {% endif %}
+          {% endfor %}
+
+        </div>
+        {% endfor %}
+
+      </div>
+
+      <div class="breaking-wrapper">
+        <div class="breaking-label">
+          BREAKING
+        </div>
+
+        <div class="breaking-ticker">
+          <div class="ticker-track">
+           {% for Blog in bnews %}
+            <a href="/{{ Blog.slug }}" class="ticker-item">
+              {{ Blog.post_title }}
+            </a>
+            {% endfor %}
+
+           {% for Blog in bnews %}
+            <a href="/{{ Blog.slug }}" class="ticker-item">
+              {{ Blog.post_title }}
+            </a>
+            {% endfor %}
+
+          </div>
+        </div>
+
+      </div>
+
+     
+  </div>
+</header>
+ 
+ 
+
+{% include 'subscribe_model.html' %}
+
+<!-- ✅ SIDE MENU -->
+<div class="sidenav-black-overlay" onclick="closeMenu()"></div>
+<div class="side-menu" id="sideMenu">
   <div class="menu-back" onclick="closeMenu()">&larr; Back</div>
 
-  <!-- Main Menu -->
   <div class="menu-item" onclick="showSubmenu('submenu')">
-    <i class="fas fa-file"></i> All-Categories <i class="fas fa-chevron-right"></i>
+    <i class="fas fa-list"></i> All Categories 
+    <i class="fas fa-chevron-right float-end"></i>
   </div>
-  <!-- <div class="menu-item"> <a href="live.html"><i class="fas fa-play"></i> Live <span
-          class="red-circle ms-2 flashing-effect"></a></span></div> -->
-  <div class="menu-item"><a style="color: white !important;" href="/"><i class="fas fa-home"></i> Home</a></div>
-  <div class="menu-item"><a style="color: white !important;" href="{% url 'contact-us' %}"><i class="fas fa-phone"></i> Contact Us</a></div>
-  <div class="menu-item"><a style="color: white !important;" href="{% url 'sitemap' %}"><i class="fas fa-lock"></i> Sitemap</a></div>
-  {% for page in pages %}
-  <div class="menu-item"><a style="color: white !important;" href="{% url 'cms' page.slug %}"></i>{{ page.pagename }}</a></div>
-  {% endfor %}
-  <!-- <div class="menu-item"><a href="{% url 'setting' %}"><i class="fas fa-cog"></i> Settings</a></div> -->
 
-
-  <!-- Main Submenu -->
-  <div id="submenu" class="submenu active">
-    <div class="menu-back" onclick="closeMenu()">
-      &larr; BACK TO MAIN MENU
-    </div>
-
+  <div id="submenu" class="submenu">
+    <div class="menu-back" onclick="closeMenu()">&larr; Back</div>
     {% for link in Blogcat %}
-    <div class="menu-item" onclick="showSubmenu('submenu-{{ link.id }}')">
-      {{ link.cat_name }}
-      <i class="fas fa-chevron-right float-end"></i>
-    </div>
+      <div class="menu-item" onclick="showSubmenu('submenu-{{ link.id }}')">
+        {{ link.cat_name }} <i class="fas fa-chevron-right float-end"></i>
+      </div>
     {% endfor %}
   </div>
 
-  <!-- Submenus for Each Category -->
   {% for link in Blogcat %}
-  <div id="submenu-{{ link.id }}" class="thirdmenu">
-    <div class="menu-back" onclick="hideSubmenu('submenu-{{ link.id }}')">
-      &larr; BACK TO SUBMENU
+    <div id="submenu-{{ link.id }}" class="thirdmenu">
+      <div class="menu-back" onclick="hideSubmenu('submenu-{{ link.id }}')">&larr; Back</div>
+      {% for sublink in link.sub_category_set.all %}
+        {% if sublink.subcat_status == 'active' %}
+          <div class="menu-item">
+            <a href="/{{ link.cat_slug }}/{{ sublink.subcat_slug }}">{{ sublink.subcat_name }}</a>
+          </div>
+        {% endif %}
+      {% endfor %}
     </div>
-
-    {% for sublink in link.sub_category_set.all %}
-    {% if sublink.subcat_status == 'active' %}
-    <div class="menu-item">
-      <a style="color: white !important;" href="/{{ link.cat_slug }}/{{ sublink.subcat_slug }}"  style="text-decoration: none; color: inherit;">
-        {{ sublink.subcat_name }}
-      </a>
-    </div>
-    {% endif %}
-    {% endfor %}
-  </div>
   {% endfor %}
 
+  <div class="menu-item">
+    <a href="{% url 'contact-us' %}">Contact Us</a>
+  </div>
 
+  {% for page in pages %}
+    <div class="menu-item">
+      <a href="{% url 'cms' page.slug %}">{{ page.pagename }}</a>
+    </div>
+  {% endfor %}
 </div>
 
-<div class="page-content-wrapper mt-0">
+<!-- ✅ dxb-STYLE SEARCH OVERLAY -->
+<div id="mobile-search-panel" class="dxb-search-overlay">
+  <div class="dxb-search-box">
+    <div class="d-flex align-items-center mb-3">
+      <i class="bi bi-search me-2 fs-5 text-muted"></i>
+     <form action="{% url 'search' %}" method="get" class="w-100 position-relative">
+        <input 
+          type="text" 
+          id="searchInput"
+          name="title" 
+          class="form-control border-0 shadow-none" 
+          placeholder="Search the web..." 
+          autocomplete="off"
+          required autofocus>
+
+        <!-- 🔽 Suggestions -->
+        <ul id="suggestions" 
+            class="list-group position-absolute w-100 shadow-sm" 
+            style="z-index:1000; display:none; max-height:250px; overflow-y:auto;">
+        </ul>
+      </form>
+      <i id="closeSearch" class="bi bi-x-lg fs-5 text-muted" style="cursor:pointer;"></i>
+    </div>
+
+    <div class="divider mb-2"></div>
+
+  <div class="recent-searches">
+  <p class="text-muted small mb-2">Recent Searches</p>
+  <ul class="list-unstyled" id="recentSearchList">
+    {% if request.session.recent_searches %}
+      {% for term in request.session.recent_searches %}
+        <li class="recent-item" style="cursor:pointer;">
+          <i class="bi bi-clock me-1"></i> {{ term }}
+        </li>
+      {% endfor %}
+    {% else %}
+      <li class="text-muted small">No recent searches</li>
+    {% endif %}
+  </ul>
+</div>
+  </div>
+</div>
+
+<!-- ✅ JS -->
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+<script>
+document.getElementById("openAppBtn").addEventListener("click", function(e) {
+  e.preventDefault();
+
+  var appLink = "dxbnews://home";  // your deep link
+  var playStore = "https://play.google.com/store/apps/details?id=com.dxbnews.app";
+
+  window.location = appLink;
+
+  setTimeout(function() {
+    window.location = playStore;
+  }, 1000);
+});
+</script>
+
+<script>
+function toggleMenu() {
+  document.getElementById("sideMenu").classList.add("active");
+  document.querySelector(".sidenav-black-overlay").style.display = "block";
+}
+
+function closeMenu() {
+  document.getElementById("sideMenu").classList.remove("active");
+  document.querySelector(".sidenav-black-overlay").style.display = "none";
+}
+
+function showSubmenu(id) {
+  document.querySelectorAll('.submenu, .thirdmenu').forEach(el => el.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function hideSubmenu(id) {
+  document.getElementById(id).classList.remove('active');
+}
+
+// 🔍 dxb-style Search Logic
+document.addEventListener("DOMContentLoaded", function() {
+  const searchIcon = document.getElementById('mobile-search-icon');
+  const searchPanel = document.getElementById('mobile-search-panel');
+  const closeSearch = document.getElementById('closeSearch');
+
+  if (searchIcon && searchPanel && closeSearch) {
+    searchIcon.addEventListener('click', () => {
+      searchPanel.classList.add('active');
+      const input = document.querySelector('.dxb-search-box input');
+      if (input) input.focus();
+    });
+
+    closeSearch.addEventListener('click', () => {
+      searchPanel.classList.remove('active');
+    });
+  }
+});
+
+// 🧠 jQuery Search Suggestions + Recent
+$(document).ready(function() {
+
+  // 🧠 Live Suggestions via existing search URL
+  $("#searchInput").on("keyup", function() {
+    const query = $(this).val().trim();
+    if (query.length > 1) {
+      $.get("{% url 'search' %}", { title: query, ajax: 1 }, function(data) {
+        if (data.results && data.results.length > 0) {
+          let list = "";
+          data.results.forEach(item => {
+            list += `<li class="list-group-item suggestion-item" style="cursor:pointer;">${item}</li>`;
+          });
+          $("#suggestions").html(list).show();
+        } else {
+          $("#suggestions").html('<li class="bg-white p-2">No results</li>').show();
+        }
+      }).fail(function() {
+        $("#suggestions").hide();
+      });
+    } else {
+      $("#suggestions").hide();
+    }
+  });
+
+  // 🖱️ Click on suggestion → fill input
+  $(document).on("click", ".suggestion-item", function() {
+    $("#searchInput").val($(this).text());
+    $("#suggestions").hide();
+  });
+
+  // 🕓 Click on recent search → fill input
+  $(document).on("click", ".recent-item", function() {
+    $("#searchInput").val($(this).text());
+    $("#searchInput").focus();
+  });
+
+  // 🚫 Hide suggestions on outside click
+  $(document).click(function(e) {
+    if (!$(e.target).closest("#searchInput, #suggestions").length) {
+      $("#suggestions").hide();
+    }
+  });
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const searchIcon = document.getElementById('mobile-search-icon');
+  const searchPanel = document.getElementById('mobile-search-panel');
+  const closeSearch = document.getElementById('closeSearch');
+  const searchInput = document.getElementById('searchInput');
+  const suggestions = document.getElementById('suggestions');
+  const recentList = document.getElementById('recentSearchList');
+
+  // 🧠 LocalStorage: Recent Searches
+  function getRecentSearches() {
+    return JSON.parse(localStorage.getItem('recentSearches') || '[]');
+  }
+
+  function saveRecentSearch(query) {
+    if (!query) return;
+    let recents = getRecentSearches().filter(item => item.toLowerCase() !== query.toLowerCase());
+    recents.unshift(query);
+    if (recents.length > 5) recents = recents.slice(0, 5);
+    localStorage.setItem('recentSearches', JSON.stringify(recents));
+  }
+
+  function renderRecentSearches() {
+    const recents = getRecentSearches();
+    if (recents.length > 0) {
+      recentList.innerHTML = recents.map(
+        item => `<li class="recent-item" style="cursor:pointer;">
+          <i class="bi bi-clock me-1"></i> ${item}
+        </li>`
+      ).join('');
+    } else {
+      recentList.innerHTML = `<li class="text-muted small">No recent searches</li>`;
+    }
+  }
+
+  // 🔍 Toggle search overlay
+  if (searchIcon && searchPanel && closeSearch) {
+    searchIcon.addEventListener('click', () => {
+      searchPanel.classList.add('active');
+      renderRecentSearches();
+      searchInput.focus();
+    });
+
+    closeSearch.addEventListener('click', () => {
+      searchPanel.classList.remove('active');
+    });
+  }
+
+  // 🔎 Live suggestions
+  searchInput.addEventListener('input', () => {
+    const query = searchInput.value.trim();
+    if (query.length < 2) {
+      suggestions.style.display = 'none';
+      return;
+    }
+
+    fetch(`/search-suggestions/?q=${encodeURIComponent(query)}`)
+      .then(res => res.json())
+      .then(data => {
+        const list = data.suggestions || [];
+        if (list.length > 0) {
+          suggestions.innerHTML = list.map(
+            item => `<li class="list-group-item suggestion-item" style="cursor:pointer;">
+              <i class="bi bi-search text-muted me-2"></i>${item.title}
+            </li>`
+          ).join('');
+          suggestions.style.display = 'block';
+        } else {
+          suggestions.innerHTML = `<li class="list-group-item text-muted">No results found</li>`;
+          suggestions.style.display = 'block';
+        }
+      })
+      .catch(() => (suggestions.style.display = 'none'));
+  });
+
+  // 🖱️ Click suggestion or recent item
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.suggestion-item')) {
+      const text = e.target.closest('.suggestion-item').innerText.trim();
+      saveRecentSearch(text);
+      window.location.href = `{% url 'search' %}?title=${encodeURIComponent(text)}`;
+    }
+    if (e.target.closest('.recent-item')) {
+      const text = e.target.closest('.recent-item').innerText.trim();
+      saveRecentSearch(text);
+      window.location.href = `{% url 'search' %}?title=${encodeURIComponent(text)}`;
+    }
+    if (!e.target.closest('#searchInput, #suggestions')) {
+      suggestions.style.display = 'none';
+    }
+  });
+
+  // ⌨️ Press Enter
+  searchInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const query = searchInput.value.trim();
+      if (query) {
+        saveRecentSearch(query);
+        window.location.href = `{% url 'search' %}?title=${encodeURIComponent(query)}`;
+      }
+    }
+  });
+});
+</script>
+
+<script>
+function showSubCat(id) {
+  // remove active from all
+  document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.subcat-group').forEach(div => div.classList.remove('active'));
+
+  // activate selected
+  event.target.classList.add('active');
+  document.getElementById('subcat-' + id).classList.add('active');
+}
+</script>
+
+<!-- ✅ CSS -->
+<style>
+  .download-app-btn {
+  background: linear-gradient(90deg, #28a745, #20c93d);
+  color: #fff !important;
+  padding: 6px 14px;
+  border-radius: 25px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 2px 8px rgba(40,167,69,0.3);
+  transition: all 0.3s ease;
+}
+
+.download-app-btn:hover {
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(40,167,69,0.4);
+}
+
+/* Optional: only show on mobile */
+@media (min-width: 768px) {
+  .download-app-btn {
+    display: none;
+  }
+}
+.top-overlay-header {
+  background: #f7f7f7;
+  backdrop-filter: blur(4px);
+}
+
+/* SIDE MENU */
+.side-menu {
+  position: fixed;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: #f7f7f7 !important;
+  color: #000;
+  overflow-y: auto;
+  transition: 0.3s;
+  z-index: 200;
+  padding-bottom: 50px;
+}
+.side-menu.active { left: 0; }
+.menu-item {
+  padding: 12px 20px;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+.menu-item a { text-decoration: none; color: #000; }
+.submenu, .thirdmenu { display: none; }
+.submenu.active, .thirdmenu.active { display: block; }
+
+.sidenav-black-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.3);
+  z-index: 150;
+}
+
+/* ✅ dxb STYLE SEARCH */
+.dxb-search-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(10px);
+  display: none;
+  z-index: 300;
+  padding: 20px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+.dxb-search-overlay.active {
+  display: block;
+  animation: slideUp 0.3s ease-out;
+}
+.dxb-search-box {
+  background: #fff;
+  border-radius: 14px;
+  padding: 15px 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  max-width: 500px;
+  margin: 60px auto;
+}
+.divider {
+  height: 1px;
+  background: #e0e0e0;
+}
+.recent-searches li {
+  padding: 6px 0;
+  font-size: 15px;
+  color: #444;
+  cursor: pointer;
+}
+.recent-searches li:hover {
+  text-decoration: underline;
+}
+
+#suggestions li:hover {
+  background: #f8f9fa;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Category scroll */
+.cat-scroll {
+  display: flex;
+  overflow-x: auto;
+  background: #005cb9;
+  padding: 4px;
+  gap: 6px;
+}
+
+.cat-btn {
+  white-space: nowrap;
+  padding: 6px 12px;
+  background: transparent;
+  color: #fff;
+  border-radius: 20px;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.cat-btn.active {
+  background: rgba(255,255,255,0.2);
+}
+
+/* Subcategory */
+.subcat-scroll {
+    display: flex;
+    overflow-x: auto;
+    background: #e6f4fd;
+    padding: 0px;
+    border-bottom: 1px solid #ccdce6;
+}
+
+/* Hide all */
+.subcat-group {
+  display: none;
+  gap: 10px;
+}
+.subcat-group a{
+  color: #0f2b47 !important;
+}
+/* Show active */
+.subcat-group.active {
+  display: flex;
+}
+
+.subcat-btn {
+  white-space: nowrap;
+  padding: 6px 12px;
+  background: transparent;
+  font-size: 11px;
+  border-bottom: 2px solid transparent;
+}
+
+.subcat-btn:hover {
+  border-bottom: 2px solid #000;
+}
+.top-margin{
+  margin: 70px 0 0 0;
+}
+/* Wrapper */
+.breaking-wrapper {
+  display: flex;
+  align-items: center;
+  background: #eaf3fb;
+  overflow: hidden;
+}
+
+/* Label */
+.breaking-label {
+    background: #e60023;
+    color: #fff;
+    font-weight: bold;
+    padding: 6px 12px;
+    font-size: 12px
+}
+
+/* Ticker */
+.breaking-ticker {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  left:2% !important;
+}
+
+/* Track */
+.ticker-track {
+  display: flex;
+  width: max-content;
+  gap: 10px;
+  animation: scrollTicker 25s linear infinite;
+}
+
+/* Item */
+.ticker-item {
+  white-space: nowrap;
+  color: #0f2b47 !important;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.ticker-item:hover {
+  text-decoration: underline;
+}
+
+/* Smooth infinite loop */
+@keyframes scrollTicker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Pause on hover */
+.breaking-ticker:hover .ticker-track {
+  animation-play-state: paused;
+}
+</style>

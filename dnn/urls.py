@@ -87,6 +87,7 @@ urlpatterns = [
     #dynemic-path---
     path('<slug>', views.newsdetails, name="newsdetails"),
     path('all-news/<slug>', views.AllNews, name="all-news"),
+    path('all-reels-news/<slug>', views.AllReelsNews, name="all-reels-news"),
     path('all-video-news/<slug>', views.AllvideoNews, name="all-video-news"),
     path('video/<slug>', views.videonewsdetails, name="videonewsdetails"),
     path('<str:catlink>/<slug>', views.catdetails, name="catdetails"),

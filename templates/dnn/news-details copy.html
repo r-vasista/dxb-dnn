@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+
+<div class="dxb-container">
+  <div class="row">
+    <div class="col-lg-9 col-md-7 col-sm-12">
+      <div class="position-relative my-1">
+        <h1 class="title">{{ Blogdetails.post_title }}</h1>
+        {% if Blogdetails.post_image == '' %}
+        <img class="img-fluid w-100" src="{% static 'upload/blog/null.jpg' %}" style="object-fit: cover"
+          alt="{{ Blogdetails.post_title|default:'No Image' }}" title="{{ Blogdetails.post_title }}" loading="lazy">
+        {% else %}
+        <img class="img-fluid w-100" src="{{ Blogdetails.post_image.url }}" style="object-fit: cover"
+          alt="{{ Blogdetails.post_title }}" title="{{ Blogdetails.post_title }}" loading="lazy">
+        {% endif %}
+        <div class="border-top-0 mt-1 artical-box">
+          <div class="row">
+            <div class="col-lg-6">
+              <p class="m-0">
+                {% if Blogdetails.author %}
+                Post by : {{ Blogdetails.author.first_name|default:""|capfirst }}
+                {{ Blogdetails.author.last_name|default:""|capfirst }}
+                {% elif Blogdetails.journalist %}
+                Author :
+                <a href="{% url 'journalist_profile' Blogdetails.journalist.username %}"
+                  style="color: #cf1e25 !important;">
+                  {{ Blogdetails.journalist.first_name|default:""|capfirst }} 
+                  {{ Blogdetails.journalist.last_name|default:""|capfirst }}
+                </a>
+                {% else %}
+                Post by : Admin
+                {% endif %}
+              </p>
+              <div class="d-flex align-items-center">
+                <small><i class="fas fa-calendar-alt"></i> {{ Blogdetails.schedule_date|date }}</small>
+                <small class="ml-3"><i class="fas fa-clock"></i> {{ Blogdetails.schedule_date|time }}</small>
+                <small class="ml-3"><i class="far fa-eye mr-2"></i>{{ Blogdetails.post_status|add:Blogdetails.viewcounter }}</small>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div style="display: flex; float: right;">
+                <div class="slider-item">
+                  <a href="https://api.whatsapp.com/send?text=Check%20this%20out!%20{{ request.build_absolute_uri }}"
+                    target="_blank" class="text-success"> <i class="fab fa-whatsapp"></i>
+                  </a>
+                </div>
+                <div class="slider-item">
+                  <button class="btn" onclick="copyLink('{{ Blogdetails.slug }}')" title="Copy Link">
+                    <i class="fas fa-link"></i>
+                  </button>
+                </div>
+
+
+                <div class="slider-item">
+                  <a href="https://t.me/share/url?url={{ request.build_absolute_uri }}&text=Check%20this%20out!"
+                    class="text-primary" target="_blank">
+                    <i class="fab fa-telegram"></i>
+                  </a>
+                </div>
+
+                <div class="slider-item">
+                  <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
+                    class="text-primary" target="_blank">
+                    <i class="fab fa-facebook"></i>
+                  </a>
+                </div>
+
+            
+
+                <div class="slider-item">
+                  <a href="https://www.linkedin.com/shareposts?mini=true&url={{ request.build_absolute_uri }}"
+                    class="text-primary" target="_blank">
+                    <i class="fab fa-linkedin"></i>
+                  </a>
+                </div>
+
+                <div class="slider-item">
+                  <a href="https://twitter.com/intent/tweet?text=Check%20this%20out!%20{{ request.build_absolute_uri }}"
+                    class="text-info" target="_blank">
+                    <i class="fab fa-twitter"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="my-1">
+            <script async
+              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
+              crossorigin="anonymous"></script>
+            <!-- News Page  Ads 2 HR -->
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5922835412614482"
+              data-ad-slot="7753527589" data-ad-format="auto" data-full-width-responsive="true"></ins>
+            <script>
+              (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+          </div>
+          {{ Blogdetails.post_des|safe }}
+          <div class="my-1">
+            <script async
+              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
+              crossorigin="anonymous"></script>
+            <!-- News Page  Ads 2 HR -->
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5922835412614482"
+              data-ad-slot="7753527589" data-ad-format="auto" data-full-width-responsive="true"></ins>
+            <script>
+              (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+          </div>
+
+          {% for tag in Blogdetails.tags.all %}
+          <a href="/topic/{{ tag.slug }}" class="badge bg-secondary">#{{ tag.name }}</a>
+          {% endfor %}
+        </div>
+      </div>
+
+      {# -----------main-news--------- #}
+      <!-- {% for mnews in mainnews %}
+        <div class="position-relative mb-3 mt-3 artical-box">
+          <h2 class="title my-3">
+            <a href="/{{ mnews.slug }}" title="{{ mnews.post_title }}">{{ mnews.post_title }}</a>
+          </h2>
+
+          <img class="img-fluid w-100" src="{{ mnews.post_image.url }}" style="object-fit: cover" alt="{{ mnews.post_title }}" title="{{ mnews.post_title }}" loading="lazy">
+
+          <div class="border-top-0 mt-1">
+            <div class="d-flex align-items-center my-3">
+              <small><i class="fas fa-calendar-alt"></i> {{ mnews.schedule_date|date }}</small>
+              <small class="ml-3"><i class="fas fa-clock"></i> {{ mnews.schedule_date|time }}</small>
+              <small class="ml-3"><i class="far fa-eye mr-2"></i>{{ mnews.post_status|add:mnews.viewcounter }}</small>
+            </div>
+
+            <p class="m-0">
+              {{ mnews.post_short_des|slice:":270"|safe }}...
+              <a href="/{{ mnews.slug }}" title="Read more about {{ mnews.post_title }}">Read More</a>
+            </p>
+          </div>
+        </div>
+      {% endfor %} -->
+      {# -----------main-news--------- #}
+
+      <!-- Featured News Slider Start -->
+      <div class="mb-2">
+        <script async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
+          crossorigin="anonymous"></script>
+        <ins class="adsbygoogle" style="display:block" data-ad-format="autorelaxed"
+          data-ad-client="ca-pub-5922835412614482" data-ad-slot="5436461790"></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
+      <div class="row">
+        {% for Blog in BlogData %}
+        <div class="col-lg-4">
+          <div class="news-card mb-3">
+            <img class="img-fluid tranimg news-image" src="../upload/{{Blog.post_image}}" alt="">
+            <a class="news-title" href="/{{Blog.slug}}">
+              <p>{{Blog.post_title}}</p>
+            </a>
+            <a href="/{{Blog.slug}}" class="news-description">
+              <p>{{Blog.post_short_des|slice:":100"|safe}}</p>
+            </a>
+
+            <div class="d-flex align-items-center px-2 my-1 mb-1 news-meta">
+              <small><i class="fas fa-calendar-alt"></i> {{Blog.schedule_date|date}}</small>
+              <small class="ml-3"><i class="fas fa-clock"></i> {{ Blog.schedule_date|time }}</small>
+              <small class="ml-3"><i class="far fa-eye mr-2"></i>{{Blog.post_status|add:Blog.viewcounter}}</small>
+              <div style="--custom-bottom: 0px; --custom-right: 0px;">
+                {% include 'share.html' with posts=Blog %}
+              </div>
+            </div>
+          </div>
+
+          <div class="my-1">
+            <script async
+              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5922835412614482"
+              crossorigin="anonymous"></script>
+            <!-- News Page SQ Sidebar -->
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5922835412614482"
+              data-ad-slot="2309629217" data-ad-format="auto" data-full-width-responsive="true"></ins>
+            <script>
+              (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-5 col-sm-12">
+      {# Right Column #}
+      {% include "rightcollam.html" %}
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
+
+<style>
+  a {
+    text-decoration: none !important;
+  }
+
+  li {
+    list-style: none !important;
+  }
+</style>

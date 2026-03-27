@@ -1503,7 +1503,6 @@ article.post-block-style-wrapper {
     margin: 0;
     font-size: 16px;
     font-weight: 400;
-    color: #AEAEAE;
     line-height: 1.1875;
 }
 
@@ -1514,7 +1513,7 @@ article.post-block-style-wrapper {
     align-items: center;
     font-size: 14px;
     font-weight: 500;
-    color: #AFAFAF;
+    color: #403e3e;
     text-transform: uppercase;
     justify-content: space-between;
     padding-right: 20px;
@@ -1656,6 +1655,7 @@ article.post-block-template-two:last-child {
     line-height: 1;
     color: rgba(139, 139, 139, 0.4);
     min-width: 50px;
+    padding: 0 15px;
 }
 
 .post-block-template-three .post-block-content-wrap h2.post-title {
@@ -1904,7 +1904,7 @@ article.most-read-block-list:last-child {
 
 .video-play-icon-wrap a {
     display: inline-block;
-    background: #3CFFD0;
+    background: red;
     color: #000000;
     width: 57px;
     height: 57px;

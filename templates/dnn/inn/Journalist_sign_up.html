@@ -8,7 +8,7 @@
     </video>
 </div>
 
-<div class="singup-content container-fluid dxb-bg py-4">
+<div class="singup-content container dxb-bg py-4">
     <div class="row">
         <div class=" col-md-12 col-sm-12">
             <!-- form start -->
@@ -988,16 +988,115 @@
         padding-left: 0;
     }
 
-    @media only screen and (max-width: 576px) {
-        .dxb-bg {
-            background: linear-gradient(to bottom right, #1e3c72, #ff512f) !important;
-        }
-    }
+@media (max-width: 576px) {
 
-    @media only screen and (min-width: 577px) and (max-width: 991px) {
-        .dxb-bg {
-            background: linear-gradient(to bottom right, #1e3c72, #ff512f) !important;
-        }
-    }
+  /* ❌ Background video remove */
+  .video-background {
+    display: none !important;
+  }
+
+  /* 🔵 Blue top area */
+  .dxb-bg {
+    background: linear-gradient(180deg, #0d47a1, #0a3d91) !important;
+    padding-top: 120px !important;
+    min-height: 100vh;
+  }
+
+  /* 📦 Form wrapper bottom align */
+  .form-wrapper {
+    align-items: flex-end !important;
+    justify-content: center !important;
+    padding: 0 !important;
+  }
+
+  /* 📄 Main card (bottom sheet style) */
+  .form-container {
+    width: 100% !important;
+    border-radius: 25px 25px 0 0 !important;
+    padding: 20px !important;
+    background: #fff !important;
+    box-shadow: 0 -5px 25px rgba(0,0,0,0.2);
+  }
+
+  /* 🔤 Heading (Create Account) */
+  .sgignup-head {
+    position: absolute;
+    top: -125px;
+    left: 20px;
+    color: #fff !important;
+    font-size: 26px;
+    font-weight: 700;
+    text-align: left;
+  }
+
+  /* Sub text */
+  .sgignup-head::after {
+    content: "Sign up to continue to DXB News";
+    display: block;
+    font-size: 14px;
+    font-weight: 400;
+    margin-top: 5px;
+    color: rgba(255,255,255,0.8);
+  }
+
+  
+
+  
+  .sighnup-logo img {
+    margin-bottom: 20px;
+  }
+
+  /* 📥 Inputs */
+  .form-control, .form-select {
+    border-radius: 14px !important;
+    height: 50px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+  }
+
+  /* 📊 Progress bar */
+  .progress-step {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 12px;
+  }
+.progress-step.active {
+    background: #0d47a1;
+    color: white;
+    border: none;
+  }
+  /* 🔘 Buttons */
+  .btn-primary-next {
+    background: linear-gradient(90deg, #1565c0, #1976d2) !important;
+    border-radius: 14px !important;
+    padding: 14px;
+    font-weight: 600;
+    border: navajowhite;
+    color: #fff !important;
+  }
+
+  .btn-primary-prev {
+    border-radius: 14px !important;
+    padding: 14px;
+  }
+
+  .btn-primary-send {
+    border-radius: 14px !important;
+    padding: 14px;
+  }
+
+  /* 🧱 Steps spacing */
+  .step h5 {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  /* 📱 Select2 fix */
+  .select2-container {
+    width: 100% !important;
+  }
+
+}
 </style>
 {% endblock %}
