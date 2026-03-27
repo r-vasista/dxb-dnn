@@ -5,16 +5,16 @@
   <div class="container-fluid d-flex align-items-center justify-content-between py-2 px-3">
 
     <!-- ☰ Left: Menu Icon -->
-    <!-- <div class="fs-4" onclick="toggleMenu()">
+    <div class="fs-4" onclick="toggleMenu()">
       <i class="fas fa-bars"></i>
-    </div> -->
-    <div class="d-flex align-items-center gap-2 fs-12 fw-semibold">
-      <i class="bi bi-sun text-warning"></i> DXB 32°C
     </div>
+    <!-- <div class="d-flex align-items-center gap-2 fs-12 fw-semibold">
+      <i class="bi bi-sun text-warning"></i> DXB 32°C
+    </div> -->
     
 
     <!-- 🏠 Center: Logo -->
-    <div class="position-absolute translate-middle text-center" style="left:55%; top:18%;">
+    <div class="position-absolute translate-middle text-center" style="left:33%; top:18%;">
       <a href="/" class="d-inline-block">
         <img src="{{ profile_setting.logo_dark.url }}" alt="Logo" class="img-fluid" >
       </a>
@@ -22,12 +22,13 @@
 
     <!-- 🔍 Right: Icons -->
     <div class="d-flex align-items-center gap-3 ms-auto fs-5">
+      <a href="#" class="download-app-btn" id="openAppBtn">
+        ⬇ App
+      </a>
       <div id="mobile-search-icon" role="button">
         <i class="bi bi-search"></i>
       </div>
-      <!-- <div data-bs-toggle="modal" data-bs-target="#ModalSubscribe" role="button">
-        <i class="bi bi-bell-fill"></i>
-      </div> -->
+      
     </div>
   </div>
 
@@ -188,6 +189,20 @@
 <!-- ✅ JS -->
 <script src="{% static 'js/jquery.min.js' %}"></script>
 <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+<script>
+document.getElementById("openAppBtn").addEventListener("click", function(e) {
+  e.preventDefault();
+
+  var appLink = "dxbnews://home";  // your deep link
+  var playStore = "https://play.google.com/store/apps/details?id=com.dxbnews.app";
+
+  window.location = appLink;
+
+  setTimeout(function() {
+    window.location = playStore;
+  }, 1000);
+});
+</script>
 
 <script>
 function toggleMenu() {
@@ -393,6 +408,33 @@ function showSubCat(id) {
 
 <!-- ✅ CSS -->
 <style>
+  .download-app-btn {
+  background: linear-gradient(90deg, #28a745, #20c93d);
+  color: #fff !important;
+  padding: 6px 14px;
+  border-radius: 25px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 2px 8px rgba(40,167,69,0.3);
+  transition: all 0.3s ease;
+}
+
+.download-app-btn:hover {
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(40,167,69,0.4);
+}
+
+/* Optional: only show on mobile */
+@media (min-width: 768px) {
+  .download-app-btn {
+    display: none;
+  }
+}
 .top-overlay-header {
   background: #f7f7f7;
   backdrop-filter: blur(4px);
@@ -561,6 +603,7 @@ function showSubCat(id) {
   flex: 1;
   overflow: hidden;
   position: relative;
+  left:2% !important;
 }
 
 /* Track */

@@ -634,7 +634,48 @@ def AllNews(request,slug):
     return render(request,'all-news.html',data)
     #return render(request, 'index.html')
 # News-details-page--end--------
+def AllReelsNews(request, slug):
 
+    alnslug = "/all-reels-news/" + slug
+
+    seo = seo_optimization.objects.select_related().filter(pageslug=alnslug).first()
+
+    # 🔥 BASE VIDEO QUERY
+    videos_base = VideoNews.objects.select_related(
+        "News_Category"
+    ).filter(
+        is_active=STATUS_ACTIVE,
+        video_type="reel"   # 🔥 MAIN CHANGE
+    )
+
+    # 🔥 FILTER (optional)
+    if slug == "trending":
+        blogdata = videos_base.filter(trending=1).order_by("-id")[:100]
+    else:
+        blogdata = videos_base.order_by("-id")
+
+    # 🔥 SAME DATA reuse (copy from video view)
+    news_base = NewsPost.objects.select_related(
+        "journalist",
+        "post_cat",
+        "post_cat__sub_cat"
+    ).filter(status=STATUS_ACTIVE)
+
+    Category = category.objects.prefetch_related(
+        "sub_category_set"
+    ).filter(cat_status=STATUS_ACTIVE).order_by("order")[:12]
+
+    user_agent = get_user_agent(request)
+    is_mobile = user_agent.is_mobile
+
+    data = {
+        "indseo": seo,
+        "BlogData": blogdata,
+        "Blogcat": Category,
+        "is_mobile": is_mobile,
+    }
+
+    return render(request, "all-reels-news.html", data)
 
 # Video-all-News-details-----------
 def AllvideoNews(request, slug):
