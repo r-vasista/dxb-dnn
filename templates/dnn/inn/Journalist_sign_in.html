@@ -105,6 +105,7 @@
             .catch(error => console.error("Error:", error));
     });
 </script>
+
 <style>
     .video-background {
         position: fixed;
@@ -152,7 +153,7 @@
     .reset-container {
         background: linear-gradient(to bottom right, #FEFBF4, #C2C2C0) !important;
         border-radius: 30px !important;
-        padding: 20px;
+        padding: 20px 0px;
         box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
         width: 350px;
 
@@ -202,19 +203,98 @@
         font-size: 36px;
     }
 
-    @media only screen and (max-width: 576px) {
-        .dxb-bg {
-            /*  background: url("{% static 'assets/dnn/img/signupform.jpg' %}") no-repeat center center; */
-            background: linear-gradient(to bottom right, #1e3c72, #ff512f) !important;
-        }
-    }
+   /* ================= MOBILE LOGIN UI ================= */
+@media (max-width: 576px) {
 
-    @media only screen and (min-width: 577px) and (max-width: 991px) {
-        .dxb-bg {
-            /*  background: url("{% static 'assets/dnn/img/signupform.jpg' %}") no-repeat center center; */
-            background: linear-gradient(to bottom right, #1e3c72, #ff512f) !important;
-        }
-    }
+  /* 🔵 FULL BLUE TOP AREA */
+  .dxb-bg {
+    background: linear-gradient(180deg, #0d47a1, #0a3d91) !important;
+    padding-top: 120px !important;
+    min-height: 100vh;
+  }
+
+  /* ❌ Remove video */
+  .video-background {
+    display: none;
+  }
+
+  /* 🧱 Container reset */
+  .m-3 {
+    margin: 0 !important;
+  }
+
+  .row {
+    margin: 0 !important;
+  }
+
+  /* 📦 FORM CARD (BOTTOM WHITE BOX) */
+  .login-container {
+    width: 100% !important;
+    background: #fff !important;
+    border-radius: 15px !important;
+    padding: 10px !important;
+    margin: 0 !important;
+    box-shadow: 0 -5px 25px rgba(0,0,0,0.2);
+  }
+
+  /* 📍 POSITION FORM LIKE APP */
+  .form-wrapper {
+    align-items: flex-end !important;
+    justify-content: center !important;
+    height: 100%;
+  }
+
+ 
+
+  /* 🔤 TITLE (Welcome Back) */
+  .sgignup-head {
+   
+    font-size: 26px;
+    font-weight: 700;
+  }
+
+  /* ✨ SUBTEXT */
+  .sgignup-head::after {
+    content: "Sign in to continue to DXB News";
+    display: block;
+    font-size: 14px;
+    font-weight: 400;
+    margin-top: 5px;
+    color: rgba(0,0,0,0.8);
+  }
+
+ 
+
+  /* 📥 INPUT */
+  .form-control {
+    border-radius: 14px !important;
+    height: 50px;
+    border: 1px solid #ddd;
+    padding-left: 15px;
+  }
+
+  /* 🔘 BUTTON */
+  .btn-login {
+    background: linear-gradient(90deg, #1565c0, #1976d2) !important;
+    border-radius: 14px !important;
+    padding: 14px;
+    font-weight: 600;
+    font-size: 15px;
+  }
+
+  /* 🔗 FORGOT */
+  .forgot-password {
+    text-align: right !important;
+    font-size: 13px;
+  }
+
+  /* ☑️ CHECKBOX ALIGN */
+  .form-check {
+    display: flex;
+    align-items: center;
+  }
+
+}
 </style>
 
 {% endblock %}

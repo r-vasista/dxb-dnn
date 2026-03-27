@@ -10,6 +10,10 @@
 <!-- 🔥 Custom CSS -->
 <style>
 
+.top-margin{
+  margin: 70px 0 0 0;
+}
+
 .swiper-button-next,
 .swiper-button-prev {
   color: #fff;
@@ -85,8 +89,7 @@
 /* Wrapper */
 .custom-article-wrapper {
   background: #f5f5f5;
-  padding: 10px;
-  
+  padding: 20px 10px;
 }
 
 /* Header */
@@ -96,18 +99,13 @@
   align-items: center;
   margin-bottom: 12px;
 }
-.custom-article-header a {
-    text-decoration: none;
-    color: #005cb9 !important;
-    font-size: 12px;
-    font-weight: 500;
-}
 
 .custom-article-title {
-  font-size: 14px;
-  font-weight: 600;
-  border-left: 4px solid #2563eb;
+  font-size: 16px;
+  font-weight: 700;
+  border-left: 4px solid red;
   padding-left: 8px;
+  text-transform: uppercase;
 }
 
 /* Arrow */
@@ -126,7 +124,7 @@
   background: #fff;
   border-radius: 16px;
   overflow: hidden;
-  
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   transition: all 0.3s ease;
 }
 
@@ -169,71 +167,7 @@
   flex-direction: column;
   gap: 12px;
 }
-.custom-card {
-  background: #fff;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  margin: 8px;
-}
 
-/* Image */
-.card-img {
-  position: relative;
-  height: 180px;
-  background: #ddd;
-}
-
-.card-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Badge */
-.card-badge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: #0680a7;
-  color: #fff;
-  font-size: 10px !important;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-weight: normal;
-}
-
-/* Share button */
-.card-share {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(0,0,0,0.5);
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-}
-
-/* Content */
-.card-content {
-  padding: 12px;
-}
-
-.card-title {
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 1.4;
-  margin-bottom: 6px;
-}
-
-.card-meta {
-  font-size: 12px;
-  color: #777;
-}
 /* Card */
 .custom-popular-card {
   background: #fff;
@@ -315,101 +249,120 @@
 </style>
 
 
-<div class="mtopspace mb-5">
- 
-    <div class="custom-article-wrapper">
-      <div class="custom-article-header">
-        <h6 class="custom-article-title">Head Lines</h6>
-        <a href="/all-news/head-lines" class="text-xs">View All</a>
-      </div>
+<div class="my-5">
+  <div class="trending-strip mb-2">
+      <span class="trending-label">TOP LEAD STORY</span>
 
-      <div class="custom-article-slider owl-carousel">
-
-        {% for news in headline|slice:":5" %}
-        <div class="custom-card">
-          <a href="{{ news.slug }}">
-
-            <!-- Image -->
-            <div class="card-img">
-              <img src="{{ news.post_image.url }}" alt="{{ news.post_title }}">
-
-              <!-- Badge -->
-              <span class="card-badge">
-                {{ news.post_cat }}
-              </span>
-
-              <!-- Share Icon -->
-              <!-- <div class="card-share">
-                <i class="bi bi-share-fill"></i>
-              </div> -->
-            </div>
-
-            <!-- Content -->
-            <div class="card-content">
-              <h6 class="card-title">
-                {{ news.post_title }}
-              </h6>
-
-              <div class="card-meta">
-                DXB News • {{ news.schedule_date|date:"M d, Y" }}
-              </div>
-            </div>
-
-          </a>
-        </div>
-        {% endfor %}
-
-      </div>
+      {% for Blog in trendpost|slice:"0:9" %}
+        <a href="/{{ Blog.newsfrom.slug }}/{{ Blog.post_cat.sub_cat.cat_slug }}/{{ Blog.slug }}"
+          class="trend-pill {% if forloop.first %}active{% endif %}">
+          {{ Blog.post_title|truncatechars:22 }}
+        </a>
+      {% endfor %}
+  </div>
+  <!-- 🔥 Top Ads -->
+  <!-- {% for ads in headtopad %}
+  <div class="container">
+    <div class="my-4 rounded-xl overflow-hidden shadow">
+      <a href="{{ads.ad_url}}" target="_blank">
+        {% if ads.ad_type == 'stil' %}
+        <img class="w-full max-h-[300px] object-cover" src="../upload/{{ads.ad_image}}">
+        {% else %}
+        <video class="w-full max-h-[300px]" autoplay loop muted>
+          <source src="../upload/{{ads.ad_image}}">
+        </video>
+        {% endif %}
+      </a>
     </div>
+  </div>
+  {% endfor %} -->
 
+  <!-- 🔥 TOP NEWS SLIDER -->
+  <div class="bg-gray-100 py-6">
+    <div class="">
 
-      <div class="custom-article-wrapper">
-      <div class="custom-article-header">
-        <h6 class="custom-article-title">Trending Post</h6>
-        <a href="/all-news/trending" class="text-xs">View All</a>
+      <!-- Header -->
+      <div class="container mx-auto px-3 flex justify-between items-center mb-4">
+        <h4 class=" md:text-2xl font-bold border-l-4 border-red-600 pl-2 text-uppercase">
+          DXB Top News
+        </h4>
+        <span id="dashboardDate2" class="text-sm text-gray-500"></span>
       </div>
 
-        {% for trendingpost in trendpost %}
-        <div class="custom-card mb-3">
-          <a href="/{{trendingpost.slug}}">
+      <!-- Slider -->
+      <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
 
-            <!-- Image -->
-            <div class="card-img">
-              <img src="{{trendingpost.post_image.url}}" alt="{{trendingpost.post_title}}">
+          {% for news in LatestNews|slice:":5" %}
+          <div class="swiper-slide">
+            <div class="news-card relative rounded-xl overflow-hidden shadow-lg">
 
-              <!-- Category Badge -->
-              <span class="card-badge">
-                {{ trendingpost.post_cat }}
-              </span>
+              <img src="{{ news.post_image.url }}"
+                  class="w-full h-[250px] md:h-[350px] object-cover">
 
-             
-            </div>
+              <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
 
-            <!-- Content -->
-            <div class="card-content">
-              <h6 class="card-title">
-                {{ trendingpost.post_title }}
-              </h6>
+              <div class="absolute bottom-0 p-4 text-white">
+                <div class="text-xs mb-1 opacity-80">
+                  {{ news.schedule_date|timesince }}
+                </div>
 
-              <div class="card-meta">
-                DXB News • {{ trendingpost.schedule_date|date:"M d, Y" }}
+                <span class="bg-red-600 px-2 py-1 text-xs rounded">
+                  {{ news.post_cat }}
+                </span>
+
+                <a href="{{ news.slug }}" class="block mt-2 font-semibold text-lg hover:text-red-400">
+                  {{ news.post_title }}
+                </a>
               </div>
-            </div>
 
-          </a>
+            </div>
+          </div>
+          {% endfor %}
+
         </div>
-        {% endfor %}
+
+        <!-- Controls -->
+        
+        <div class="swiper-pagination"></div>
+      </div>
 
     </div>
+  </div>
 
-    {% include 'mobile/reels.html' %}
+  <!-- 🔥 Buttons -->
+  <!-- <div class="container mx-auto px-3 py-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+
+      <a href="{% url 'sign-up' %}"
+        class="bg-blue-600 hover:bg-blue-800 text-white text-center py-3 rounded-xl shadow transition">
+        PR Agencies
+      </a>
+
+      <a href="{% url 'voices-of-uae' %}"
+        class="bg-green-600 hover:bg-green-800 text-white text-center py-3 rounded-xl shadow transition">
+        Voices Of UAE
+      </a>
+
+      <a href="{% url 'sign-in' %}"
+        class="bg-purple-600 hover:bg-purple-800 text-white text-center py-3 rounded-xl shadow transition">
+        ArtDomain
+      </a>
+
+    </div>
+  </div> -->
   <!-- Articale -->
   <div class="custom-article-wrapper">
-    <div class="">
+    <div class="container">
+
       <!-- Heading -->
       <div class="custom-article-header">
         <h6 class="custom-article-title">Top Articles</h6>
-        <a href="/all-news/articles" class="text-xs">View All</a>
+        <div class="custom-arrow">
+          <a href="/all-news/articles">
+            <i class="bi bi-arrow-right"></i>
+          </a>
+        </div>
       </div>
 
       <!-- Slider -->
@@ -453,12 +406,15 @@
 
   <!-- voices of uae end -->
   <div class="custom-article-wrapper">
-    <div class="">
+    <div class="container">
 
       <!-- Heading -->
       <div class="custom-article-header">
         <h6 class="custom-article-title">Voices Of UAE</h6>
-          <a href="/spotlite/voices-of-uae" class="text-xs">View All</a>         
+        <a href="/spotlite/voices-of-uae" 
+          class="custom-arrow flex items-center justify-center hover:text-red-500 transition">
+          <i class="bi bi-arrow-right"></i>
+        </a>
       </div>
 
       <!-- Slider -->
@@ -505,14 +461,14 @@
 
   <!-- popular or tranding news -->
   <div class="custom-article-wrapper">
-    <div class="">
+    <div class="container">
 
       <!-- Header -->
       <div class="custom-article-header">
-        <h6 class="custom-article-title">Latest News</h6>
+        <h6 class="custom-article-title">Popular News</h6>
 
         <a href="/all-news/trending" 
-          class="text-xs ">
+          class="text-xs bg-red-600 text-white px-3 py-1 rounded-md">
           View All
         </a>
       </div>
@@ -520,7 +476,7 @@
       <!-- List -->
       <div class="custom-popular-list">
 
-        {% for news in LatestNews %}
+        {% for news in trendpost %}
         <div class="custom-popular-card">
           <a href="/{{ news.slug }}" class="flex gap-3">
 
@@ -561,7 +517,7 @@
 
   <!-- ArdDomain -->
   <div class="custom-article-wrapper">
-  <div class="">
+  <div class="container">
 
     <!-- Header -->
     <div class="custom-article-header">
@@ -622,14 +578,14 @@
 
   <!-- Videos News-->
   <div class="custom-article-wrapper">
-    <div class="">
+    <div class="container">
 
       <!-- Header -->
       <div class="custom-article-header">
         <h6 class="custom-article-title">Video News</h6>
 
         <a href="/all-video-news/all" 
-          class="text-xs ">
+          class="text-xs bg-red-600 text-white px-3 py-1 rounded-md">
           View All
         </a>
       </div>
@@ -673,14 +629,14 @@
 
   <!-- Past Event -->
   <div class="custom-article-wrapper">
-    <div class="">
+    <div class="container">
 
       <!-- Header -->
       <div class="custom-article-header">
         <h6 class="custom-article-title">Past Event</h6>
 
         <!-- <a href="/all-events/past" 
-          class="text-xs ">
+          class="text-xs bg-red-600 text-white px-3 py-1 rounded-md">
           View All
         </a> -->
       </div>
@@ -728,64 +684,9 @@
     </div>
   </div>
   <!-- Past Event end -->
-
-  <div class="custom-article-wrapper">
-
-  {% for category, subcategories_data in grouped_postsdata2.items %}
-
-  <!-- Section Header -->
-  <div class="custom-article-header">
-    <h6 class="custom-article-title">
-      {{ category.cat_name }}
-    </h6>
-    <a href="/{{ category.cat_slug }}/{{ subcategories_data.subcategories.0.subcat_slug }}" class="text-xs">
-      View All
-    </a>
-  </div>
-
-  <!-- Posts Loop -->
-  {% for post in subcategories_data.posts|slice:":4" %}
-  <div class="custom-card mb-3">
-    <a href="/{{ post.slug }}">
-
-      <!-- Image -->
-      <div class="card-img">
-        <img src="{{ post.post_image.url }}" alt="{{ post.post_title }}">
-
-        <!-- Category Badge -->
-        <span class="card-badge">
-          {{ category.cat_name }}
-        </span>
-      </div>
-
-      <!-- Content -->
-      <div class="card-content">
-        <h6 class="card-title">
-          {{ post.post_title|truncatechars:60 }}
-        </h6>
-
-        <div class="card-meta">
-          DXB News • {{ post.schedule_date|date:"M d, Y" }}
-        </div>
-      </div>
-
-    </a>
-  </div>
-  {% endfor %}
-
-  {% endfor %}
-
-  </div>
-
-  
 </div>
 
-
-
 <!-- 🔥 JS -->
-
-
-
 <script>
 const swiper = new Swiper(".mySwiper", {
   loop: true,

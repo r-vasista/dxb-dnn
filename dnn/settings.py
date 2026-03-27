@@ -112,7 +112,7 @@ TEMPLATES = [
 
 PREPEND_WWW = False
 # PREPEND_WWW = True
-WSGI_APPLICATION = 'dnn.wsgi.application'
+WSGI_APPLFICATION = 'dnn.wsgi.application'
 
 
 # Database
@@ -120,11 +120,26 @@ WSGI_APPLICATION = 'dnn.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'dnndb.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'dxb_mysql',
+        'USER': 'root',
+        'PASSWORD': 'mysqlpass',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
         'CONN_MAX_AGE': 600,
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        }
     }
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": "dnndb.sqlite3",
+#     }
+# }
 
 
 # Password validation
