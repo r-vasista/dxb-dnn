@@ -26,7 +26,7 @@ import random
 from django.core.cache import cache
 from django.views.decorators.csrf import csrf_exempt
 from itertools import islice
-from journalist.models import Journalist
+from journalist.models import Journalist, Gallery
 from django.core.exceptions import ObjectDoesNotExist
 
 from PIL import ImageFile
@@ -218,6 +218,13 @@ def home(request):
 
     user_agent = get_user_agent(request)
     is_mobile = user_agent.is_mobile
+    active_galleries = Gallery.objects.select_related(
+        'journalist'
+    ).filter(
+        status='active',
+        journalist__status='active',
+        journalist__registration_type='artist'
+    ).order_by('-post_at')[:20]
 
     data = {
         "indseo": seo,
@@ -259,6 +266,7 @@ def home(request):
         "tags": tags,
         "is_mobile": is_mobile,
         "uae_voice": uae_voice,
+        "active_galleries": active_galleries,
     }
 
     template = "mobile/index.html" if is_mobile else "index.html"

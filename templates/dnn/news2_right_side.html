@@ -1,130 +1,146 @@
 {% load static %}
 <div class="d-lg-block sticky-sidebar">
   <div>
+
+    <!-- Header tab — matches "Recent / Popular" style exactly -->
     <div class="custom-tabs">
-      <button class="custom-tab active">Gallery's</button>
+      <button class="custom-tab active" style="background:#c0392b; color:#fff; border-radius:50;">Gallery's</button>
     </div>
 
-    <div class="custom-post Container_background p-3"
-      style="max-height: 600px; overflow-y: auto; -ms-overflow-style: none; scrollbar-width: none;">
-      {% if active_galleries %}
-      {% for gallery in active_galleries %}
-      <div class="items_background post-card mb-4 p-3 rounded-3 shadow-sm">
-        <!-- Header -->
-        <div class="d-flex justify-content-between align-items-start mb-2">
-          <div class="d-flex align-items-center gap-2">
-            <a href="{% url 'journalist_profile' gallery.journalist.username %}">
-              <div class="profile-pic">
-              <img class="rounded-circle" width="40" height="40"
-                src="{% if gallery.journalist.profile_picture %}{{ gallery.journalist.profile_picture.url }}{% else %}{% static 'assets/dnn/img/user_random.jpg' %}{% endif %}"
-                >
-                </div>
-            </a>
-            <div>
-              <a href="{% url 'journalist_profile' gallery.journalist.username %}" class="text-decoration-none text-dark">
-                <strong>{{ gallery.journalist.first_name }} {{ gallery.journalist.last_name }}</strong>
-              </a><br>
-              <small class="text-muted">{{ gallery.updated_at|timesince }} · 🌐</small>
+    <!-- Scrollable gallery feed -->
+    <div class="custom-tab-content Container_background active">
+      <div class="custom-post"
+        style="max-height: 600px; overflow-y: auto; -ms-overflow-style: none; scrollbar-width: none;">
+
+        {% if active_galleries %}
+          {% for gallery in active_galleries %}
+          <div class="items_background border-bottom my-2 p-2">
+
+            <!-- Profile row -->
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <a href="{% url 'journalist_profile' gallery.journalist.username %}">
+                <img
+                  src="{% if gallery.journalist.profile_picture %}{{ gallery.journalist.profile_picture.url }}{% else %}{% static 'assets/dnn/img/user_random.jpg' %}{% endif %}"
+                  class="rounded-circle"
+                  width="36" height="36"
+                  style="object-fit:cover; border:2px solid #eee;"
+                  alt="{{ gallery.journalist.first_name }}">
+              </a>
+              <div style="line-height:1.2;">
+                <a href="{% url 'journalist_profile' gallery.journalist.username %}"
+                   class="text-decoration-none text-dark fw-semibold"
+                   style="font-size:0.85rem;">
+                  {{ gallery.journalist.first_name }} {{ gallery.journalist.last_name }}
+                </a><br>
+                <span class="text-muted" style="font-size:0.75rem;">
+                  {{ gallery.post_at|timesince }} ago &nbsp;🌐
+                </span>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <!-- Image -->
-        <img src="{{ gallery.image.url }}"  class="post-image img-fluid rounded cursor-pointer" data-bs-toggle="modal"
-          data-bs-target="#galleryModal"
-          data-img="{{ gallery.image.url }}"
-          data-name="{{ gallery.journalist.first_name }} {{ gallery.journalist.last_name }}"
-          data-profile="{% if gallery.journalist.profile_picture %}{{ gallery.journalist.profile_picture.url }}{% else %}{% static 'assets/dnn/img/user_random.jpg' %}{% endif %}"
-          data-profile-link="{% url 'journalist_profile' gallery.journalist.username %}"
-          data-timeago="{{ gallery.updated_at|timesince }}">
+            <!-- Gallery image — clickable -->
+            {% if gallery.image %}
+            <img
+              src="{{ gallery.image.url }}"
+              class="img-fluid rounded"
+              style="width:100%; max-height:260px; object-fit:cover; cursor:pointer; transition:opacity .2s;"
+              onmouseover="this.style.opacity='.88'"
+              onmouseout="this.style.opacity='1'"
+              data-bs-toggle="modal"
+              data-bs-target="#galleryModal"
+              data-img="{{ gallery.image.url }}"
+              data-name="{{ gallery.journalist.first_name }} {{ gallery.journalist.last_name }}"
+              data-profile="{% if gallery.journalist.profile_picture %}{{ gallery.journalist.profile_picture.url }}{% else %}{% static 'assets/dnn/img/user_random.jpg' %}{% endif %}"
+              data-profile-link="{% url 'journalist_profile' gallery.journalist.username %}"
+              data-timeago="{{ gallery.post_at|timesince }}"
+              data-title="{{ gallery.title|default:'' }}"
+              data-caption="{{ gallery.caption|default:'' }}"
+              alt="{{ gallery.title|default:'Gallery Image' }}">
+            {% endif %}
+
+            <!-- Title / caption -->
+            {% if gallery.title %}
+              <p class="fw-semibold mb-0 mt-1 text-dark" style="font-size:0.85rem;">{{ gallery.title }}</p>
+            {% endif %}
+            {% if gallery.caption %}
+              <p class="text-muted mb-0" style="font-size:0.78rem;">{{ gallery.caption|truncatechars:80 }}</p>
+            {% endif %}
+
+          </div>
+          {% endfor %}
+
+        {% else %}
+          <p class="text-muted text-center py-4" style="font-size:0.85rem;">No gallery posts yet.</p>
+        {% endif %}
+
       </div>
-      {% endfor %}
-      {% endif %}
     </div>
+
   </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="galleryModal" tabindex="-1">
+<!-- ===== MODAL ===== -->
+<div class="modal fade" id="galleryModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content rounded-4">
-      <div class="modal-header border-0 p-3">
-        <div class="d-flex justify-content-between align-items-start w-100">
-          <div class="d-flex align-items-center gap-2">
-            <a href="#" id="modalProfileLink">
-              <img id="modalProfilePic" class="rounded-circle" width="40" height="40" />
-            </a>
-            <div>
-              <a href="#" id="modalProfileLinkName" class="text-decoration-none text-dark">
-                <strong id="modalJournalistName"></strong>
-              </a><br>
-              <small class="text-muted" id="modalTimeAgo">· 🌐</small>
-            </div>
+    <div class="modal-content rounded-4 border-0 shadow-lg">
+
+      <!-- Modal header with profile -->
+      <div class="modal-header border-0 px-4 pt-3 pb-1">
+        <div class="d-flex align-items-center gap-2 w-100">
+          <a href="#" id="modalProfileLink">
+            <img id="modalProfilePic"
+                 class="rounded-circle"
+                 width="44" height="44"
+                 src=""
+                 style="object-fit:cover; border:2px solid #eee;">
+          </a>
+          <div class="flex-grow-1">
+            <a href="#" id="modalProfileLinkName" class="text-decoration-none text-dark">
+              <strong id="modalJournalistName" style="font-size:0.95rem;"></strong>
+            </a><br>
+            <small class="text-muted" id="modalTimeAgo" style="font-size:0.78rem;"></small>
           </div>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
       </div>
-      <div class="modal-body text-center p-3">
-        <img id="modalImage" src="" class="img-fluid rounded" />
+
+      <!-- Title / caption in modal -->
+      <div class="px-4 pt-1 pb-0" id="modalTextBlock">
+        <p class="fw-semibold mb-0" id="modalTitle" style="font-size:0.9rem;"></p>
+        <p class="text-muted small mb-0" id="modalCaption"></p>
       </div>
+
+      <!-- Full image -->
+      <div class="modal-body p-3">
+        <img id="modalImage" src=""
+             class="img-fluid rounded-3 w-100"
+             style="max-height:520px; object-fit:cover;">
+      </div>
+
     </div>
   </div>
 </div>
 
 <style>
-  .custom-post::-webkit-scrollbar {
-    display: none;
-  }
-
-  .cursor-pointer {
-    cursor: pointer;
-  }
-
-  .post-card {
-    background: #fff;
-  }
-
-  .post-image {
-    margin-top: 10px;
-    max-height: 400px;
-    object-fit: cover;
-  }
-
-  .custom-tabs {
-    margin-bottom: 10px;
-  }
-
-  .custom-tab {
-    background: #f1f1f1;
-    border: none;
-    padding: 8px 16px;
-    font-weight: 500;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-
-  #modalImage {
-    object-fit: cover;
-    height: 560px;
-  }
+  .custom-post::-webkit-scrollbar { display: none; }
 </style>
 
 <script>
   const galleryModal = document.getElementById('galleryModal');
   galleryModal.addEventListener('show.bs.modal', function (event) {
-    const image = event.relatedTarget;
+    const t = event.relatedTarget;
 
-    const imgSrc = image.getAttribute('data-img');
-    const profileSrc = image.getAttribute('data-profile');
-    const name = image.getAttribute('data-name');
-    const profileLink = image.getAttribute('data-profile-link');
-    const timeAgo = image.getAttribute('data-timeago');
+    document.getElementById('modalImage').src                   = t.dataset.img;
+    document.getElementById('modalProfilePic').src              = t.dataset.profile;
+    document.getElementById('modalJournalistName').textContent  = t.dataset.name;
+    document.getElementById('modalProfileLink').href            = t.dataset.profileLink;
+    document.getElementById('modalProfileLinkName').href        = t.dataset.profileLink;
+    document.getElementById('modalTimeAgo').textContent         = t.dataset.timeago + ' ago · 🌐';
 
-    document.getElementById('modalImage').src = imgSrc;
-    document.getElementById('modalProfilePic').src = profileSrc;
-    document.getElementById('modalJournalistName').textContent = name;
-    document.getElementById('modalProfileLink').href = profileLink;
-    document.getElementById('modalProfileLinkName').href = profileLink;
-    document.getElementById('modalTimeAgo').textContent = timeAgo + ' · 🌐';
+    const title   = t.dataset.title   || '';
+    const caption = t.dataset.caption || '';
+    document.getElementById('modalTitle').textContent   = title;
+    document.getElementById('modalCaption').textContent = caption;
+    document.getElementById('modalTextBlock').style.display = (title || caption) ? 'block' : 'none';
   });
 </script>
