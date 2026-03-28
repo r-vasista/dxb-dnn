@@ -47,7 +47,7 @@
           </div>
 
           <!-- Button -->
-          <button type="submit" class="btn btn-danger w-100 py-2 rounded-pill fw-semibold shadow-sm"
+          <button type="submit" class="btn-subscribe w-100 py-2 rounded-pill fw-semibold shadow-sm"
             id="subscribeBtn" >
             Subscribe Now
           </button>
@@ -149,18 +149,15 @@ $(document).ready(function () {
   border-radius: 20px;
   animation: fadeInUp 0.3s ease;
 }
-
-/* Remove rounded corners for mobile fullscreen */
-@media (max-width: 768px) {
-  #subscribeModalBox {
-    border-radius: 0 !important;
-    height: 100%;
-    width: 100%;
+.btn-subscribe {
+    background: linear-gradient(90deg, #1565c0, #1976d2) !important;
+    border-radius: 14px !important;
+    padding: 14px;
+    font-weight: 600;
+    font-size: 15px;
+    color: #fff;
   }
-      .modal-content {
-        max-width: 100% !important;
-    }
-}
+
 
 #ModalSubscribe .form-control {
   font-size: 15px;
@@ -169,8 +166,8 @@ $(document).ready(function () {
 }
 
 #ModalSubscribe .form-control:focus {
-  border-color: #ff0003;
-  box-shadow: 0 0 0 0.15rem rgba(220, 53, 69, 0.25);
+  border-color: #094891;
+  box-shadow: 0 0 0 0.15rem rgba(21, 25, 226, 0.25);
   background-color: #fff;
 }
 
@@ -189,5 +186,17 @@ $(document).ready(function () {
     transform: translateY(0);
     opacity: 1;
   }
+}
+
+/* Remove rounded corners for mobile fullscreen */
+@media (max-width: 768px) {
+  #subscribeModalBox {
+    border-radius: 0 !important;
+    height: 100%;
+    width: 100%;
+  }
+      .modal-content {
+        max-width: 100% !important;
+    }
 }
 </style>
