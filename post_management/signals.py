@@ -6,6 +6,9 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from .models import category, sub_category, NewsPost
 from django.conf import settings
+from django.core.cache import cache
+
+from dnn.views import HOME_CACHE_KEY, HOME_CACHE_TTL, _build_home_context
 
 RECON_BASE_URL = settings.RECON_BASE_URL
 
@@ -92,3 +95,16 @@ def run_thumbnail_logic_on_new_post(sender, instance, created, **kwargs):
     except Exception as e:
         print("Thumbnail Error:", e)
     
+
+
+@receiver(post_save, sender=NewsPost)
+def refresh_home_cache_on_news_save(sender, instance, **kwargs):
+    """
+    When any NewsPost is saved, check if the home cache exists.
+    If it does, rebuild and replace it immediately instead of
+    waiting for the TTL to expire.
+    """
+    if cache.get(HOME_CACHE_KEY) is not None:
+        new_context = _build_home_context()
+        cache.set(HOME_CACHE_KEY, new_context, HOME_CACHE_TTL)
+        
