@@ -66,9 +66,10 @@ INSTALLED_APPS = [
     'portal',
     'rest_framework',
     'rest_framework_simplejwt',
-    'api'
+    'api',
     #'django_crontab',
     #'embed_video',
+    'webstories',
 ]
 SITE_ID = 1
 from easy_thumbnails.conf import Settings as thumbnail_settings
@@ -278,3 +279,6 @@ HUB_API_KEY = os.getenv('HUB_API_KEY', '')
 HUB_SECRET_KEY = os.getenv("HUB_SECRET_KEY", "")
 RECON_BASE_URL = os.getenv('RECON_BASE_URL', '')
 PORTAL_NAME = os.getenv("PORTAL_NAME", "")
+
+# You can also set limits for images if needed
+WEBSTORY_IMAGE_MAX_SIZE_MB = 100  # 1MB limit for images

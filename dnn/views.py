@@ -197,149 +197,152 @@ def _build_home_context():
     } 
 
 # News-details-page----------
+
+NEWS_DETAIL_CACHE_TTL = 60 * 2  # 2 minutes
+
 def newsdetails(request, slug):
     try:
         current_datetime = timezone.now()
 
         # ---------------- VIEW COUNTER ----------------
+        # Always runs — never cached
         NewsPost.objects.filter(slug=slug).update(
             viewcounter=F("viewcounter") + 1
         )
 
-        # ---------------- BLOG DETAILS ----------------
-        blogdetails = get_object_or_404(
-            NewsPost.objects.select_related(
+        # ---------------- CACHE ----------------
+        cache_key = f"news_detail_{slug}"
+        cached = cache.get(cache_key)
+
+        if cached is None:
+            # ---------------- BLOG DETAILS ----------------
+            blogdetails = get_object_or_404(
+                NewsPost.objects.select_related(
+                    "journalist",
+                    "post_cat",
+                    "post_cat__sub_cat"
+                ),
+                slug=slug,
+                status=STATUS_ACTIVE
+            )
+
+            # ---------------- BASE NEWS QUERY ----------------
+            base_news = NewsPost.objects.select_related(
                 "journalist",
                 "post_cat",
                 "post_cat__sub_cat"
-            ),
-            slug=slug,
-            status=STATUS_ACTIVE
-        )
+            ).filter(
+                schedule_date__lt=current_datetime,
+                status=STATUS_ACTIVE
+            )
 
-        # ---------------- BASE NEWS QUERY ----------------
-        base_news = NewsPost.objects.select_related(
-            "journalist",
-            "post_cat",
-            "post_cat__sub_cat"
-        ).filter(
-            schedule_date__lt=current_datetime,
-            status=STATUS_ACTIVE
-        )
+            # ---------------- NEWS ----------------
+            blogdata = base_news.filter(
+                is_active=IS_ACTIVE
+            ).order_by("-id")[:9]
 
-        # ---------------- NEWS ----------------
-        blogdata = base_news.filter(
-            is_active=IS_ACTIVE
-        ).order_by("-id")[:9]
+            mainnews = base_news.filter(
+                is_active=IS_ACTIVE
+            ).order_by("-id")[:2]
 
-        mainnews = base_news.filter(
-            is_active=IS_ACTIVE
-        ).order_by("-id")[:2]
+            articales = base_news.filter(
+                articles=1
+            ).order_by("-id")[:3]
 
-        articales = base_news.filter(
-            articles=1
-        ).order_by("-id")[:3]
+            headline = base_news.filter(
+                Head_Lines=1
+            ).order_by("-id")[:4]
 
-        headline = base_news.filter(
-            Head_Lines=1
-        ).order_by("-id")[:4]
+            trending = base_news.filter(
+                trending=1
+            ).order_by("-id")[:8]
 
-        trending = base_news.filter(
-            trending=1
-        ).order_by("-id")[:8]
+            brknews = base_news.filter(
+                BreakingNews=1
+            ).order_by("-id")[:8]
 
-        brknews = base_news.filter(
-            BreakingNews=1
-        ).order_by("-id")[:8]
+            # ---------------- VIDEO ----------------
+            videos_base = VideoNews.objects.select_related(
+                "News_Category"
+            ).filter(is_active=STATUS_ACTIVE)
 
-        # ---------------- VIDEO ----------------
-        videos_base = VideoNews.objects.select_related(
-            "News_Category"
-        ).filter(is_active=STATUS_ACTIVE)
+            podcast = videos_base.order_by("-id")[:1]
 
-        podcast = videos_base.order_by("-id")[:1]
+            vidarticales = videos_base.filter(
+                articles=1,
+                video_type="video"
+            ).order_by("order")[:2]
 
-        vidarticales = videos_base.filter(
-            articles=1,
-            video_type="video"
-        ).order_by("order")[:2]
+            # ---------------- ADS ----------------
+            ad_categories = ad_category.objects.in_bulk(field_name="ads_cat_slug")
+            ads = ad.objects.select_related("ads_cat").filter(is_active=IS_ACTIVE)
 
-        # ---------------- ADS ----------------
-        ad_categories = ad_category.objects.in_bulk(field_name="ads_cat_slug")
+            def get_ads(slug, limit):
+                cat = ad_categories.get(slug)
+                if not cat:
+                    return []
+                return list(ads.filter(ads_cat_id=cat.id).order_by("-id")[:limit])
 
-        ads = ad.objects.select_related("ads_cat").filter(is_active=IS_ACTIVE)
+            # ---------------- CATEGORY ----------------
+            Category = category.objects.prefetch_related(
+                "sub_category_set"
+            ).filter(
+                cat_status=STATUS_ACTIVE
+            ).order_by("order")[:12]
 
-        def get_ads(slug, limit):
-            cat = ad_categories.get(slug)
-            if not cat:
-                return []
-            return ads.filter(ads_cat_id=cat.id).order_by("-id")[:limit]
+            # ---------------- SLIDER ----------------
+            slider = list(NewsPost.objects.select_related(
+                "journalist"
+            ).order_by("-id")[:5])
 
-        leftsquqre = get_ads("left-fest-square", 4)
-        adtopleft = get_ads("topleft-600x80", 1)
-        adtopright = get_ads("topright-600x80", 1)
-        adtop = get_ads("leaderboard", 1)
-        adleft = get_ads("skyscraper", 1)
-        adright = get_ads("mrec", 1)
-        festive = get_ads("festivebg", 1)
+            latestnews = list(NewsPost.objects.select_related(
+                "journalist"
+            ).order_by("-id")[:5])
 
-        # ---------------- CATEGORY ----------------
-        Category = category.objects.prefetch_related(
-            "sub_category_set"
-        ).filter(
-            cat_status=STATUS_ACTIVE
-        ).order_by("order")[:12]
+            cached = {
+                "Blogdetails":  blogdetails,
+                "BlogData":     list(blogdata),
+                "mainnews":     list(mainnews),
+                "Slider":       slider,
+                "Blogcat":      list(Category),
+                "latnews":      latestnews,
+                "adtop":        get_ads("leaderboard", 1),
+                "adleft":       get_ads("skyscraper", 1),
+                "adright":      get_ads("mrec", 1),
+                "adtl":         get_ads("topleft-600x80", 1),
+                "adtr":         get_ads("topright-600x80", 1),
+                "bgad":         get_ads("festivebg", 1),
+                "lfs":          get_ads("left-fest-square", 4),
+                "Articale":     list(articales),
+                "vidart":       list(vidarticales),
+                "headline":     list(headline),
+                "trendpost":    list(trending),
+                "bnews":        list(brknews),
+                "vidnews":      list(podcast),
+            }
 
-        # ---------------- SLIDER ----------------
-        slider = NewsPost.objects.select_related(
-            "journalist"
-        ).order_by("-id")[:5]
-
-        latestnews = NewsPost.objects.select_related(
-            "journalist"
-        ).order_by("-id")[:5]
+            cache.set(cache_key, cached, NEWS_DETAIL_CACHE_TTL)
 
         # ---------------- USER AGENT ----------------
+        # Always per-request, never cached
         user_agent = get_user_agent(request)
         is_mobile = user_agent.is_mobile
 
-        # ---------------- SEO ----------------
-        seo = "ndetail"
-
         data = {
-            "indseo": seo,
-            "Blogdetails": blogdetails,
-            "BlogData": blogdata,
-            "mainnews": mainnews,
-            "Slider": slider,
-            "Blogcat": Category,
-            "latnews": latestnews,
-            "adtop": adtop,
-            "adleft": adleft,
-            "adright": adright,
-            "adtl": adtopleft,
-            "adtr": adtopright,
-            "bgad": festive,
-            "lfs": leftsquqre,
-            "Articale": articales,
-            "vidart": vidarticales,
-            "headline": headline,
-            "trendpost": trending,
-            "bnews": brknews,
-            "vidnews": podcast,
+            **cached,
+            "indseo":    "ndetail",
             "is_mobile": is_mobile,
         }
 
-        return render(request, "news-details.html", data)  
+        return render(request, "news-details.html", data)
+
     except Http404:
-        # Check if there's a redirect for this slug
         try:
             news_redirect = NewsRedirect.objects.get(old_slug=slug, is_active=True)
-            # Perform a 301 permanent redirect (best for SEO)
             return redirect('newsdetails', slug=news_redirect.redirect_slug, permanent=True)
         except NewsRedirect.DoesNotExist:
-            # No redirect found, show 404
             raise Http404("News post not found")
+        
     
 # News-details-page--end--------
 # News-pdf--------
@@ -1049,13 +1052,39 @@ def videonewsdetails(request, slug):
 
 # cat-details-page---------
 def catdetails(request, catlink, slug):
-
     current_datetime = timezone.now()
 
+    # ---------------- USER AGENT ----------------
+    user_agent = get_user_agent(request)
+    is_mobile = user_agent.is_mobile
+
+    # ---------------- PAGINATION PARAMS ----------------
+    page = request.GET.get('page', 1)
+    headline_page_no = request.GET.get('headline_page', 1)
+    articles_page_no = request.GET.get('articles_page', 1)
+    trending_page_no = request.GET.get('trending_page', 1)
+    brknews_page_no = request.GET.get('brknews_page', 1)
+    videos_page_no = request.GET.get('videos_page', 1)
+    reels_page_no = request.GET.get('reels_page', 1)
+    podcast_page_no = request.GET.get('podcast_page', 1)
+
+    # ---------------- CACHE KEY ----------------
+    cache_key = (
+        f"catdetails:{catlink}:{slug}:"
+        f"p{page}:hp{headline_page_no}:ap{articles_page_no}:"
+        f"tp{trending_page_no}:bp{brknews_page_no}:"
+        f"vp{videos_page_no}:rp{reels_page_no}:pp{podcast_page_no}:"
+        f"m{is_mobile}"
+    )
+
+    cached_data = cache.get(cache_key)
+    if cached_data:
+        return render(request, 'category.html', cached_data)
+
+    # ---------------- SEO ----------------
     seourl = '/' + catlink + '/' + slug
     seoslug = seourl.replace("-", " ").upper()
 
-    # ---------------- SEO ----------------
     seo = seo_optimization.objects.filter(pageslug=seourl).first()
 
     if not seo:
@@ -1066,7 +1095,7 @@ def catdetails(request, catlink, slug):
     # ---------------- SUBCATEGORY ----------------
     subcatid = sub_category.objects.get(subcat_slug=slug)
 
-    # ---------------- BASE NEWS QUERY ----------------
+    # ---------------- BASE NEWS ----------------
     base_news = NewsPost.objects.select_related(
         "journalist",
         "post_cat",
@@ -1077,16 +1106,15 @@ def catdetails(request, catlink, slug):
         status=STATUS_ACTIVE
     )
 
-    Latest_News = base_news.filter(is_active=IS_ACTIVE).order_by('-id')[:3]
+    Latest_News = list(
+        base_news.filter(is_active=IS_ACTIVE).order_by('-id')[:3]
+    )
 
     blogdata_list = base_news.order_by('-id')
 
     headline = base_news.filter(Head_Lines=1).order_by('-id')
-
     articales = base_news.filter(articles=1).order_by('-id')
-
     trending = base_news.filter(trending=1).order_by('-id')
-
     brknews = base_news.filter(BreakingNews=1).order_by('-id')
 
     # ---------------- VIDEOS ----------------
@@ -1097,10 +1125,7 @@ def catdetails(request, catlink, slug):
         is_active=STATUS_ACTIVE
     )
 
-    videos = videos_base.filter(
-        video_type='video'
-    ).order_by('order')
-
+    videos = videos_base.filter(video_type='video').order_by('order')
     reels = videos_base.filter(
         News_Category=subcatid.id,
         video_type='reel'
@@ -1111,50 +1136,31 @@ def catdetails(request, catlink, slug):
     ).order_by('order')
 
     # ---------------- PAGINATION ----------------
-    blogdata = Paginator(blogdata_list, 12).get_page(request.GET.get('page'))
+    blogdata = Paginator(blogdata_list, 12).get_page(page)
+    headline_page = Paginator(headline, 5).get_page(headline_page_no)
+    articles_page = Paginator(articales, 5).get_page(articles_page_no)
+    trending_page = Paginator(trending, 7).get_page(trending_page_no)
+    brknews_page = Paginator(brknews, 8).get_page(brknews_page_no)
+    videos_page = Paginator(videos, 10).get_page(videos_page_no)
+    reels_page = Paginator(reels, 10).get_page(reels_page_no)
+    podcast_page = Paginator(podcast, 7).get_page(podcast_page_no)
 
-    headline_page = Paginator(headline, 5).get_page(
-        request.GET.get('headline_page')
-    )
-
-    articles_page = Paginator(articales, 5).get_page(
-        request.GET.get('articles_page')
-    )
-
-    trending_page = Paginator(trending, 7).get_page(
-        request.GET.get('trending_page')
-    )
-
-    brknews_page = Paginator(brknews, 8).get_page(
-        request.GET.get('brknews_page')
-    )
-
-    videos_page = Paginator(videos, 10).get_page(
-        request.GET.get('videos_page')
-    )
-
-    reels_page = Paginator(reels, 10).get_page(
-        request.GET.get('reels_page')
-    )
-
-    podcast_page = Paginator(podcast, 7).get_page(
-        request.GET.get('podcast_page')
-    )
-
-    # ---------------- VIDEO URL ----------------
+    # ---------------- FIX VIDEO URL ----------------
     for video in videos_page:
-        video.get_absolute_url = lambda slug=video.slug: f"/video/{slug}"
+        video.custom_url = f"/video/{video.slug}"
 
     # ---------------- ADS ----------------
     ad_categories = ad_category.objects.in_bulk(field_name="ads_cat_slug")
 
-    ads = ad.objects.select_related("ads_cat").filter(is_active=IS_ACTIVE)
+    ads_qs = ad.objects.select_related("ads_cat").filter(is_active=IS_ACTIVE)
 
     def get_ads(slug, limit):
         cat = ad_categories.get(slug)
         if not cat:
             return []
-        return ads.filter(ads_cat_id=cat.id).order_by("-id")[:limit]
+        return list(
+            ads_qs.filter(ads_cat_id=cat.id).order_by("-id")[:limit]
+        )
 
     adtopleft = get_ads("topleft-600x80", 1)
     adtopright = get_ads("topright-600x80", 1)
@@ -1164,26 +1170,28 @@ def catdetails(request, catlink, slug):
     festive = get_ads("festivebg", 1)
 
     # ---------------- CATEGORY ----------------
-    Category = category.objects.prefetch_related(
-        "sub_category_set"
-    ).filter(
-        cat_status=STATUS_ACTIVE
-    ).order_by('order')[:12]
+    Category = list(
+        category.objects.prefetch_related(
+            "sub_category_set"
+        ).filter(
+            cat_status=STATUS_ACTIVE
+        ).order_by('order')[:12]
+    )
 
     # ---------------- SLIDER ----------------
-    slider = NewsPost.objects.select_related(
-        "journalist"
-    ).order_by('-id')[:5]
+    slider = list(
+        NewsPost.objects.select_related(
+            "journalist"
+        ).order_by('-id')[:5]
+    )
 
-    latestnews = NewsPost.objects.select_related(
-        "journalist"
-    ).order_by('-id')[:5]
+    latestnews = list(
+        NewsPost.objects.select_related(
+            "journalist"
+        ).order_by('-id')[:5]
+    )
 
-    # ---------------- USER AGENT ----------------
-    user_agent = get_user_agent(request)
-    is_mobile = user_agent.is_mobile
-
-    # ---------------- DATA ----------------
+    # ---------------- FINAL DATA ----------------
     data = {
         'indseo': seo,
         'sslug': seoslug,
@@ -1209,7 +1217,11 @@ def catdetails(request, catlink, slug):
         'is_mobile': is_mobile,
     }
 
+    # ---------------- CACHE SET ----------------
+    cache.set(cache_key, data, timeout=300)  # 5 mins
+
     return render(request, 'category.html', data)
+
 # cat-details-page--end--------
 
 

@@ -9,17 +9,23 @@ from django.views.generic.base import RedirectView
 #sitmap start
 from django.contrib.sitemaps.views import sitemap
 from dnn.sitemaps import custom_sitemap_index, sitemap_news, sitemap_images, sitemap_images_by_month, sitemap_videos, sitemap_videos_by_month, sitemap_article, sitemap_article_by_month, sitemap_archive, sitemap_archive_by_month, sitemap_tags, sitemap_tag_detail, sitemap_static, sitemap_categories, sitemap_category_detail
+from webstories.sitemaps import WebStorySitemap
 #sitmap end
 
 admin.site.site_header="DNN Admin"
 admin.site.site_title="DNN Admin"
 admin.site.index_title="Dasboard"
 
+sitemaps = {
+    'webstories': WebStorySitemap,
+}
+
 urlpatterns = [
     # Explicit redirect for favicon.ico requests (fixes 500 error)
     path('favicon.ico', RedirectView.as_view(url='/static/favicon.ico')),
 
     path('', views.home, name="home"),
+    path('webstories/', include('webstories.urls')),
     path('auth/', include('journalist.urls')),
     path('topic/<slug:slug>', views.posts_by_tag, name='posts_by_tag'),
     path('tags/<slug:slug>', views.posts_by_tag, name='posts_by_tag_legacy'),
@@ -64,6 +70,10 @@ urlpatterns = [
     path('sitemap/static', sitemap_static, name='sitemap-static'),
     path('sitemap/categories', sitemap_categories, name='sitemap-categories'),
     path('sitemap/categories/<slug:slug>', sitemap_category_detail, name='sitemap-category-detail'),
+    
+    path('sitemap-webstories.xml', sitemap, 
+         {'sitemaps': sitemaps}, 
+         name='django.contrib.sitemaps.views.sitemap'),
     #for recon
     path('dxbnewsnetwork/api/', include('portal.urls')),
 

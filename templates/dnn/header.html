@@ -102,6 +102,11 @@
                         </div>
                     </div>
                     {% endfor %}
+
+                    <!-- ✅ Webstories inline item -->
+                    <a href="/webstories/" class="nav-item nav-link webstories-inline d-flex align-items-center">
+                        WEBSTORIES
+                    </a>
                 </div>
             </div>
         </nav>
@@ -128,6 +133,9 @@
                     </div>
                 </div>
                 {% endfor %}
+                <a href="/webstories/" class="nav-item nav-link webstories-inline d-flex align-items-center">
+                    WEBSTORIES
+                </a>
             </div>
         </div>
     </nav>
@@ -214,6 +222,15 @@ input:checked + .slider:before {
 
 .login-btn:hover {
   background: #e1221c;
+}
+
+.navbar-expand-lg .navbar-nav .nav-link.webstories-inline {
+    {% comment %} margin-left: 15px; {% endcomment %}
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+    display: inline-flex;   
+    align-items: center;
+    justify-content: center; /* This ensures the text centers perfectly if the box stretches */
 }
 
 </style>
