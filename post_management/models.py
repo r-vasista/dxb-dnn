@@ -372,3 +372,18 @@ class NewsRedirect(models.Model):
         """Validate that old_slug and redirect_slug are different"""
         if self.old_slug == self.redirect_slug:
             raise ValidationError("Old slug and redirect slug cannot be the same")
+
+
+class VisitorLog(models.Model):
+    ip_address = models.GenericIPAddressField()
+    user_agent = models.TextField(null=True, blank=True)
+    path = models.CharField(max_length=255)
+    method = models.CharField(max_length=10)
+
+    is_bot = models.BooleanField(default=False)
+
+    entry_time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.ip_address} - {self.path}"
+    

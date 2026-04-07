@@ -87,6 +87,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_user_agents.middleware.UserAgentMiddleware',
+    'post_management.middleware.VisitorTrackingMiddleware',
 ]
 
 AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend']

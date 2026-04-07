@@ -1,5 +1,5 @@
 from django.contrib import admin
-from post_management.models import category, sub_category, NewsPost, VideoNews, CMS, slider, AppUser
+from post_management.models import category, sub_category, NewsPost, VideoNews, CMS, slider, AppUser, VisitorLog
 from django.contrib.auth.models import User
 import csv
 from django.http import HttpResponse
@@ -275,5 +275,39 @@ class NewsRedirectAdmin(admin.ModelAdmin):
             'fields': ('notes', 'created_at', 'updated_at'),
             'classes': ('collapse',)
         }),
+    )
+    
+    
+@admin.register(VisitorLog)
+class VisitorLogAdmin(admin.ModelAdmin):
+    list_display = (
+        'ip_address',
+        'path',
+        'method',
+        'is_bot',
+        'entry_time',
+    )
+
+    list_filter = (
+        'is_bot',
+        'method',
+        'entry_time',
+    )
+
+    search_fields = (
+        'ip_address',
+        'path',
+        'user_agent',
+    )
+
+    ordering = ('-entry_time',)
+
+    readonly_fields = (
+        'ip_address',
+        'user_agent',
+        'path',
+        'method',
+        'is_bot',
+        'entry_time',
     )
     
