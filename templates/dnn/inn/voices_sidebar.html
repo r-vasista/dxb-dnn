@@ -1,0 +1,124 @@
+{% load static %}
+
+<div class="mb-3">
+  <div class="vou-event-container">
+
+    <h3 class="vou-event-heading">Voices of UAE</h3>
+
+    <div class="vou-event-scroller" id="vouScroller">
+      <div class="vou-event-list" id="vouList">
+
+        {% for post in voices_posts %}
+        <a href="/{{ post.slug }}" class="vou-event-item">
+          <img src="{{ post.thumbnail_url }}" alt="{{ post.post_title }}">
+        </a>
+        {% endfor %}
+
+        <!-- duplicate for infinite scroll -->
+        {% for post in voices_posts %}
+        <a href="/{{ post.slug }}" class="vou-event-item">
+          <img src="{{ post.thumbnail_url }}" alt="{{ post.post_title }}">
+        </a>
+        {% endfor %}
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+.vou-event-container {
+  background: linear-gradient(to bottom right, #0b4177, #02142d);
+  border-radius: 12px;
+  padding: 10px;
+  height: 440px;
+  max-width: 334px;
+  overflow: hidden;
+  margin: auto;
+}
+
+.vou-event-heading {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #ffdb49;
+  font-style: italic;
+  text-transform: uppercase;
+}
+
+.vou-event-scroller {
+  height: 360px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+
+.vou-event-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.vou-event-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.vou-event-item {
+  display: block;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid #ffd93e;
+}
+
+.vou-event-item img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.vou-event-item:hover img {
+  transform: scale(1.05);
+}
+</style>
+
+<script>
+(function () {
+  const scroller = document.getElementById('vouScroller');
+  const list = document.getElementById('vouList');
+
+  let isPaused = false;
+  let accumulated = 0;  // tracks fractional pixels
+
+  const SPEED = 0.5;  // now any decimal works
+
+  function step() {
+    if (!isPaused) {
+      accumulated += SPEED;
+
+      if (accumulated >= 1) {
+        const pixels = Math.floor(accumulated);
+        scroller.scrollTop += pixels;
+        accumulated -= pixels;
+      }
+
+      const halfHeight = list.scrollHeight / 2;
+      if (scroller.scrollTop >= halfHeight) {
+        scroller.scrollTop -= halfHeight;
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  scroller.addEventListener('mouseenter', () => { isPaused = true; });
+  scroller.addEventListener('mouseleave', () => { isPaused = false; });
+
+  scroller.addEventListener('touchstart', () => { isPaused = true; }, { passive: true });
+  scroller.addEventListener('touchend', () => {
+    setTimeout(() => { isPaused = false; }, 1500);
+  });
+
+  requestAnimationFrame(step);
+})();
+</script>

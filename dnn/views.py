@@ -40,7 +40,7 @@ IS_ACTIVE = 1
 # home-pahe---------
 
 HOME_CACHE_KEY = "home_page_cache"
-HOME_CACHE_TTL = 60 * 10  # 10 minutes
+HOME_CACHE_TTL = 60 * 5  # 5 minutes
 
 def home(request):
     current_datetime = timezone.now()
@@ -193,6 +193,7 @@ def _build_home_context():
         "ongoing_events":   list(ongoing_events),
         "tags":             list(tags),
         "uae_voice":        list(uae_voice),
+        "voices_posts":     list(uae_voice),
         "active_galleries": list(active_galleries),
     } 
 

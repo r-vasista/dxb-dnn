@@ -26,3 +26,6 @@ class ad(models.Model):
     is_active=models.BooleanField(verbose_name="Is Active", default=False)
     post_date=models.DateTimeField(auto_now=True)
     post_status=models.IntegerField(null=True,default=0)
+    
+    def __str__(self):
+        return self.ad_url

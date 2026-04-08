@@ -1,21 +1,25 @@
 {% load static %}
 
 <!-- HEADER TOP ADS -->
-{% for ads in headtopad %}
-<div class="alert alert-dismissible fade show p-0 mt-2" role="alert">
-  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-  
-  <a href="{{ ads.ad_url }}" target="_blank">
-    {% if ads.ad_type == 'stil' %}
-      <img class="w-100" src="{{ ads.ad_image.url }}" alt="ad">
-    {% else %}
-      <video class="w-100" autoplay loop muted playsinline preload="none">
-        <source src="{{ ads.ad_image.url }}">
-      </video>
+{% comment %} {% if headtopad|length > 0 %}
+  {% for ads in headtopad %}
+    {% if ads.ad_image %}
+      <div class="alert alert-dismissible fade show p-0" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+
+        <a href="{{ ads.ad_url }}" target="_blank">
+          {% if ads.ad_type == 'stil' %}
+            <img class="w-100" src="{{ ads.ad_image.url }}" alt="ad">
+          {% else %}
+            <video class="w-100" autoplay loop muted playsinline preload="metadata">
+              <source src="{{ ads.ad_image.url }}">
+            </video>
+          {% endif %}
+        </a>
+      </div>
     {% endif %}
-  </a>
-</div>
-{% endfor %}
+  {% endfor %}
+{% endif %} {% endcomment %}
 <!-- END HEADER TOP ADS -->
 
 
