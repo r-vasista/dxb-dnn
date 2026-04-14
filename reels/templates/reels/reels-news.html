@@ -1,0 +1,284 @@
+{% load static %}
+
+{% if reels %}
+
+<script id="reels-data" type="application/json">
+[{% for reel in reels %}{"index":{{ forloop.counter0 }},"title":"{{ reel.title|escapejs }}","category":"{{ reel.category|default:''|escapejs }}","src":"{{ reel.get_video_src|escapejs }}","thumbnail":"{% if reel.thumbnail %}{{ reel.thumbnail.url }}{% endif %}"}{% if not forloop.last %},{% endif %}{% endfor %}]
+</script>
+
+<section class="reels-section">
+  <div class="reels-header">
+    <span class="reels-bar"></span>
+    <h2 class="reels-title">WATCH LATEST REELS</h2>
+  </div>
+  <div class="reels-carousel-wrapper">
+    <button class="reels-nav reels-nav--left" id="reelsNavLeft" aria-label="Previous">&#8249;</button>
+    <div class="reels-track" id="reelsTrack">
+      {% for reel in reels %}
+      <div class="reel-card" data-index="{{ forloop.counter0 }}">
+        <div class="reel-video-wrapper">
+          {% if reel.thumbnail %}
+            <img class="reel-thumbnail" src="{{ reel.thumbnail.url }}" alt="{{ reel.title }}" loading="lazy"/>
+          {% else %}
+            <div class="reel-thumbnail reel-thumbnail--placeholder">
+              <svg viewBox="0 0 24 24" fill="none" width="40" height="40"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><polygon points="10,8 16,12 10,16" fill="currentColor"/></svg>
+            </div>
+          {% endif %}
+          <video class="reel-video" src="{{ reel.get_video_src }}" muted loop playsinline preload="none"></video>
+          <div class="reel-play-icon">
+            <svg viewBox="0 0 24 24" fill="none" width="40" height="40"><circle cx="12" cy="12" r="11" fill="rgba(0,0,0,0.45)"/><polygon points="9,7 19,12 9,17" fill="white"/></svg>
+          </div>
+          {% if reel.category %}<span class="reel-category">{{ reel.category }}</span>{% endif %}
+        </div>
+        <p class="reel-caption">{{ reel.title }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    <button class="reels-nav reels-nav--right" id="reelsNavRight" aria-label="Next">&#8250;</button>
+  </div>
+</section>
+
+
+<div id="reelModal" class="reel-modal" role="dialog" aria-modal="true">
+  <div class="reel-modal__overlay" id="reelModalOverlay"></div>
+
+  <div class="reel-modal__panel">
+    <div class="reel-modal__topbar">
+      <span class="reel-modal__brand">DXB News Network</span>
+      <div class="reel-modal__topbar-actions">
+        <button class="reel-modal__icon-btn" id="reelMuteBtn" title="Toggle mute">
+          <svg id="iconUnmuted" viewBox="0 0 24 24" fill="none" width="20" height="20">
+            <path d="M11 5L6 9H2v6h4l5 4V5z" fill="white"/>
+            <path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <svg id="iconMuted" viewBox="0 0 24 24" fill="none" width="20" height="20" style="display:none">
+            <path d="M11 5L6 9H2v6h4l5 4V5z" fill="white"/>
+            <line x1="23" y1="9" x2="17" y2="15" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            <line x1="17" y1="9" x2="23" y2="15" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+        {% comment %} <button class="reel-modal__icon-btn" id="reelShareBtn" title="Share">
+          <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+            <circle cx="18" cy="5" r="3" stroke="white" stroke-width="2"/><circle cx="6" cy="12" r="3" stroke="white" stroke-width="2"/><circle cx="18" cy="19" r="3" stroke="white" stroke-width="2"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" stroke="white" stroke-width="2"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" stroke="white" stroke-width="2"/>
+          </svg>
+        </button> {% endcomment %}
+      </div>
+    </div>
+
+    <video id="reelModalVideo" class="reel-modal__video" playsinline loop></video>
+    <div class="reel-modal__tap" id="reelModalTap"></div>
+
+    <div class="reel-modal__progress-wrap">
+      <div class="reel-modal__progress-bar" id="reelProgressBar"></div>
+    </div>
+
+    <div class="reel-modal__bottom">
+      <span class="reel-modal__cat" id="reelModalCat"></span>
+      <p class="reel-modal__title" id="reelModalTitle"></p>
+    </div>
+  </div>
+
+  <button class="reel-modal__close" id="reelModalClose" aria-label="Close">
+    <svg viewBox="0 0 24 24" fill="none" width="24" height="24">
+      <line x1="18" y1="6" x2="6" y2="18" stroke="white" stroke-width="2.5" stroke-linecap="round"/><line x1="6" y1="6" x2="18" y2="18" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+  </button>
+
+  <div class="reel-modal__nav-stack">
+    <button class="reel-modal__nav-btn" id="reelNavUp" aria-label="Previous reel">
+      <svg viewBox="0 0 24 24" fill="none" width="24" height="24">
+        <polyline points="18,15 12,9 6,15" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <button class="reel-modal__nav-btn" id="reelNavDown" aria-label="Next reel">
+      <svg viewBox="0 0 24 24" fill="none" width="24" height="24">
+        <polyline points="6,9 12,15 18,9" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+
+<style>
+/* Carousel */
+.reels-section{padding:20px 0 28px;background:#fff;position:relative}
+.reels-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding: 0 16px; }
+.reels-bar { width: 4px; height: 1.2rem; background: #007bff; border-radius: 50px; }
+.reels-title { font-size: 1rem; font-weight: 700; letter-spacing: 0.05em; color: #1a1a1a; margin: 0; line-height: 1; text-transform: uppercase; display: flex; align-items: center; }
+.reels-carousel-wrapper{position:relative;display:flex;align-items:center}
+.reels-track{display:flex;gap:12px;overflow-x:auto;scroll-behavior:smooth;padding:8px 16px 12px;scrollbar-width:none;-ms-overflow-style:none;flex:1}
+.reels-track::-webkit-scrollbar{display:none}
+.reel-card{flex:0 0 auto;width:160px;cursor:pointer}
+.reel-video-wrapper{position:relative;width:160px;height:284px;border-radius:10px;overflow:hidden;background:#111;box-shadow:0 2px 8px rgba(0,0,0,.18);transition:box-shadow .2s,transform .2s}
+.reel-card:hover .reel-video-wrapper{box-shadow:0 6px 20px rgba(0,0,0,.32);transform:translateY(-3px)}
+.reel-thumbnail{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;transition:opacity .3s}
+.reel-thumbnail--placeholder{background:#222;display:flex;align-items:center;justify-content:center}
+.reel-thumbnail--placeholder svg{width:40px;height:40px;color:#666}
+.reel-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity .3s}
+.reel-card:hover .reel-thumbnail{opacity:0}
+.reel-card:hover .reel-video{opacity:1}
+.reel-card:hover .reel-play-icon{opacity:0}
+.reel-play-icon{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;transition:opacity .2s}
+.reel-play-icon svg{width:40px;height:40px}
+.reel-category{position:absolute;bottom:8px;left:8px;z-index:4;background:#007bff;color:#fff;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 7px;border-radius:3px}
+.reel-caption{margin:8px 0 0;font-size:.78rem;font-weight:500;color:#222;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.reels-nav{position:absolute;top:50%;transform:translateY(-60%);z-index:10;background:#fff;border:1px solid #ddd;border-radius:50%;width:34px;height:34px;font-size:1.4rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.12);transition:background .15s;padding:0}
+.reels-nav:hover{background:#f5f5f5}
+.reels-nav--left{left:0}
+.reels-nav--right{right:0}
+.reels-nav.hidden{display:none}
+
+/* Modal */
+.reel-modal{display:none;position:fixed;inset:0;z-index:9999;align-items:center;justify-content:center}
+.reel-modal.open{display:flex}
+.reel-modal__overlay{position:absolute;inset:0;background:rgba(0,0,0,.88);cursor:pointer}
+.reel-modal__panel{position:relative;z-index:1;width:min(420px,92vw);height:min(746px,88vh);border-radius:14px;overflow:hidden;background:#000;box-shadow:0 24px 60px rgba(0,0,0,.7);flex-shrink:0;animation:modalIn .25s ease}
+@keyframes modalIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+.reel-modal__video{width:100%;height:100%;object-fit:cover;display:block}
+.reel-modal__tap{position:absolute;inset:0;z-index:2;cursor:pointer}
+
+/* SVG ICON FIXES */
+.reel-modal__icon-btn svg, 
+.reel-modal__nav-btn svg, 
+.reel-modal__close svg {
+  display: block;
+  flex-shrink: 0; /* Prevents SVG from squashing */
+}
+
+.reel-modal__topbar{position:absolute;top:0;left:0;right:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:14px 14px 10px;background:linear-gradient(to bottom,rgba(0,0,0,.65),transparent)}
+.reel-modal__brand{color:#fff;font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;opacity:.9}
+.reel-modal__topbar-actions{display:flex;gap:8px}
+
+.reel-modal__bottom{position:absolute;bottom:0;left:0;right:0;z-index:5;padding:40px 16px 20px;background:linear-gradient(to top,rgba(0,0,0,.75),transparent)}
+.reel-modal__cat{display:inline-block;background:#007bff;color:#fff;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 8px;border-radius:3px;margin-bottom:6px}
+.reel-modal__cat:empty{display:none}
+.reel-modal__title{color:#fff;font-size:1rem;font-weight:600;line-height:1.35;margin:0;text-shadow:0 1px 4px rgba(0,0,0,.5)}
+
+.reel-modal__progress-wrap{position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.25);z-index:6}
+.reel-modal__progress-bar{height:100%;width:0%;background:#007bff;transition:width .25s linear}
+
+/* Floating Controls */
+.reel-modal__close{position:absolute;top:16px;left:calc(50% + min(210px,46vw) + 12px);z-index:10;background:rgba(255,255,255,0.15);border:none;border-radius:50%;width:42px;height:42px;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(6px);transition:background 0.15s}
+.reel-modal__close:hover{background:rgba(255,255,255,0.28)}
+
+.reel-modal__nav-stack{position:absolute;top:50%;transform:translateY(-50%);left:calc(50% + min(210px,46vw) + 12px);z-index:10;display:flex;flex-direction:column;gap:10px}
+.reel-modal__nav-btn{background:rgba(255,255,255,0.15);border:none;border-radius:50%;width:42px;height:42px;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(6px);transition:background 0.15s, transform 0.1s}
+.reel-modal__nav-btn:hover{background:rgba(255,255,255,0.28)}
+.reel-modal__nav-btn:active{transform:scale(0.92)}
+.reel-modal__nav-btn:disabled{opacity:0.35;cursor:default}
+
+.reel-modal__icon-btn{background:rgba(255,255,255,0.18);border:none;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(6px);transition:background 0.15s}
+.reel-modal__icon-btn:hover{background:rgba(255,255,255,0.3)}
+
+@media(max-width:600px){
+  .reel-modal__close{left:auto;right:10px;top:10px}
+  .reel-modal__nav-stack{left:auto;right:10px;top:50%;transform:translateY(-50%)}
+}
+</style>
+
+
+<script>
+(function(){
+  const REELS       = JSON.parse(document.getElementById('reels-data').textContent);
+  const track       = document.getElementById('reelsTrack');
+  const navLeft     = document.getElementById('reelsNavLeft');
+  const navRight    = document.getElementById('reelsNavRight');
+  const modal       = document.getElementById('reelModal');
+  const overlay     = document.getElementById('reelModalOverlay');
+  const modalVideo  = document.getElementById('reelModalVideo');
+  const modalClose  = document.getElementById('reelModalClose');
+  const navUp       = document.getElementById('reelNavUp');
+  const navDown     = document.getElementById('reelNavDown');
+  const muteBtn     = document.getElementById('reelMuteBtn');
+  const shareBtn    = document.getElementById('reelShareBtn');
+  const iconUnmuted = document.getElementById('iconUnmuted');
+  const iconMuted   = document.getElementById('iconMuted');
+  const tapArea     = document.getElementById('reelModalTap');
+  const progressBar = document.getElementById('reelProgressBar');
+  const titleEl     = document.getElementById('reelModalTitle');
+  const catEl       = document.getElementById('reelModalCat');
+
+  let currentIndex = 0;
+  let isMuted      = false;
+  let rafId        = null;
+
+  /* Carousel Navigation */
+  navLeft.addEventListener('click',  () => track.scrollBy({left:-340,behavior:'smooth'}));
+  navRight.addEventListener('click', () => track.scrollBy({left:340, behavior:'smooth'}));
+  
+  function updateNav(){
+    navLeft.classList.toggle('hidden', track.scrollLeft<=4);
+    navRight.classList.toggle('hidden', track.scrollLeft+track.clientWidth>=track.scrollWidth-4);
+  }
+  track.addEventListener('scroll', updateNav, {passive:true});
+  updateNav();
+
+  /* Hover and Click Logic */
+  document.querySelectorAll('.reel-card').forEach(function(card){
+    const vid = card.querySelector('.reel-video');
+    if(!vid) return;
+    card.addEventListener('mouseenter', () => vid.play().catch(()=>{}));
+    card.addEventListener('mouseleave', () => { vid.pause(); vid.currentTime=0; });
+    card.addEventListener('click', () => openModal(parseInt(card.dataset.index,10)));
+  });
+
+  function openModal(index){
+    currentIndex = index;
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    loadReel(currentIndex);
+  }
+
+  function closeModal(){
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+    modalVideo.pause();
+    modalVideo.src = '';
+    cancelAnimationFrame(rafId);
+  }
+
+  function loadReel(index){
+    const reel = REELS[index];
+    if(!reel) return;
+    cancelAnimationFrame(rafId);
+    modalVideo.pause();
+    
+    titleEl.textContent = reel.title;
+    catEl.textContent   = reel.category || '';
+    navUp.disabled      = (index===0);
+    navDown.disabled    = (index===REELS.length-1);
+
+    modalVideo.src   = reel.src;
+    modalVideo.muted = isMuted;
+    modalVideo.play().catch(()=>{});
+
+    function tick(){
+      if(modalVideo.duration) progressBar.style.width = ((modalVideo.currentTime/modalVideo.duration)*100)+'%';
+      rafId = requestAnimationFrame(tick);
+    }
+    rafId = requestAnimationFrame(tick);
+  }
+
+  /* Interaction Events */
+  modalClose.addEventListener('click', closeModal);
+  overlay.addEventListener('click', closeModal);
+  navUp.addEventListener('click', () => { if(currentIndex>0) loadReel(--currentIndex); });
+  navDown.addEventListener('click', () => { if(currentIndex<REELS.length-1) loadReel(++currentIndex); });
+
+  tapArea.addEventListener('click', () => modalVideo.paused ? modalVideo.play() : modalVideo.pause());
+
+  muteBtn.addEventListener('click', function(){
+    isMuted = !isMuted;
+    modalVideo.muted = isMuted;
+    iconUnmuted.style.display = isMuted ? 'none' : '';
+    iconMuted.style.display   = isMuted ? '' : 'none';
+  });
+
+  shareBtn.addEventListener('click', () => {
+    if(navigator.share) navigator.share({title:REELS[currentIndex].title, url: window.location.href});
+    else navigator.clipboard.writeText(window.location.href);
+  });
+})();
+</script>
+
+{% endif %}

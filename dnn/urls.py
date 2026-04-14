@@ -47,12 +47,14 @@ urlpatterns = [
     path('voices-of-uae', views.voicesofuae, name='voices-of-uae'),
     path('cms<slug:slug>/', views.cms_detail, name='cms'),
     path('setting', views.Settings, name='setting'),
+    path('reels/', include('reels.urls', namespace='reels')),
     
     path("robots.txt", views.robots_txt, name="robots_txt"),
     path(
         "ads.txt",
         TemplateView.as_view(template_name="ads.txt", content_type="text/plain"),
     ),
+    
     
     #sitmap start
     path('sitemap', custom_sitemap_index, name='sitemap'),

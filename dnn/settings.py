@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     #'django_crontab',
     #'embed_video',
     'webstories',
+    'reels',
 ]
 SITE_ID = 1
 from easy_thumbnails.conf import Settings as thumbnail_settings

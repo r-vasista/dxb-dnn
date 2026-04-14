@@ -28,6 +28,7 @@ from django.views.decorators.csrf import csrf_exempt
 from itertools import islice
 from journalist.models import Journalist, Gallery
 from django.core.exceptions import ObjectDoesNotExist
+from reels.views import get_active_reels
 
 from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
@@ -40,7 +41,7 @@ IS_ACTIVE = 1
 # home-pahe---------
 
 HOME_CACHE_KEY = "home_page_cache"
-HOME_CACHE_TTL = 60 * 5  # 5 minutes
+HOME_CACHE_TTL = 60 * 0  # 5 minutes
 
 def home(request):
     current_datetime = timezone.now()
@@ -58,6 +59,7 @@ def home(request):
         "now": current_datetime,
         "is_mobile": is_mobile,
     }
+    print('RELLLSSSSSSSSSSSSS',data['reels'])
 
     template = "mobile/index.html" if is_mobile else "index.html"
     return render(request, template, data)
@@ -195,6 +197,7 @@ def _build_home_context():
         "uae_voice":        list(uae_voice),
         "voices_posts":     list(uae_voice),
         "active_galleries": list(active_galleries),
+        'reels': get_active_reels(),  
     } 
 
 # News-details-page----------
