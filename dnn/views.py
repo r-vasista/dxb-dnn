@@ -59,7 +59,6 @@ def home(request):
         "now": current_datetime,
         "is_mobile": is_mobile,
     }
-    print('RELLLSSSSSSSSSSSSS',data['reels'])
 
     template = "mobile/index.html" if is_mobile else "index.html"
     return render(request, template, data)
