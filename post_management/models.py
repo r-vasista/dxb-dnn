@@ -171,6 +171,16 @@ class NewsPost(models.Model):
 
         # Fallback to original image
         return original_url
+    
+    @property
+    def total_views(self):
+        """
+        Combines the base Counter (post_status) and actual Views (viewcounter).
+        Handles cases where either might be None.
+        """
+        base_count = self.post_status if self.post_status else 0
+        actual_views = self.viewcounter if self.viewcounter else 0
+        return base_count + actual_views
 
     def get_posted_by(self):
         if self.journalist:
