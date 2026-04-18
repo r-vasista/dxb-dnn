@@ -7,21 +7,22 @@
 
     <div class="vou-event-scroller" id="vouScroller">
       <div class="vou-event-list" id="vouList">
-
         {% for post in voices_posts %}
         <a href="/{{ post.slug }}" class="vou-event-item">
           <img src="{{ post.thumbnail_url }}" alt="{{ post.post_title }}">
         </a>
         {% endfor %}
 
-        <!-- duplicate for infinite scroll -->
         {% for post in voices_posts %}
         <a href="/{{ post.slug }}" class="vou-event-item">
           <img src="{{ post.thumbnail_url }}" alt="{{ post.post_title }}">
         </a>
         {% endfor %}
-
       </div>
+    </div>
+
+    <div class="vou-view-more-wrapper">
+      <a href="/spotlite/voices-of-uae" class="vou-view-more-btn">View More</a>
     </div>
 
   </div>
@@ -48,7 +49,7 @@
 }
 
 .vou-event-scroller {
-  height: 360px;
+  height: 330px;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: none;
@@ -80,6 +81,34 @@
 
 .vou-event-item:hover img {
   transform: scale(1.05);
+}
+
+
+/* Styles for the View More button */
+.vou-view-more-wrapper {
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
+}
+
+.vou-view-more-btn {
+  background-color: transparent;
+  color: #ffdb49 !important;
+  border: 1px solid #ffdb49;
+  padding: 6px 20px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.vou-view-more-btn:hover {
+  background-color: #ffdb49;
+  color: #02142d !important; /* Forces the dark blue color on hover */
+  text-decoration: none; /* Prevents underlines on hover */
+  box-shadow: 0 0 10px rgba(255, 219, 73, 0.4);
 }
 </style>
 
