@@ -41,7 +41,7 @@ IS_ACTIVE = 1
 # home-pahe---------
 
 HOME_CACHE_KEY = "home_page_cache"
-HOME_CACHE_TTL = 60 * 0  # 5 minutes
+HOME_CACHE_TTL = 60 * 5 # 5 minutes
 
 def home(request):
     current_datetime = timezone.now()
@@ -125,7 +125,7 @@ def _build_home_context():
 
     uae_voice = base_news.filter(
         post_cat__order=23, post_cat__sub_cat__order=1
-    )[:8]
+    ).order_by("-post_date")[:15]
 
     videos_base = VideoNews.objects.select_related("News_Category").filter(
         is_active="active"
@@ -2484,3 +2484,4 @@ def Settings(request):
         'is_mobile': is_mobile,
     }
     return render(request, 'mobile/settings.html', data)
+

@@ -285,11 +285,13 @@ class VisitorLogAdmin(admin.ModelAdmin):
         'path',
         'method',
         'is_bot',
+        'is_blocked',
         'entry_time',
     )
 
     list_filter = (
         'is_bot',
+        'is_blocked',
         'method',
         'entry_time',
     )
@@ -309,5 +311,6 @@ class VisitorLogAdmin(admin.ModelAdmin):
         'method',
         'is_bot',
         'entry_time',
+        'is_blocked',
     )
     
