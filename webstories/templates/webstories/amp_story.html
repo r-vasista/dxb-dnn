@@ -251,12 +251,14 @@
           </div>
           {% endif %}
           
+          {% if page.heading and page.heading != "None" %}
           <h2 class="page-heading"
               animate-in="fly-in-bottom"
               animate-in-delay="0.2s"
               animate-in-duration="0.6s">
             {{ page.heading }}
           </h2>
+          {% endif %}
           
           <p class="page-text"
             animate-in="fly-in-bottom"

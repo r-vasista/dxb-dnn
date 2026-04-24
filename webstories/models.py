@@ -181,13 +181,17 @@ class WebStoryPage(models.Model):
     # Page heading (short)
     heading = models.CharField(
         max_length=100,
-        help_text="Short heading for this page"
+        help_text="Short heading for this page",
+        blank=True,
+        null=True
     )
     
     # Page text (max 200 chars as per Google guidelines)
     text = models.TextField(
         max_length=200,
-        help_text="Max 200 characters (Google recommendation)"
+        help_text="Max 200 characters (Google recommendation)",
+        blank=True,
+        null=True
     )
     
     # Optional credit
