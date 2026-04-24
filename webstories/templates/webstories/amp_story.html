@@ -6,7 +6,7 @@
   
   <title>{{ story.title }}</title>
   
-  <!-- ⚠️ AMP Story Required Scripts (ONLY THESE ARE ALLOWED) -->
+  <!-- AMP Story Required Scripts (ONLY THESE ARE ALLOWED) -->
   <script async src="https://cdn.ampproject.org/v0.js"></script>
   <script async custom-element="amp-story" src="https://cdn.ampproject.org/v0/amp-story-1.0.js"></script>
   <script async custom-element="amp-video" src="https://cdn.ampproject.org/v0/amp-video-0.1.js"></script>
@@ -18,16 +18,89 @@
   <!-- Open Graph -->
   <meta property="og:title" content="{{ story.title }}">
   <meta property="og:description" content="{{ story.meta_description|default:story.title }}">
-  <meta property="og:image" content="{{ request.scheme }}://{{ requestf.get_host }}{{ story.poster_portrait.url }}">
+  <!-- FIX: was {{ requestf.get_host }} (typo with extra 'f') — now {{ request.get_host }} -->
+  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ story.poster_portrait.url }}">
   <meta property="og:type" content="article">
   <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  <meta property="og:site_name" content="{{ story.publisher_name }}">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ story.title }}">
   <meta name="twitter:description" content="{{ story.meta_description|default:story.title }}">
   <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ story.poster_portrait.url }}">
+  <meta name="twitter:site" content="@dxbnewsnetwork">
   
+  <!-- NewsArticle Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "{{ request.build_absolute_uri }}"
+    },
+    "headline": "{{ story.title }}",
+    "description": "{{ story.meta_description|default:story.title }}",
+    "image": [
+      "{{ request.scheme }}://{{ request.get_host }}{{ story.poster_portrait.url }}"
+    ],
+    "datePublished": "{{ story.published_date|date:'c' }}",
+    "dateModified": "{{ story.modified_date|default:story.published_date|date:'c' }}",
+    "author": {
+      "@type": "Person",
+      "name": "{{ story.author_name|default:'Editorial Team' }}",
+      "url": "{{ request.scheme }}://{{ request.get_host }}/about-us"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "{{ story.publisher_name }}",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "{{ request.scheme }}://{{ request.get_host }}/upload/logo/dxb_black.png"
+      }
+    }
+  }
+  </script>
+
+  <!-- WebPage Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "{{ story.title }}",
+    "url": "{{ request.build_absolute_uri }}"
+  }
+  </script>
+
+  <!-- Breadcrumb Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "{{ request.scheme }}://{{ request.get_host }}/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Web Stories",
+        "item": "{{ request.scheme }}://{{ request.get_host }}/webstories/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "{{ story.title }}",
+        "item": "{{ request.build_absolute_uri }}"
+      }
+    ]
+  }
+  </script>
+
   <!-- AMP Boilerplate (REQUIRED - DO NOT MODIFY) -->
   <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style>
   <noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
@@ -195,7 +268,7 @@
     </svg>
   </a>
   
-  <!-- ⚠️ AMP STORY CONTAINER - This is what Google indexes -->
+  <!--  AMP STORY CONTAINER - This is what Google indexes -->
   <amp-story 
     standalone
     title="{{ story.title }}"
