@@ -3,7 +3,9 @@
 <div class="mb-3">
   <div class="vou-event-container">
 
-    <h3 class="vou-event-heading">Voices of UAE</h3>
+    <a href="/spotlite/voices-of-uae" class="vou-heading-link">
+        <h3 class="vou-event-heading">Voices of UAE</h3>
+    </a>
 
     <div class="vou-event-scroller" id="vouScroller">
       <div class="vou-event-list" id="vouList">
@@ -21,9 +23,9 @@
       </div>
     </div>
 
-    <div class="vou-view-more-wrapper">
+    {% comment %} <div class="vou-view-more-wrapper">
       <a href="/spotlite/voices-of-uae" class="vou-view-more-btn">View More</a>
-    </div>
+    </div> {% endcomment %}
 
   </div>
 </div>
@@ -84,32 +86,37 @@
 }
 
 
-/* Styles for the View More button */
-.vou-view-more-wrapper {
-  display: flex;
-  justify-content: center;
-  padding-top: 10px;
+/* Styling for the new heading link */
+.vou-heading-link {
+    text-decoration: none;
+    display: block;
+    transition: opacity 0.3s ease;
 }
 
-.vou-view-more-btn {
-  background-color: transparent;
-  color: #ffdb49 !important;
-  border: 1px solid #ffdb49;
-  padding: 6px 20px;
-  border-radius: 20px;
-  text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: bold;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
+.vou-heading-link:hover {
+    text-decoration: none;
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
 }
 
-.vou-view-more-btn:hover {
-  background-color: #ffdb49;
-  color: #02142d !important; /* Forces the dark blue color on hover */
-  text-decoration: none; /* Prevents underlines on hover */
-  box-shadow: 0 0 10px rgba(255, 219, 73, 0.4);
+/* Adjust the container height since the button is gone */
+.vou-event-container {
+    background: linear-gradient(to bottom right, #0b4177, #02142d);
+    border-radius: 12px;
+    padding: 15px 10px; /* Slightly more padding for balance */
+    height: 410px;      /* Reduced height slightly as button is removed */
+    max-width: 334px;
+    overflow: hidden;
+    margin: auto;
 }
+
+.vou-event-scroller {
+    height: 350px; /* Increased scroller height to fill the gap */
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+}
+
 </style>
 
 <script>
