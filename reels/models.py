@@ -5,8 +5,6 @@ class Reel(models.Model):
     title = models.CharField(max_length=255)
     video_file = models.FileField(upload_to='reels/videos/', blank=True, null=True,
                                   help_text="Upload an MP4 video file")
-    video_url = models.URLField(blank=True, null=True,
-                                help_text="Or paste an external video URL (MP4 direct link)")
     thumbnail = models.ImageField(upload_to='reels/thumbnails/', blank=True, null=True,
                                   help_text="Optional thumbnail image shown before hover")
     category = models.CharField(max_length=100, blank=True, null=True)
