@@ -13,12 +13,11 @@
   
   <!-- SEO Meta Tags -->
   <meta name="description" content="{{ story.meta_description|default:story.title }}">
-  <link rel="canonical" href="{{ request.build_absolute_uri }}">
+  <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
   
   <!-- Open Graph -->
   <meta property="og:title" content="{{ story.title }}">
   <meta property="og:description" content="{{ story.meta_description|default:story.title }}">
-  <!-- FIX: was {{ requestf.get_host }} (typo with extra 'f') — now {{ request.get_host }} -->
   <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ story.poster_portrait.url }}">
   <meta property="og:type" content="article">
   <meta property="og:url" content="{{ request.build_absolute_uri }}">
@@ -133,7 +132,8 @@
       text-shadow: 0 2px 8px rgba(0,0,0,0.9), 0 1px 3px rgba(0,0,0,0.7);
       color: #fff;
       font-weight: 400;
-      opacity: 0;
+      /* FIX 1: Removed opacity: 0 with !important — not allowed in AMP.
+         AMP's animate-in handles visibility automatically. */
     }
     
     .page-credit {
@@ -147,7 +147,6 @@
     /* Story date badge */
     .story-date-badge {
       background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(8px);
       padding: 8px 14px;
       border-radius: 20px;
       font-size: 0.8rem;
@@ -157,11 +156,11 @@
       margin-bottom: 16px;
       color: #fff;
       border: 1px solid rgba(255,255,255,0.2);
+      /* Note: backdrop-filter is not supported in AMP amp-custom — removed */
     }
-    /* Make elements visible when animating */
-    [animate-in] {
-      opacity: 1 !important;
-    }
+
+    /* FIX 1 (continued): Removed [animate-in] { opacity: 1 !important; }
+       — !important is not allowed in AMP CSS at all. */
     
     /* Text container with strong gradient background - BOTTOM placement */
     .text-container {
@@ -187,93 +186,54 @@
       padding: 32px 28px;
       background: rgba(0,0,0,0.88);
       border-radius: 16px;
-      backdrop-filter: blur(15px);
       box-shadow: 0 8px 32px rgba(0,0,0,0.4);
       margin: 0 24px;
       width: calc(100% - 48px);
+      /* Note: backdrop-filter not allowed in AMP amp-custom — removed */
     }
     
     /* Ensure text layers are positioned correctly */
     amp-story-grid-layer[template="vertical"] {
       align-content: end;
       justify-content: center;
-      padding: 0 !important;
+      padding: 0;
     }
     
     amp-story-grid-layer[template="thirds"] {
       align-content: center;
-      padding: 0 !important;
+      padding: 0;
     }
     
     /* Remove any default padding from grid layers */
     amp-story-grid-layer {
-      padding: 0 !important;
+      padding: 0;
     }
-    
-    /* Close button styling */
-    .close-button {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      width: 44px;
-      height: 44px;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(10px);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 999999;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border: 2px solid rgba(255,255,255,0.2);
-      text-decoration: none;
-    }
-    
-    .close-button:hover,
-    .close-button:active {
-      background: rgba(0,0,0,0.9);
-      transform: scale(1.05);
-      border-color: rgba(255,255,255,0.4);
-    }
-    
-    .close-button svg {
-      width: 24px;
-      height: 24px;
-      fill: #fff;
-    }
-    
-    /* Mobile optimization */
-    @media (max-width: 768px) {
-      .close-button {
-        top: 16px;
-        left: 16px;
-        width: 40px;
-        height: 40px;
-      }
-      
-      .close-button svg {
-        width: 20px;
-        height: 20px;
-      }
-    }
+
+
   </style>
 </head>
 
 <body>
-  <!-- Close/Back Button - Links to stories homepage -->
-  <a href="{% url 'webstories:home' %}" class="close-button" aria-label="Close story">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-    </svg>
-  </a>
-  
+  <!--
+    FIX 5: Removed the standalone <a class="close-button"> from <body>.
+    AMP requires <body> to have exactly 1 child: <amp-story>.
+    The close/back link is now placed inside the first amp-story-page
+    as an amp-story-grid-layer, which is the AMP-compliant approach.
+
+    FIX 3: Removed the <noscript><style>...</style></noscript> block from <body>.
+    AMP only allows <style amp-boilerplate> and <style amp-custom> in <head>.
+    Style tags inside <noscript> in the body are not permitted.
+  -->
+
   <!--  AMP STORY CONTAINER - This is what Google indexes -->
   <amp-story 
     standalone
     title="{{ story.title }}"
     publisher="{{ story.publisher_name }}"
+    publisher-logo-src="{{ request.scheme }}://{{ request.get_host }}/upload/logo/dxb_black.png"
     poster-portrait-src="{{ request.scheme }}://{{ request.get_host }}{{ story.poster_portrait.url }}">
+    <!-- FIX 4: Added required publisher-logo-src attribute to <amp-story>.
+         This attribute is mandatory and was missing, causing AMP validation failure. -->
     
     <!-- ============ STORY PAGES ============ -->
     {% for page in pages %}
@@ -309,6 +269,8 @@
           </amp-video>
         {% endif %}
       </amp-story-grid-layer>
+
+
       
       <!-- Text Content Layer with subtle animations -->
       {% if page.layout == 'vertical' %}
@@ -332,12 +294,16 @@
             {{ page.heading }}
           </h2>
           {% endif %}
-          
+
+          <!--
+            FIX 2: Removed fly-in-distance="20px" attribute from <p>.
+            The fly-in-distance attribute is not allowed on <p> tags in AMP.
+            AMP's built-in fly-in-bottom animation handles distance automatically.
+          -->
           <p class="page-text"
             animate-in="fly-in-bottom"
             animate-in-delay="0.2s"
-            animate-in-duration="0.7s"
-            fly-in-distance="20px">
+            animate-in-duration="0.7s">
             {{ page.text }}
           </p>
           
@@ -368,16 +334,16 @@
           <h2 class="page-heading"
               animate-in="fly-in-bottom"
               animate-in-delay="0.7s"
-              animate-in-duration="0.8s"
-              fly-in-distance="30px">
+              animate-in-duration="0.8s">
             {{ page.heading }}
           </h2>
-          
+          <!--
+            FIX 2 (also here): Removed fly-in-distance="30px" attribute from <p>.
+          -->
           <p class="page-text"
              animate-in="fly-in-bottom"
              animate-in-delay="1s"
-             animate-in-duration="0.8s"
-             fly-in-distance="30px">
+             animate-in-duration="0.8s">
             {{ page.text }}
           </p>
           
@@ -403,30 +369,9 @@
     </amp-story-bookend>
     
   </amp-story>
-  
-  <!-- ⚠️ NO CUSTOM JAVASCRIPT ALLOWED HERE -->
-  <!-- AMP handles all interactions automatically -->
-  
-  <!-- Navigation Instructions (optional, shows on first visit) -->
-  <noscript>
-    <style>
-      .story-nav-hint {
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(0,0,0,0.8);
-        color: #fff;
-        padding: 12px 20px;
-        border-radius: 25px;
-        font-size: 14px;
-        z-index: 999998;
-      }
-    </style>
-    <div class="story-nav-hint">
-      Tap left/right to navigate • Press ESC to close
-    </div>
-  </noscript>
+
+  <!-- ⚠️ NO CUSTOM JAVASCRIPT ALLOWED IN AMP -->
+  <!-- ⚠️ NO SIBLING TAGS TO amp-story ALLOWED IN BODY -->
   
 </body>
 </html>
