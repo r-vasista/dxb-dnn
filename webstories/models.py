@@ -78,7 +78,7 @@ class WebStory(models.Model):
     # Publisher info (for AMP) - REQUIRED by Google
     publisher_name = models.CharField(
         max_length=100,
-        default="Newsible",
+        default="Dxb News Network",
         help_text="Publisher name for AMP stories (REQUIRED by Google AMP)"
     )
     
