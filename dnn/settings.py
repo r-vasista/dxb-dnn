@@ -284,4 +284,3 @@ PORTAL_NAME = os.getenv("PORTAL_NAME", "")
 
 # You can also set limits for images if needed
 WEBSTORY_IMAGE_MAX_SIZE_MB = 100  # 1MB limit for images
-
