@@ -156,12 +156,29 @@ body{
 
 <!-- ================= HEADER ================= -->
 <div class="header">
-  <div class="container d-flex justify-content-between align-items-center">
-    <a href="{% url 'webstories:home' %}" class="logo"><i class="fa-solid fa-book-open me-1"></i>WEB STORIES</a>
-    <a href="/" class="btn btn-outline-secondary btn-sm">
-        <i class="fa fa-arrow-left me-1"></i>Home
-    </a>
-  </div>
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-4">
+                <a href="{% url 'webstories:home' %}" class="logo text-nowrap">
+                    <i class="fa-solid fa-book-open me-1"></i>WEB STORIES
+                </a>
+            </div>
+
+            <div class="col-4 text-center">
+                {% if profile_setting %}
+                <a href="/">
+                    <img src="{{ profile_setting.logo_dark.url }}" alt="Logo" style="max-height: 50px; width: auto;">
+                </a>
+                {% endif %}
+            </div>
+
+            <div class="col-4 text-end">
+                <a href="/" class="btn btn-outline-secondary btn-sm">
+                    <i class="fa fa-arrow-left me-1"></i>Home
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- ================= CATEGORY ================= -->
@@ -215,22 +232,32 @@ body{
     {% if stories %}
     <h2 class="section-title">{{ category.name }}</h2>
 
-    <div class="stories-grid">
-    {% for story in stories %}
-    <a href="{% url 'webstories:detail' story.slug %}" class="story-card" target="_blank">
-        <img src="{{ story.poster_portrait.url }}" alt="{{ story.title }}" loading="lazy">
-        <div class="story-body">
-            <div class="story-title">{{ story.title }}</div>
-            <div class="story-meta">
-                <span><i class="fa fa-eye me-1"></i>{{ story.views }}</span>
-                <button class="share-btn"
-                    onclick="event.preventDefault(); shareStory('{% url 'webstories:detail' story.slug %}','{{ story.title }}')">
-                    <i class="fa fa-share"></i>
-                </button>
-            </div>
+    <div class="stories-slider-wrap">
+        <button class="story-nav prev" onclick="slideCategoryStories(this, -1)">
+            <i class="fa fa-chevron-left"></i>
+        </button>
+
+        <div class="stories-slider">
+            {% for story in stories %}
+            <a href="{% url 'webstories:detail' story.slug %}" class="story-card" target="_blank">
+                <img src="{{ story.poster_portrait.url }}" alt="{{ story.title }}" loading="lazy">
+                <div class="story-body">
+                    <div class="story-title">{{ story.title }}</div>
+                    <div class="story-meta">
+                        <span><i class="fa fa-eye me-1"></i>{{ story.views }}</span>
+                        <button class="share-btn"
+                            onclick="event.preventDefault(); shareStory('{% url 'webstories:detail' story.slug %}','{{ story.title }}')">
+                            <i class="fa fa-share"></i>
+                        </button>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
         </div>
-    </a>
-    {% endfor %}
+
+        <button class="story-nav next" onclick="slideCategoryStories(this, 1)">
+            <i class="fa fa-chevron-right"></i>
+        </button>
     </div>
 
     {% endif %}
@@ -238,7 +265,6 @@ body{
 
 </div>
 
-<!-- ✅ JAVASCRIPT IS ALLOWED HERE (This is just a landing page) -->
 <script>
 function slideStories(dir){
     const slider = document.getElementById('storiesSlider');
@@ -258,6 +284,14 @@ function shareStory(url, title) {
         alert('Link copied to clipboard!');
     }
 }
+
+function slideCategoryStories(btn, dir) {
+    const wrap = btn.closest('.stories-slider-wrap');
+    const slider = wrap.querySelector('.stories-slider');
+    const cardWidth = slider.querySelector('.story-card').offsetWidth + 16;
+    slider.scrollLeft += dir * cardWidth;
+}
+
 </script>
 
 </body>
