@@ -1,3 +1,4 @@
+import random
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from .models import WebStory, WebStoryCategory, WebStoryPage
@@ -51,36 +52,41 @@ def webstories_category(request, category_slug):
 def webstory_detail(request, story_slug):
     """
     Individual AMP Web Story
-    URL: /web-stories/story-slug/ (clean URL as per guidelines)
+    URL: /web-stories/story-slug/
     """
     story = get_object_or_404(
-        WebStory, 
-        slug=story_slug, 
+        WebStory,
+        slug=story_slug,
         is_published=True
     )
-    
+ 
     # Increment view count
     story.views += 1
     story.save(update_fields=['views'])
-    
+ 
     # Get all pages ordered
     pages = story.pages.all().order_by('order')
-    
+ 
     # Check if story has minimum pages
     if pages.count() < 5:
-        # Redirect to admin or show error
-        from django.contrib import messages
-        from django.shortcuts import redirect
         messages.warning(request, 'This story needs at least 5 pages.')
         return redirect('webstories:home')
-    
+ 
+    # Pick 4 random stories from the latest 12 (excluding current story)
+    related_pool = list(
+        WebStory.objects.filter(is_published=True)
+        .exclude(slug=story_slug)
+        .order_by('-published_date')[:12]
+    )
+    related_stories = random.sample(related_pool, min(4, len(related_pool)))
+ 
     context = {
         'story': story,
         'pages': pages,
+        'related_stories': related_stories,
     }
-    
+ 
     return render(request, 'webstories/amp_story.html', context)
-
 
 def webstories_latest(request):
     """Latest web stories page"""

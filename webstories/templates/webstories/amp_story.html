@@ -6,38 +6,33 @@
   
   <title>{{ story.title }}</title>
   
-  <!-- AMP Story Required Scripts (ONLY THESE ARE ALLOWED) -->
   <script async src="https://cdn.ampproject.org/v0.js"></script>
   <script async custom-element="amp-story" src="https://cdn.ampproject.org/v0/amp-story-1.0.js"></script>
   <script async custom-element="amp-video" src="https://cdn.ampproject.org/v0/amp-video-0.1.js"></script>
   
-  <!-- SEO Meta Tags -->
   <meta name="description" content="{{ story.meta_description|default:story.title }}">
   <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
   
-  <!-- Open Graph -->
   <meta property="og:title" content="{{ story.title }}">
   <meta property="og:description" content="{{ story.meta_description|default:story.title }}">
   <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ story.poster_portrait.url }}">
   <meta property="og:type" content="article">
-  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
   <meta property="og:site_name" content="{{ story.publisher_name }}">
   
-  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ story.title }}">
   <meta name="twitter:description" content="{{ story.meta_description|default:story.title }}">
   <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ story.poster_portrait.url }}">
   <meta name="twitter:site" content="@dxbnewsnetwork">
   
-  <!-- NewsArticle Schema -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "{{ request.build_absolute_uri }}"
+      "@id": "{{ request.scheme }}://{{ request.get_host }}{{ request.path }}"
     },
     "headline": "{{ story.title }}",
     "description": "{{ story.meta_description|default:story.title }}",
@@ -62,17 +57,15 @@
   }
   </script>
 
-  <!-- WebPage Schema -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebPage",
     "name": "{{ story.title }}",
-    "url": "{{ request.build_absolute_uri }}"
+    "url": "{{ request.scheme }}://{{ request.get_host }}{{ request.path }}"
   }
   </script>
 
-  <!-- Breadcrumb Schema -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -94,17 +87,15 @@
         "@type": "ListItem",
         "position": 3,
         "name": "{{ story.title }}",
-        "item": "{{ request.build_absolute_uri }}"
+        "item": "{{ request.scheme }}://{{ request.get_host }}{{ request.path }}"
       }
     ]
   }
   </script>
 
-  <!-- AMP Boilerplate (REQUIRED - DO NOT MODIFY) -->
   <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style>
   <noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
   
-  <!-- Custom Story Styles (ONLY CSS ALLOWED, NO JS) -->
   <style amp-custom>
     amp-story {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -132,8 +123,6 @@
       text-shadow: 0 2px 8px rgba(0,0,0,0.9), 0 1px 3px rgba(0,0,0,0.7);
       color: #fff;
       font-weight: 400;
-      /* FIX 1: Removed opacity: 0 with !important — not allowed in AMP.
-         AMP's animate-in handles visibility automatically. */
     }
     
     .page-credit {
@@ -156,11 +145,7 @@
       margin-bottom: 16px;
       color: #fff;
       border: 1px solid rgba(255,255,255,0.2);
-      /* Note: backdrop-filter is not supported in AMP amp-custom — removed */
     }
-
-    /* FIX 1 (continued): Removed [animate-in] { opacity: 1 !important; }
-       — !important is not allowed in AMP CSS at all. */
     
     /* Text container with strong gradient background - BOTTOM placement */
     .text-container {
@@ -189,7 +174,6 @@
       box-shadow: 0 8px 32px rgba(0,0,0,0.4);
       margin: 0 24px;
       width: calc(100% - 48px);
-      /* Note: backdrop-filter not allowed in AMP amp-custom — removed */
     }
     
     /* Ensure text layers are positioned correctly */
@@ -209,40 +193,91 @@
       padding: 0;
     }
 
+    /* ===== Related Stories Last Slide ===== */
+    .related-page-bg {
+      background: #0a0a0a;
+      width: 100%;
+      height: 100%;
+    }
+
+    .related-slide-wrap {
+      padding: 30px 16px;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .related-slide-title {
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 0 0 14px 0;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .related-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      flex-grow: 1;
+    }
+
+    .related-card {
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      background: #1a1a1a;
+      border-radius: 12px;
+      overflow: hidden;
+      height: 100%;
+    }
+
+    .related-card-img-wrap {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+      background: #222;
+    }
+
+    .related-card-img-wrap amp-img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .related-card-title {
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.4;
+      padding: 12px 10px;
+      margin: 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      flex-grow: 1;
+    }
 
   </style>
 </head>
 
 <body>
-  <!--
-    FIX 5: Removed the standalone <a class="close-button"> from <body>.
-    AMP requires <body> to have exactly 1 child: <amp-story>.
-    The close/back link is now placed inside the first amp-story-page
-    as an amp-story-grid-layer, which is the AMP-compliant approach.
 
-    FIX 3: Removed the <noscript><style>...</style></noscript> block from <body>.
-    AMP only allows <style amp-boilerplate> and <style amp-custom> in <head>.
-    Style tags inside <noscript> in the body are not permitted.
-  -->
-
-  <!--  AMP STORY CONTAINER - This is what Google indexes -->
   <amp-story 
     standalone
     title="{{ story.title }}"
     publisher="{{ story.publisher_name }}"
     publisher-logo-src="{{ request.scheme }}://{{ request.get_host }}/upload/logo/dxb_black.png"
     poster-portrait-src="{{ request.scheme }}://{{ request.get_host }}{{ story.poster_portrait.url }}">
-    <!-- FIX 4: Added required publisher-logo-src attribute to <amp-story>.
-         This attribute is mandatory and was missing, causing AMP validation failure. -->
     
-    <!-- ============ STORY PAGES ============ -->
     {% for page in pages %}
     <amp-story-page id="page-{{ forloop.counter }}" auto-advance-after="{{ page.duration }}s">
       
-      <!-- Background Layer - Image or Video with subtle zoom -->
       <amp-story-grid-layer template="fill">
         {% if page.media_type == 'image' %}
-          <!-- Image Background with subtle zoom-in animation -->
           <amp-img 
             src="{{ page.image.url }}" 
             width="720" 
@@ -256,7 +291,6 @@
           </amp-img>
         
         {% elif page.media_type == 'video' %}
-          <!-- Video Background -->
           <amp-video
             autoplay
             loop
@@ -270,11 +304,7 @@
         {% endif %}
       </amp-story-grid-layer>
 
-
-      
-      <!-- Text Content Layer with subtle animations -->
       {% if page.layout == 'vertical' %}
-      <!-- Bottom text layout (default) -->
       <amp-story-grid-layer template="vertical" style="align-content: end;">
         <div class="text-container">
           {% if forloop.first %}
@@ -295,11 +325,6 @@
           </h2>
           {% endif %}
 
-          <!--
-            FIX 2: Removed fly-in-distance="20px" attribute from <p>.
-            The fly-in-distance attribute is not allowed on <p> tags in AMP.
-            AMP's built-in fly-in-bottom animation handles distance automatically.
-          -->
           <p class="page-text"
             animate-in="fly-in-bottom"
             animate-in-delay="0.2s"
@@ -319,7 +344,6 @@
       </amp-story-grid-layer>
       
       {% elif page.layout == 'thirds' %}
-      <!-- Middle text layout -->
       <amp-story-grid-layer template="thirds" style="align-content: center;">
         <div grid-area="middle-third" class="text-container-thirds">
           {% if forloop.first %}
@@ -337,9 +361,7 @@
               animate-in-duration="0.8s">
             {{ page.heading }}
           </h2>
-          <!--
-            FIX 2 (also here): Removed fly-in-distance="30px" attribute from <p>.
-          -->
+          
           <p class="page-text"
              animate-in="fly-in-bottom"
              animate-in-delay="1s"
@@ -362,7 +384,46 @@
     </amp-story-page>
     {% endfor %}
     
-    <!-- ============ BOOKEND (Related Stories) ============ -->
+    {% if related_stories %}
+    <amp-story-page id="page-related" auto-advance-after="15s">
+
+      <amp-story-grid-layer template="fill">
+        <div class="related-page-bg"></div>
+      </amp-story-grid-layer>
+
+      <amp-story-grid-layer template="vertical" style="align-content: center;">
+        <div class="related-slide-wrap">
+          <h2 class="related-slide-title"
+              animate-in="fade-in"
+              animate-in-duration="0.6s">
+            Related Stories
+          </h2>
+          <div class="related-grid">
+            {% for rs in related_stories %}
+            <a class="related-card"
+               href="{{ request.scheme }}://{{ request.get_host }}{% url 'webstories:detail' rs.slug %}"
+               animate-in="fade-in"
+               animate-in-delay="0.{{ forloop.counter }}s"
+               animate-in-duration="0.5s">
+              <div class="related-card-img-wrap">
+                <amp-img
+                  src="{{ request.scheme }}://{{ request.get_host }}{{ rs.poster_portrait.url }}"
+                  width="4"
+                  height="5"
+                  layout="responsive"
+                  alt="{{ rs.title }}">
+                </amp-img>
+              </div>
+              <p class="related-card-title">{{ rs.title }}</p>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+      </amp-story-grid-layer>
+
+    </amp-story-page>
+    {% endif %}
+
     <amp-story-bookend 
       src="{{ request.scheme }}://{{ request.get_host }}{% url 'webstories:bookend_json' story.slug %}" 
       layout="nodisplay">
@@ -370,8 +431,5 @@
     
   </amp-story>
 
-  <!-- ⚠️ NO CUSTOM JAVASCRIPT ALLOWED IN AMP -->
-  <!-- ⚠️ NO SIBLING TAGS TO amp-story ALLOWED IN BODY -->
-  
-</body>
+  </body>
 </html>
