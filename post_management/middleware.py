@@ -33,7 +33,8 @@ def check_bot_status(user_agent):
         # Generic & Scrapers
         'bot', 'crawl', 'spider', 'slurp', 'scrapy', 'mechanize',
         'headlesschrome', 'phantomjs', 'puppeteer', 'playwright',
-        'python-requests', 'curl', 'wget', 'bytespider', 'petalbot'
+        'python-requests', 'curl', 'wget', 'bytespider', 'petalbot',
+        'terra cotta', 'ceramic', 'terracotta'
     ]
 
     is_seo_bot = any(keyword in ua for keyword in good_bots)
