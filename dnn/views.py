@@ -209,7 +209,7 @@ def _build_home_context(current_datetime):
         "uae_voice": uae_voice,
         "voices_posts": uae_voice,
         "active_galleries": active_galleries,
-        # "reels": get_active_reels(),
+        "reels": get_active_reels(),
         'turnstile_site_key': settings.TURNSTILE_SITE_KEY,
     }
 # News-details-page----------
