@@ -1,4 +1,6 @@
 import logging
+import requests
+import json
 logger = logging.getLogger(__name__)
 from django.http import HttpResponse
 from django.db.models import Q, F
@@ -38,6 +40,10 @@ from django.db.models import Prefetch
 from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 from django_user_agents.utils import get_user_agent
+
+from django.conf import settings
+
+TURNSTILE_SECRET_KEY = settings.TURNSTILE_SECRET_KEY
 
 STATUS_ACTIVE = "active"
 IS_ACTIVE = 1
@@ -204,6 +210,7 @@ def _build_home_context(current_datetime):
         "voices_posts": uae_voice,
         "active_galleries": active_galleries,
         "reels": get_active_reels(),
+        'turnstile_site_key': settings.TURNSTILE_SITE_KEY,
     }
 # News-details-page----------
 
@@ -2462,3 +2469,49 @@ def Settings(request):
     }
     return render(request, 'mobile/settings.html', data)
 
+
+@csrf_exempt # We use csrf_exempt here because the initial page load might be cached
+def verify_turnstile(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            token = data.get('token')
+            
+            if not token:
+                return JsonResponse({'success': False, 'error': 'No token provided'}, status=400)
+
+            # 1. Verify the token with Cloudflare's servers
+            verify_url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'
+            payload = {
+                'secret': TURNSTILE_SECRET_KEY,
+                'response': token,
+                # Optional: You can also pass the user's IP for tighter security
+                # 'remoteip': request.META.get('HTTP_X_FORWARDED_FOR') 
+            }
+            
+            cf_response = requests.post(verify_url, data=payload)
+            cf_result = cf_response.json()
+
+            # 2. If Cloudflare says they are human, set the secure cookie!
+            if cf_result.get('success'):
+                response = JsonResponse({'success': True, 'message': 'Entry pass granted'})
+                
+                # Set the cookie. 
+                # httponly=True means Javascript CANNOT read or modify it.
+                # secure=True means it only sends over HTTPS.
+                response.set_cookie(
+                    'is_human', 
+                    'true', 
+                    max_age=1800, # 30 mins
+                    httponly=True, 
+                    secure=True, 
+                    samesite='Lax'
+                )
+                return response
+            else:
+                return JsonResponse({'success': False, 'error': 'Failed verification'}, status=403)
+
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)

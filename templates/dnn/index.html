@@ -17,7 +17,7 @@
     <!--profiles end -->
 
     <!-- ✅ REELS SECTION — placed right after guist_profiles -->
-    {% include 'reels/reels-news.html' %}
+    {% comment %} {% include 'reels/reels-news.html' %} {% endcomment %}
     <!-- reels end -->
 
     
@@ -29,9 +29,9 @@
     <!-- news1 end -->
     
     
-    {% comment %} <!-- reels news start -->
+     <!-- reels news start -->
     {% include 'reels-news.html' %}
-    <!-- reels news end --> {% endcomment %}
+    <!-- reels news end --> 
 
 
     <!-- articls section start -->
@@ -73,5 +73,43 @@
     <!--LATESH INSTAGRAM POSTS End -->
     {% comment %} {% include 'instapost.html' %} {% endcomment %}
     <!--LATEST INSTAGRAM POSTS End -->
+
+    <!-- 1. Load the Turnstile script -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+    <!-- 2. The Turnstile Widget. 
+        data-callback points to the JS function that runs when they pass. -->
+    <div class="cf-turnstile" 
+        data-sitekey={{ turnstile_site_key }}
+        data-callback="onHumanVerified">
+    </div>
+
+    <!-- 3. The logic to send the token to your Django backend -->
+    <script>
+    function onHumanVerified(token) {
+        // Turnstile passed! Now we send the secure token to Django.
+        fetch('/verify-human/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // If you removed @csrf_exempt in Django, you'd need your CSRF token here
+            },
+            body: JSON.stringify({ token: token })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log("Backend confirmed humanity. Cookie set securely.");
+                // Optional: You could hide the Turnstile widget now
+                document.querySelector('.cf-turnstile').style.display = 'none';
+            } else {
+                console.error("Backend verification failed:", data.error);
+            }
+        })
+        .catch(error => {
+            console.error("Network error during verification:", error);
+        });
+    }
+    </script>
 </div>
 {% endblock %}

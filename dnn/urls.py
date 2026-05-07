@@ -55,6 +55,8 @@ urlpatterns = [
         TemplateView.as_view(template_name="ads.txt", content_type="text/plain"),
     ),
     
+    path('verify-human/', views.verify_turnstile, name='verify_turnstile'),
+    
     
     #sitmap start
     path('sitemap', custom_sitemap_index, name='sitemap'),
