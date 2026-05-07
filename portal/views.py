@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import AllowAny
 from django.http import Http404
 from django.db import transaction
 from django.contrib.auth import get_user_model
@@ -92,3 +93,20 @@ class TagListAPIView(APIView):
             return Response({"status": True, "data": serializer.data}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"status": False, "message": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class NewsViewsAPIView(APIView):
+    """
+    GET /api/news/<slug>/views/
+    """
+    permission_classes = [AllowAny]
+    def get(self, request, slug):
+        try:
+            news_post = NewsPost.objects.get(slug=slug)
+            return Response({"total_views": news_post.viewcounter}, status=200)
+        except NewsPost.DoesNotExist:
+            return Response({"total_views": 0}, status=404)
+        except Exception as e:
+            print(str(e))
+            return Response({"status": False, "message": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
