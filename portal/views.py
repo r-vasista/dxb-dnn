@@ -99,7 +99,6 @@ class NewsViewsAPIView(APIView):
     """
     GET /api/news/<slug>/views/
     """
-    permission_classes = [AllowAny]
     def get(self, request, slug):
         try:
             news_post = NewsPost.objects.get(slug=slug)
@@ -107,6 +106,6 @@ class NewsViewsAPIView(APIView):
         except NewsPost.DoesNotExist:
             return Response({"total_views": 0}, status=404)
         except Exception as e:
-            print(str(e))
             return Response({"status": False, "message": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
         
